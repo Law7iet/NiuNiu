@@ -27,7 +27,7 @@ class MainViewController: UIViewController, MCSessionDelegate, MCBrowserViewCont
             discoveryInfo: nil,
             session: self.mcSession
         )
-//        self.mcAdvertiserAssistant.start()
+        self.mcAdvertiserAssistant.start()
     }
     
     @IBAction func joinGameAction(_ sender: Any) {
@@ -75,10 +75,12 @@ class MainViewController: UIViewController, MCSessionDelegate, MCBrowserViewCont
     }
     
     func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
+        print("Done")
         dismiss(animated: true, completion: nil)
     }
     
     func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
+        print("Cancel")
         dismiss(animated: true, completion: nil)
     }
     

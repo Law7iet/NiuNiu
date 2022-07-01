@@ -25,7 +25,6 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Host game"/>
                                         <connections>
                                             <action selector="hostGameAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Eou-KI-v1H"/>
-                                            <segue destination="0P7-bC-ATX" kind="showDetail" id="rjh-De-ivV"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
@@ -51,41 +50,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2001.8691588785045" y="93.952483801295898"/>
-        </scene>
-        <!--HostViewController-->
-        <scene sceneID="Gt2-z8-hHF">
-            <objects>
-                <viewController storyboardIdentifier="HostViewController" title="HostViewController" interfaceStyle="light" id="0P7-bC-ATX" customClass="HostViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Usm-x2-hdv">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="sRx-58-KEb">
-                                <rect key="frame" x="130.66666666666666" y="448" width="166.99999999999997" height="20"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding Player" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kzf-wb-Ttb">
-                                        <rect key="frame" x="0.0" y="0.0" width="107" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="c7U-6I-Rx6">
-                                        <rect key="frame" x="147.00000000000003" y="0.0" width="20" height="20"/>
-                                    </activityIndicatorView>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="zPp-F4-X5E"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="sRx-58-KEb" firstAttribute="centerX" secondItem="zPp-F4-X5E" secondAttribute="centerX" id="Efs-hq-DDc"/>
-                            <constraint firstItem="sRx-58-KEb" firstAttribute="centerY" secondItem="zPp-F4-X5E" secondAttribute="centerY" id="Gg7-ZV-U0Z"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pUC-gi-1X1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2814" y="94"/>
         </scene>
     </scenes>
     <resources>
