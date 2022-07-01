@@ -16,6 +16,7 @@
 		6A305919284E2FB400913DBD /* NiuNiuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305918284E2FB400913DBD /* NiuNiuTests.swift */; };
 		6A305923284E2FB400913DBD /* NiuNiuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305922284E2FB400913DBD /* NiuNiuUITests.swift */; };
 		6A305925284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305924284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift */; };
+		6A3B3B2D286F14F900E43530 /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3B3B2C286F14F900E43530 /* JoinViewController.swift */; };
 		6A6AE91D286DEC460067EE2D /* HostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6AE91C286DEC460067EE2D /* HostViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		6A305922284E2FB400913DBD /* NiuNiuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiuNiuUITests.swift; sourceTree = "<group>"; };
 		6A305924284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiuNiuUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6A305931284E2FE500913DBD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6A3B3B2C286F14F900E43530 /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		6A6AE91C286DEC460067EE2D /* HostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,8 +106,7 @@
 			children = (
 				6A305901284E2FB100913DBD /* AppDelegate.swift */,
 				6A305903284E2FB100913DBD /* SceneDelegate.swift */,
-				6A305905284E2FB100913DBD /* MainViewController.swift */,
-				6A6AE91C286DEC460067EE2D /* HostViewController.swift */,
+				6A3B3B2E286F150400E43530 /* ViewController */,
 				6A305907284E2FB100913DBD /* Main.storyboard */,
 				6A30590A284E2FB300913DBD /* Assets.xcassets */,
 				6A30590C284E2FB300913DBD /* LaunchScreen.storyboard */,
@@ -130,6 +131,16 @@
 				6A305924284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift */,
 			);
 			path = NiuNiuUITests;
+			sourceTree = "<group>";
+		};
+		6A3B3B2E286F150400E43530 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6A305905284E2FB100913DBD /* MainViewController.swift */,
+				6A6AE91C286DEC460067EE2D /* HostViewController.swift */,
+				6A3B3B2C286F14F900E43530 /* JoinViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 				6A6AE91D286DEC460067EE2D /* HostViewController.swift in Sources */,
 				6A305906284E2FB100913DBD /* MainViewController.swift in Sources */,
 				6A305902284E2FB100913DBD /* AppDelegate.swift in Sources */,
+				6A3B3B2D286F14F900E43530 /* JoinViewController.swift in Sources */,
 				6A305904284E2FB100913DBD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

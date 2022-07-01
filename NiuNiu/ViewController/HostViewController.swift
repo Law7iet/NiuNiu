@@ -1,14 +1,25 @@
 //
-//  ViewController.swift
+//  HostViewController.swift
 //  NiuNiu
 //
-//  Created by Han Chu on 06/06/22.
+//  Created by Han Chu on 30/06/22.
 //
 
 import UIKit
 import MultipeerConnectivity
 
-class MainViewController: UIViewController, MCSessionDelegate, MCBrowserViewControllerDelegate {
+class HostViewController: UIViewController, MCSessionDelegate {
+
+    var waitingPlayers = [String]()
+    @IBOutlet weak var waitingPlayerLabel: UILabel!
+    
+    func convertWaitingListToString() -> String {
+        var x = ""
+        for player in waitingPlayers {
+            x = x + player + "\n"
+        }
+        return x
+    }
     
     // MARK: Variables and functions for multipeer connectivity
     var peerID: MCPeerID!
@@ -16,43 +27,48 @@ class MainViewController: UIViewController, MCSessionDelegate, MCBrowserViewCont
     var mcAdvertiserAssistant: MCAdvertiserAssistant!
     
     func setupConnectivity() {
+//        peerID = MCPeerID(displayName: (UIDevice.current.name + " " + (UIDevice.current.identifierForVendor?.uuidString ?? "")))
         peerID = MCPeerID(displayName: UIDevice.current.name)
         mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         mcSession.delegate = self
     }
-    
-    @IBAction func hostGameAction(_ sender: Any) {
-        self.mcAdvertiserAssistant = MCAdvertiserAssistant(
-            serviceType: "NiuNiuGame",
-            discoveryInfo: nil,
-            session: self.mcSession
-        )
-        self.mcAdvertiserAssistant.start()
-    }
-    
-    @IBAction func joinGameAction(_ sender: Any) {
-        let mcBrowser = MCBrowserViewController(
-            serviceType: "NiuNiuGame",
-            session: self.mcSession
-        )
-        mcBrowser.delegate = self
-        self.present(mcBrowser, animated: true, completion: nil)
+
+    @IBAction func playGame(_ segue: UIStoryboardSegue) {
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupConnectivity()
+        
+        mcAdvertiserAssistant = MCAdvertiserAssistant(
+            serviceType: "NiuNiuGame",
+            discoveryInfo: nil,
+            session: mcSession
+        )
+        mcAdvertiserAssistant.start()
     }
-
-    // MARK: Multipeer connectivity's delegate implementation
+    
+    // MARK: Multipeer Connectivity Session's delegate implementation
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
             print("Connected: \(peerID.displayName)")
+            DispatchQueue.main.async {
+                self.waitingPlayers.append(peerID.displayName)
+                let text = self.convertWaitingListToString()
+                self.waitingPlayerLabel.text = text
+            }
         case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("Not connected: \(peerID.displayName)")
+            DispatchQueue.main.async {
+                if let index = self.waitingPlayers.firstIndex(of: peerID.displayName) {
+                    self.waitingPlayers.remove(at: index)
+                    self.waitingPlayerLabel.text = self.convertWaitingListToString()
+                }
+            }
         @unknown default:
             print("Unknown state: \(state)")
         }
@@ -73,16 +89,5 @@ class MainViewController: UIViewController, MCSessionDelegate, MCBrowserViewCont
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         
     }
-    
-    func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
-        print("Done")
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
-        print("Cancel")
-        dismiss(animated: true, completion: nil)
-    }
-    
-}
 
+}
