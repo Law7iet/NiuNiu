@@ -11,7 +11,7 @@
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainVCID" id="BYZ-38-t0r" customClass="MainViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,7 +25,7 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Host game" buttonSize="large"/>
                                         <connections>
                                             <action selector="hostGameAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Eou-KI-v1H"/>
-                                            <segue destination="Wti-hx-8VX" kind="show" id="0Yn-FX-MVr"/>
+                                            <segue destination="ZId-kM-Ygh" kind="show" identifier="showHostSegue" id="xLc-Gc-gUz"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
@@ -34,7 +34,6 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Join game" buttonSize="large"/>
                                         <connections>
                                             <action selector="joinGameAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qt3-Fa-AVt"/>
-                                            <segue destination="thm-Ra-U6T" kind="show" id="4vd-oc-2w6"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -53,150 +52,78 @@
             </objects>
             <point key="canvasLocation" x="2856" y="94"/>
         </scene>
-        <!--Host a Game-->
-        <scene sceneID="qsA-K1-JYO">
+        <!--Host View Controller-->
+        <scene sceneID="SEi-PU-sRH">
             <objects>
-                <viewController id="0vs-C2-EYi" customClass="HostViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="leG-iB-8Dq">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <viewController modalPresentationStyle="fullScreen" id="ZId-kM-Ygh" customClass="HostViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="t4c-7y-T5m">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="y6g-8k-9Ua">
-                                <rect key="frame" x="123.33333333333333" y="92" width="181.66666666666669" height="60.333333333333343"/>
+                            <stackView opaque="NO" contentMode="top" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="LFL-Kw-vVZ">
+                                <rect key="frame" x="100" y="371" width="228" height="194.33333333333337"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="NUE-ZH-Ntg">
-                                        <rect key="frame" x="0.0" y="0.0" width="181.66666666666666" height="20"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P4I-Pv-5b2">
+                                        <rect key="frame" x="0.0" y="0.0" width="228" height="47"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Home" buttonSize="large"/>
+                                        <connections>
+                                            <action selector="hostGameAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sPv-ri-LuE"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="bY8-1n-IZw">
+                                        <rect key="frame" x="0.0" y="67" width="228" height="20"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Seaching players" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uTD-ZM-oPS">
-                                                <rect key="frame" x="0.0" y="0.0" width="129.66666666666666" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3mh-iW-3tE">
+                                                <rect key="frame" x="0.0" y="0.0" width="182" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="IND-Fx-FTf">
-                                                <rect key="frame" x="161.66666666666669" y="0.0" width="20" height="20"/>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="1I5-k7-mrA">
+                                                <rect key="frame" x="208" y="0.0" width="20" height="20"/>
                                             </activityIndicatorView>
                                         </subviews>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Players" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VVo-zK-bhX">
-                                        <rect key="frame" x="63.333333333333329" y="40" width="55" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wOG-lz-HEw">
+                                        <rect key="frame" x="0.0" y="107" width="228" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVv-Bs-eSn">
+                                        <rect key="frame" x="0.0" y="147.33333333333337" width="228" height="47"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Play" buttonSize="large"/>
+                                        <connections>
+                                            <action selector="hostGameAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SfD-Kc-gA0"/>
+                                            <action selector="playGame:" destination="ZId-kM-Ygh" eventType="touchUpInside" id="ZzR-as-7OG"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="P4I-Pv-5b2" firstAttribute="top" secondItem="LFL-Kw-vVZ" secondAttribute="top" id="BJp-dg-4kk"/>
+                                    <constraint firstAttribute="bottom" secondItem="HVv-Bs-eSn" secondAttribute="bottom" id="hDE-cz-Nfd"/>
+                                </constraints>
                             </stackView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="M61-cd-1yI"/>
+                        <viewLayoutGuide key="safeArea" id="mPA-WA-tid"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="y6g-8k-9Ua" firstAttribute="top" secondItem="M61-cd-1yI" secondAttribute="top" constant="36" id="Lv4-75-p2l"/>
-                            <constraint firstItem="y6g-8k-9Ua" firstAttribute="centerX" secondItem="M61-cd-1yI" secondAttribute="centerX" id="cXR-MY-Br8"/>
+                            <constraint firstItem="mPA-WA-tid" firstAttribute="trailing" secondItem="LFL-Kw-vVZ" secondAttribute="trailing" constant="100" id="2tu-qI-dYW"/>
+                            <constraint firstItem="LFL-Kw-vVZ" firstAttribute="leading" secondItem="mPA-WA-tid" secondAttribute="leading" constant="100" id="3LR-NE-Q0x"/>
+                            <constraint firstItem="LFL-Kw-vVZ" firstAttribute="centerX" secondItem="mPA-WA-tid" secondAttribute="centerX" id="7iv-O2-aWV"/>
+                            <constraint firstItem="LFL-Kw-vVZ" firstAttribute="centerY" secondItem="mPA-WA-tid" secondAttribute="centerY" id="l58-dM-G05"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Host a Game" id="n1c-ud-y9F">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3Jt-u0-eMn">
-                            <connections>
-                                <action selector="cancelToPlayersViewController:" destination="0vs-C2-EYi" id="4Fg-VE-xaY"/>
-                                <segue destination="SxH-AW-ft4" kind="unwind" unwindAction="backToHome:" id="w2S-ir-8pb"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Play" id="KTQ-Sl-5An">
-                            <connections>
-                                <action selector="playGame:" destination="0vs-C2-EYi" id="jk3-6k-8Hc"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="ZYS-nK-2Ol"/>
                     <connections>
-                        <outlet property="waitingPlayerLabel" destination="VVo-zK-bhX" id="Vir-q3-fGV"/>
+                        <outlet property="waitingPlayerLabel" destination="wOG-lz-HEw" id="Zjx-rR-VuC"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F2i-nL-PQR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="SxH-AW-ft4" userLabel="Exit" sceneMemberID="exit"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e2r-gJ-YjL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4645.794392523364" y="-290.28077753779701"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="MZw-tR-aqW">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Wti-hx-8VX" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="qyT-Rz-2sA"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="z2s-sO-ob5">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="0vs-C2-EYi" kind="relationship" relationship="rootViewController" id="lGe-tV-X0Y"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="41g-Pi-cPA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3809" y="-290"/>
-        </scene>
-        <!--Join a Game-->
-        <scene sceneID="Ga5-Qr-xSR">
-            <objects>
-                <viewController id="Sm0-Lm-2CQ" customClass="JoinViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hFo-Nm-CgE">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="iws-Sx-t9O">
-                                <rect key="frame" x="129.66666666666669" y="92" width="168.66666666666669" height="20"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Seaching hosts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UB6-oz-8ct">
-                                        <rect key="frame" x="0.0" y="0.0" width="116.66666666666667" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="IUk-44-Yvc">
-                                        <rect key="frame" x="148.66666666666666" y="0.0" width="20" height="20"/>
-                                    </activityIndicatorView>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="JYX-dZ-rVF"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="iws-Sx-t9O" firstAttribute="centerX" secondItem="JYX-dZ-rVF" secondAttribute="centerX" id="RSH-Fn-I1a"/>
-                            <constraint firstItem="iws-Sx-t9O" firstAttribute="top" secondItem="JYX-dZ-rVF" secondAttribute="top" constant="36" id="mQ3-Fc-PYf"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Join a Game" id="TEb-zN-tDy">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hpR-vL-woh">
-                            <connections>
-                                <segue destination="yAv-1G-dEi" kind="unwind" unwindAction="backToHome:" id="dBm-YI-ObI"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Join" id="MIX-5y-fUc"/>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Yp1-u7-uBJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="yAv-1G-dEi" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="4646" y="511"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="b1v-HZ-W97">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="thm-Ra-U6T" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="F22-Su-hiD"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cwI-tO-gsT">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Sm0-Lm-2CQ" kind="relationship" relationship="rootViewController" id="UAp-is-eoV"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="535-vj-d8h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3809" y="511"/>
+            <point key="canvasLocation" x="3717.7570093457944" y="93.952483801295898"/>
         </scene>
     </scenes>
     <resources>
