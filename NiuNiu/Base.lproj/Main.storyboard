@@ -97,9 +97,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f6Z-r8-E1D">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="cVF-e2-5vV">
+                                <rect key="frame" x="0.0" y="124" width="428" height="714"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="ndU-em-xys">
+                                        <rect key="frame" x="152.33333333333334" y="0.0" width="123.33333333333334" height="20.333333333333332"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JBv-uD-1kO">
+                                                <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-Q5-Xse">
+                                                <rect key="frame" x="103.33333333333331" y="0.0" width="20" height="20.333333333333332"/>
+                                            </activityIndicatorView>
+                                        </subviews>
+                                    </stackView>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="wfs-Au-m2Q">
+                                        <rect key="frame" x="24" y="40.333333333333314" width="380" height="673.66666666666674"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="kkf-KP-gTG">
+                                                <rect key="frame" x="0.0" y="44.666666030883789" width="380" height="43.666667938232422"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kkf-KP-gTG" id="TGA-Ge-1la">
+                                                    <rect key="frame" x="0.0" y="0.0" width="380" height="43.666667938232422"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="wfs-Au-m2Q" firstAttribute="leading" secondItem="cVF-e2-5vV" secondAttribute="leading" constant="24" id="RQ8-YP-ERx"/>
+                                    <constraint firstAttribute="trailing" secondItem="wfs-Au-m2Q" secondAttribute="trailing" constant="24" id="obG-g4-9Rx"/>
+                                </constraints>
+                            </stackView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6Z-r8-E1D">
+                                <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="sAt-tg-dnQ"/>
+                                </constraints>
                                 <items>
                                     <navigationItem title="Host" id="8IJ-Of-eDS">
                                         <barButtonItem key="leftBarButtonItem" style="plain" id="Ac7-K8-eFz">
@@ -127,47 +166,27 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="icS-bD-Rf9">
-                                <rect key="frame" x="145.33333333333331" y="144" width="137.33333333333331" height="87.333333333333314"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="ndU-em-xys">
-                                        <rect key="frame" x="0.0" y="0.0" width="137.33333333333334" height="20"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JBv-uD-1kO">
-                                                <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="20"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-Q5-Xse">
-                                                <rect key="frame" x="117.33333333333334" y="0.0" width="20" height="20"/>
-                                            </activityIndicatorView>
-                                        </subviews>
-                                    </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Players" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tGR-CU-h89">
-                                        <rect key="frame" x="0.0" y="67" width="55" height="20.333333333333329"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Grn-2N-r6M"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="icS-bD-Rf9" firstAttribute="centerX" secondItem="Grn-2N-r6M" secondAttribute="centerX" id="Bco-YQ-mef"/>
-                            <constraint firstItem="icS-bD-Rf9" firstAttribute="top" secondItem="Grn-2N-r6M" secondAttribute="top" constant="100" id="MjR-Mf-TbP"/>
+                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="leading" secondItem="cVF-e2-5vV" secondAttribute="leading" id="7Vj-19-0DP"/>
+                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="trailing" secondItem="cVF-e2-5vV" secondAttribute="trailing" id="LeY-9c-maX"/>
+                            <constraint firstItem="cVF-e2-5vV" firstAttribute="leading" secondItem="Grn-2N-r6M" secondAttribute="leading" id="TFW-Ik-KJE"/>
+                            <constraint firstItem="cVF-e2-5vV" firstAttribute="top" secondItem="Grn-2N-r6M" secondAttribute="top" constant="80" id="d0r-YU-Tr2"/>
+                            <constraint firstItem="Grn-2N-r6M" firstAttribute="bottom" secondItem="cVF-e2-5vV" secondAttribute="bottom" constant="34" id="iAM-M8-hBs"/>
+                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="top" secondItem="Grn-2N-r6M" secondAttribute="top" id="wGK-8T-Vfp"/>
+                            <constraint firstItem="Grn-2N-r6M" firstAttribute="trailing" secondItem="cVF-e2-5vV" secondAttribute="trailing" id="woA-zX-u6W"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PXd-uI-vqj"/>
                     <connections>
-                        <outlet property="waitingPlayerLabel" destination="tGR-CU-h89" id="ciR-h7-MN3"/>
+                        <outlet property="waitingPlayersTableView" destination="wfs-Au-m2Q" id="lPV-Oi-oW6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fl6-TB-WyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3108" y="-209"/>
+            <point key="canvasLocation" x="3107.9439252336447" y="-209.28725701943847"/>
         </scene>
     </scenes>
     <resources>

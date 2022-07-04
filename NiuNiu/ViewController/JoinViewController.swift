@@ -27,7 +27,7 @@ class JoinViewController: UIViewController, MCBrowserViewControllerDelegate, MCS
     
     override func viewDidAppear(_ animated: Bool) {
         let mcBrowser = MCBrowserViewController(
-            serviceType: "NiuNiuGame",
+            serviceType: "niu-niu-game",
             session: mcSession
         )
         mcBrowser.delegate = self

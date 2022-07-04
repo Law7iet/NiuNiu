@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>NiuNiuGame uses the local network to play with other players around you.</string>
+	<string>NiuNiu uses the local network to play with other players around you.</string>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_NiuNiuGame._udp</string>
-		<string>_NiuNiuGame._tcp</string>
+		<string>_niu-niu-game._udp</string>
+		<string>_niu-niu-game._tcp</string>
 	</array>
 </dict>
 </plist>

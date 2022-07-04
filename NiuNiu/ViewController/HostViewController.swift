@@ -8,16 +8,16 @@
 import UIKit
 import MultipeerConnectivity
 
-class HostViewController: UIViewController, MCSessionDelegate {
+class HostViewController: UIViewController, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate {
     
     // MARK: Variables for multipeer connectivity
     var peerID: MCPeerID!
     var mcSession: MCSession!
-    var mcAdvertiserAssistant: MCAdvertiserAssistant!
+    var mcAdvertiserAssistant: MCNearbyServiceAdvertiser!
     
-    var waitingPlayers = [String]()
-    @IBOutlet weak var waitingPlayerLabel: UILabel!
-
+    var waitingPlayers: [String] = [String]()
+    @IBOutlet weak var waitingPlayersTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,12 +25,16 @@ class HostViewController: UIViewController, MCSessionDelegate {
         mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         mcSession.delegate = self
         
-        mcAdvertiserAssistant = MCAdvertiserAssistant(
-            serviceType: "NiuNiuGame",
+        mcAdvertiserAssistant = MCNearbyServiceAdvertiser(
+            peer: peerID,
             discoveryInfo: nil,
-            session: mcSession
+            serviceType: "niu-niu-game"
         )
-        mcAdvertiserAssistant.start()
+        mcAdvertiserAssistant.delegate = self
+        mcAdvertiserAssistant.startAdvertisingPeer()
+        
+        waitingPlayersTableView.delegate = self
+        waitingPlayersTableView.dataSource = self
     }
     
     @IBAction func back(_ sender: Any) {
@@ -40,33 +44,26 @@ class HostViewController: UIViewController, MCSessionDelegate {
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         dismiss(animated: true)
     }
-
-    func convertArrayToString() -> String {
-        var text = ""
-        for player in waitingPlayers {
-            text = text + player + "\n"
-        }
-        return text
-    }
     
     // MARK: Multipeer Connectivity Session's delegate implementation
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
             print("Connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
+                let indexPath = IndexPath(row: self.waitingPlayers.count, section: 0)
                 self.waitingPlayers.append(peerID.displayName)
-                let text = self.convertArrayToString()
-                self.waitingPlayerLabel.text = text
+                self.waitingPlayersTableView.insertRows(at: [indexPath], with: .automatic)
             }
         case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("Not connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 if let index = self.waitingPlayers.firstIndex(of: peerID.displayName) {
+                    let indexPath = IndexPath(row: index, section: 0)
                     self.waitingPlayers.remove(at: index)
-                    self.waitingPlayerLabel.text = self.convertArrayToString()
+                    self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
                 }
             }
         @unknown default:
@@ -90,4 +87,50 @@ class HostViewController: UIViewController, MCSessionDelegate {
         
     }
     
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        print("Connessione")
+        invitationHandler(true, self.mcSession)
+    }
+    
+}
+
+extension HostViewController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = waitingPlayers[indexPath.row]
+        let alert = UIAlertController(
+            title: "Remove user",
+            message: "Are you sure to remove the user " + user + "?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(
+            title: "Yes",
+            style: .default,
+            handler: { (action: UIAlertAction) in
+                // Remove
+                self.waitingPlayers.remove(at: indexPath.row)
+                self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+        ))
+        alert.addAction(UIAlertAction(
+            title: "No",
+            style: .destructive
+        ))
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+extension HostViewController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return waitingPlayers.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = waitingPlayersTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        var content = cell.defaultContentConfiguration()
+        content.text = waitingPlayers[indexPath.row]
+        cell.contentConfiguration = content
+        
+        return cell
+    }
 }
