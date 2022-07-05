@@ -44,13 +44,19 @@ class HostViewController: UIViewController {
         self.mcNearbyServiceAdvertiser.stopAdvertisingPeer()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? GameViewController {
+            vc.users = self.playersInLobby
+        }
+    }
+    
     // MARK: Actions
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true)
     }
 
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
-        dismiss(animated: true)
+        
         // Start the game
     }
     
