@@ -8,33 +8,37 @@
 import UIKit
 import MultipeerConnectivity
 
-class HostViewController: UIViewController, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate {
+class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, MCSessionDelegate {
     
     // MARK: Variables for multipeer connectivity
     var peerID: MCPeerID!
     var mcSession: MCSession!
-    var mcAdvertiserAssistant: MCNearbyServiceAdvertiser!
+    var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser!
     
     var waitingPlayers: [String] = [String]()
     @IBOutlet weak var waitingPlayersTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         peerID = MCPeerID(displayName: (UIDevice.current.name + " #" + Utils.getRandomID(length: 4)))
         mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         mcSession.delegate = self
         
-        mcAdvertiserAssistant = MCNearbyServiceAdvertiser(
+        mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(
             peer: peerID,
             discoveryInfo: nil,
             serviceType: "niu-niu-game"
         )
-        mcAdvertiserAssistant.delegate = self
-        mcAdvertiserAssistant.startAdvertisingPeer()
+        mcNearbyServiceAdvertiser.delegate = self
+        mcNearbyServiceAdvertiser.startAdvertisingPeer()
         
         waitingPlayersTableView.delegate = self
         waitingPlayersTableView.dataSource = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        mcNearbyServiceAdvertiser.stopAdvertisingPeer()
     }
     
     @IBAction func back(_ sender: Any) {
@@ -72,24 +76,28 @@ class HostViewController: UIViewController, MCSessionDelegate, MCNearbyServiceAd
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        
+
     }
-    
+
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-        
+
     }
-    
+
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-        
+
     }
-    
+
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-        
+
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         print("Connessione")
         invitationHandler(true, self.mcSession)
+    }
+    
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
+        print("Help")
     }
     
 }
@@ -120,12 +128,16 @@ extension HostViewController: UITableViewDelegate {
 }
 
 extension HostViewController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Players in the lobby"
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return waitingPlayers.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = waitingPlayersTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = waitingPlayersTableView.dequeueReusableCell(withIdentifier: "HostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
         content.text = waitingPlayers[indexPath.row]
