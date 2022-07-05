@@ -8,40 +8,43 @@
 import UIKit
 import MultipeerConnectivity
 
-class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, MCSessionDelegate {
+class HostViewController: UIViewController {
     
-    // MARK: Variables for multipeer connectivity
+    // MARK: Variables
     var peerID: MCPeerID!
     var mcSession: MCSession!
     var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser!
     
-    var waitingPlayers: [String] = [String]()
-    @IBOutlet weak var waitingPlayersTableView: UITableView!
-    @IBOutlet weak var playButton: UIButton!
+    var playersInLobby: PeerList = PeerList()
+    @IBOutlet weak var playersTableView: UITableView!
     
+    @IBOutlet weak var playButton: UIButton!
+
+    // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        peerID = MCPeerID(displayName: (UIDevice.current.name + " #" + Utils.getRandomID(length: 4)))
-        mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
-        mcSession.delegate = self
+        self.peerID = MCPeerID(displayName: (UIDevice.current.name + " #" + Utils.getRandomID(length: 4)))
+        self.mcSession = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
+        self.mcSession.delegate = self
         
-        mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(
-            peer: peerID,
+        self.mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(
+            peer: self.peerID,
             discoveryInfo: nil,
             serviceType: "niu-niu-game"
         )
-        mcNearbyServiceAdvertiser.delegate = self
-        mcNearbyServiceAdvertiser.startAdvertisingPeer()
+        self.mcNearbyServiceAdvertiser.delegate = self
+        self.mcNearbyServiceAdvertiser.startAdvertisingPeer()
         
-        waitingPlayersTableView.delegate = self
-        waitingPlayersTableView.dataSource = self
+        self.playersTableView.delegate = self
+        self.playersTableView.dataSource = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        mcNearbyServiceAdvertiser.stopAdvertisingPeer()
+        self.mcNearbyServiceAdvertiser.stopAdvertisingPeer()
     }
     
+    // MARK: Actions
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true)
     }
@@ -51,31 +54,46 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
         // Start the game
     }
     
-    // MARK: Multipeer Connectivity Session's delegate implementation
+    // MARK: Supporting functions
+    func updatePlayButton() {
+        if self.playersInLobby.list.count > 0 && !self.playButton.isEnabled {
+            self.playButton.isEnabled = true
+        } else if self.playersInLobby.list.count == 0 && self.playButton.isEnabled {
+            self.playButton.isEnabled = false
+        }
+    }
+    
+    func addPlayerWith(peerID: MCPeerID) {
+        let indexPath = IndexPath(row: self.playersInLobby.list.count, section: 0)
+        self.playersInLobby.list.append(peerID)
+        self.playersTableView.insertRows(at: [indexPath], with: .automatic)
+        self.updatePlayButton()
+    }
+    
+    func removePlayerWith(indexPath: IndexPath) {
+        self.playersInLobby.list.remove(at: indexPath.row)
+        self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
+        self.updatePlayButton()
+    }
+}
+
+// MARK: Multipeer Connectivity Session's delegate implementation
+extension HostViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
             print("Connected: \(peerID.displayName)")
             DispatchQueue.main.async { [self] in
-                let indexPath = IndexPath(row: self.waitingPlayers.count, section: 0)
-                self.waitingPlayers.append(peerID.displayName)
-                self.waitingPlayersTableView.insertRows(at: [indexPath], with: .automatic)
-                if self.waitingPlayers.count > 0 && !self.playButton.isEnabled {
-                    self.playButton.isEnabled = true
-                }
+                self.addPlayerWith(peerID: peerID)
             }
         case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("Not connected: \(peerID.displayName)")
             DispatchQueue.main.async { [self] in
-                if let index = self.waitingPlayers.firstIndex(of: peerID.displayName) {
+                if let index = self.playersInLobby.list.firstIndex(of: peerID) {
                     let indexPath = IndexPath(row: index, section: 0)
-                    self.waitingPlayers.remove(at: index)
-                    self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
-                    if self.waitingPlayers.count == 0 && self.playButton.isEnabled {
-                        self.playButton.isEnabled = false
-                    }
+                    self.removePlayerWith(indexPath: indexPath)
                 }
             }
         @unknown default:
@@ -98,36 +116,34 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
 
     }
-    
+}
+
+// MARK: Multipeer Connectivity Advertiser's delegate implementation
+extension HostViewController: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        print("Connessione")
+        print("Connecting")
         invitationHandler(true, self.mcSession)
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         print("Help")
     }
-    
 }
 
+// MARK: TableView's delegate implementation
 extension HostViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = waitingPlayers[indexPath.row]
+        let user = self.playersInLobby.list[indexPath.row]
         let alert = UIAlertController(
             title: "Remove user",
-            message: "Are you sure to remove the user " + user + "?",
+            message: "Are you sure to remove the user " + user.displayName + "?",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
             title: "Yes",
             style: .default,
             handler: { (action: UIAlertAction) in
-                // Remove
-                self.waitingPlayers.remove(at: indexPath.row)
-                self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
-                if self.waitingPlayers.count == 0 && self.playButton.isEnabled {
-                    self.playButton.isEnabled = false
-                }
+                self.removePlayerWith(indexPath: indexPath)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -138,20 +154,21 @@ extension HostViewController: UITableViewDelegate {
     }
 }
 
+// MARK: DataSource's delegate implementation
 extension HostViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return waitingPlayers.count
+        return self.playersInLobby.list.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = waitingPlayersTableView.dequeueReusableCell(withIdentifier: "HostCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = waitingPlayers[indexPath.row]
+        content.text = self.playersInLobby.convertListToString()[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
