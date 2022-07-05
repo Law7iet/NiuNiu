@@ -200,7 +200,7 @@
                                                 </connections>
                                             </button>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" style="plain" id="bo3-tf-4iM">
+                                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="plain" id="bo3-tf-4iM">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="F0i-1Y-Buh">
                                                 <rect key="frame" x="313" y="11" width="95" height="34.333333333333336"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -229,6 +229,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="PXd-uI-vqj"/>
                     <connections>
+                        <outlet property="playButton" destination="F0i-1Y-Buh" id="T2s-FR-6Bg"/>
                         <outlet property="waitingPlayersTableView" destination="wfs-Au-m2Q" id="lPV-Oi-oW6"/>
                     </connections>
                 </viewController>

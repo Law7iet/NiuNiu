@@ -17,6 +17,7 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
     
     var waitingPlayers: [String] = [String]()
     @IBOutlet weak var waitingPlayersTableView: UITableView!
+    @IBOutlet weak var playButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,7 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
 
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         dismiss(animated: true)
+        // Start the game
     }
     
     // MARK: Multipeer Connectivity Session's delegate implementation
@@ -58,6 +60,9 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
                 let indexPath = IndexPath(row: self.waitingPlayers.count, section: 0)
                 self.waitingPlayers.append(peerID.displayName)
                 self.waitingPlayersTableView.insertRows(at: [indexPath], with: .automatic)
+                if self.waitingPlayers.count > 0 && !self.playButton.isEnabled {
+                    self.playButton.isEnabled = true
+                }
             }
         case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
@@ -68,6 +73,9 @@ class HostViewController: UIViewController, MCNearbyServiceAdvertiserDelegate, M
                     let indexPath = IndexPath(row: index, section: 0)
                     self.waitingPlayers.remove(at: index)
                     self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
+                    if self.waitingPlayers.count == 0 && self.playButton.isEnabled {
+                        self.playButton.isEnabled = false
+                    }
                 }
             }
         @unknown default:
@@ -117,6 +125,9 @@ extension HostViewController: UITableViewDelegate {
                 // Remove
                 self.waitingPlayers.remove(at: indexPath.row)
                 self.waitingPlayersTableView.deleteRows(at: [indexPath], with: .automatic)
+                if self.waitingPlayers.count == 0 && self.playButton.isEnabled {
+                    self.playButton.isEnabled = false
+                }
             }
         ))
         alert.addAction(UIAlertAction(
