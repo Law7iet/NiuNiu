@@ -56,8 +56,8 @@ class HostViewController: UIViewController {
     }
 
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
-        
         // Start the game
+        
     }
     
     // MARK: Supporting functions
@@ -149,6 +149,7 @@ extension HostViewController: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: { (action: UIAlertAction) in
+                self.mcSession.disconnect()
                 self.removePlayerWith(indexPath: indexPath)
             }
         ))

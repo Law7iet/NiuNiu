@@ -8,10 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class JoinViewController: UIViewController {
+class SearchViewControll: UIViewController {
     
     // MARK: Variables
     var peerID: MCPeerID!
+    var hostPeerID: MCPeerID!
     var mcNearbyServieBrowser: MCNearbyServiceBrowser!
     var mcSession: MCSession!
     
@@ -44,6 +45,13 @@ class JoinViewController: UIViewController {
         self.mcNearbyServieBrowser.stopBrowsingForPeers()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! LobbyViewController
+        vc.myPeerID = self.peerID
+        vc.hostPeerID = self.hostPeerID
+        vc.mcSession = self.mcSession
+    }
+    
     // MARK: Actions
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true)
@@ -62,42 +70,7 @@ class JoinViewController: UIViewController {
     }
 }
 
-// MARK: Multipeer Connectivity Session's delegate implementation
-extension JoinViewController: MCSessionDelegate {
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-    }
-    
-    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-
-    }
-
-    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-
-    }
-
-    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-
-    }
-
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-
-    }
-}
-
-extension JoinViewController: MCNearbyServiceBrowserDelegate {
-    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        self.addHostWith(peerID: peerID)
-    }
-    
-    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        if let index = self.hosts.list.firstIndex(of: peerID) {
-            let indexPath = IndexPath(row: index, section: 0)
-            self.removeHostWith(indexPath: indexPath)
-        }
-    }
-}
-
-extension JoinViewController: UITableViewDelegate {
+extension SearchViewControll: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
     }
@@ -106,13 +79,15 @@ extension JoinViewController: UITableViewDelegate {
         let user = hosts.list[indexPath.row]
         let alert = UIAlertController(
             title: "Join",
-            message: "Do you want to join to the " + user.displayName + " lobby?",
+            message: "Do you want to join to the \(user.displayName) lobby?",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
             title: "Yes",
             style: .default,
             handler: { [self] (action: UIAlertAction) in
+                // Disconnect from the old connection
+                self.mcSession.disconnect()
                 // Join lobby
                 self.mcNearbyServieBrowser.invitePeer(
                     user,
@@ -130,18 +105,64 @@ extension JoinViewController: UITableViewDelegate {
     }
 }
 
-extension JoinViewController: UITableViewDataSource {
+extension SearchViewControll: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return hosts.list.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "JoinCell", for: indexPath)
-        
         var content = cell.defaultContentConfiguration()
         content.text = hosts.convertListToString()[indexPath.row]
         cell.contentConfiguration = content
-        
         return cell
+    }
+}
+
+extension SearchViewControll: MCNearbyServiceBrowserDelegate {
+    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
+        self.addHostWith(peerID: peerID)
+    }
+    
+    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+        if let index = self.hosts.list.firstIndex(of: peerID) {
+            let indexPath = IndexPath(row: index, section: 0)
+            self.removeHostWith(indexPath: indexPath)
+        }
+    }
+}
+
+extension SearchViewControll: MCSessionDelegate {
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        switch state {
+        case MCSessionState.connected:
+            print("Connected: \(peerID.displayName)")
+            DispatchQueue.main.async { [self] in
+                self.hostPeerID = peerID
+                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
+            }
+        case MCSessionState.connecting:
+            print("Connecting: \(peerID.displayName)")
+        case MCSessionState.notConnected:
+            print("Not connected: \(peerID.displayName)")
+        @unknown default:
+            print("Unknown state: \(state)")
+        }
+    }
+    
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+
+    }
+
+    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+
+    }
+
+    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
+
+    }
+
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+
     }
 }
