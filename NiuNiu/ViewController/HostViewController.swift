@@ -57,7 +57,21 @@ class HostViewController: UIViewController {
 
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Start the game
-        
+        // TODO: Send a message to all players in waiting room
+//        let data = Data(GameMessage(
+//            type: .startGame,
+//            message: nil,
+//            cards: nil
+//        ))
+//        do {
+//            try self.mcSession.send(
+//                data,
+//                toPeers: self.playersInLobby.list,
+//                with: .reliable
+//            )
+//        } catch {
+//            print("Data error")
+//        }
     }
     
     // MARK: Supporting functions
@@ -127,12 +141,11 @@ extension HostViewController: MCSessionDelegate {
 // MARK: Multipeer Connectivity Advertiser's delegate implementation
 extension HostViewController: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        print("Connecting")
         invitationHandler(true, self.mcSession)
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        print("Help")
+        
     }
 }
 

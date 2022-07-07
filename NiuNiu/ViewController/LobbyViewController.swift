@@ -48,6 +48,7 @@ class LobbyViewController: UIViewController {
     
 }
 
+// MARK: UITableViewDataSource implementation
 extension LobbyViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
@@ -68,6 +69,7 @@ extension LobbyViewController: UITableViewDataSource {
     }
 }
 
+// MARK: MCSessionDelegate implementation
 extension LobbyViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {

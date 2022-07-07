@@ -316,7 +316,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRg-QQ-pAc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5033" y="-209"/>
+            <point key="canvasLocation" x="4782" y="-209"/>
         </scene>
         <!--Guest View Controller-->
         <scene sceneID="AVU-Hf-rQK">
@@ -343,7 +343,7 @@
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="i3d-MF-rMF"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Send"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Send"/>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -365,11 +365,12 @@
                             <constraint firstItem="5cO-en-HA5" firstAttribute="centerX" secondItem="ZFu-mg-fVH" secondAttribute="centerX" id="nJS-Rm-JBg"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="97n-9k-cTx"/>
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEQ-pJ-Jhu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5033" y="468"/>
+            <point key="canvasLocation" x="4782" y="468"/>
         </scene>
         <!--Lobby View Controller-->
         <scene sceneID="qq0-Ku-fS3">
@@ -453,6 +454,7 @@
                     <navigationItem key="navigationItem" id="D6m-xB-qO3"/>
                     <connections>
                         <outlet property="playersTableView" destination="d77-ai-qFy" id="666-Wj-wZu"/>
+                        <segue destination="uRC-w6-dEM" kind="show" id="m1A-tP-Z5t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUi-Ua-eXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

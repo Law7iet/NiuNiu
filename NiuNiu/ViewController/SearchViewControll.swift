@@ -12,7 +12,7 @@ class SearchViewControll: UIViewController {
     
     // MARK: Variables
     var peerID: MCPeerID!
-    var hostPeerID: MCPeerID!
+    var hostPeerID: MCPeerID?
     var mcNearbyServieBrowser: MCNearbyServiceBrowser!
     var mcSession: MCSession!
     
@@ -70,6 +70,7 @@ class SearchViewControll: UIViewController {
     }
 }
 
+// MARK: UITableViewDelegate implementation
 extension SearchViewControll: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
@@ -105,6 +106,7 @@ extension SearchViewControll: UITableViewDelegate {
     }
 }
 
+// MARK: UITableViewDataSource implementation
 extension SearchViewControll: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return hosts.list.count
@@ -119,6 +121,7 @@ extension SearchViewControll: UITableViewDataSource {
     }
 }
 
+// MARK: MCNearbyServiceBrowserDelegate implementation
 extension SearchViewControll: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         self.addHostWith(peerID: peerID)
@@ -132,6 +135,7 @@ extension SearchViewControll: MCNearbyServiceBrowserDelegate {
     }
 }
 
+// MARK: MCSessionDelegate
 extension SearchViewControll: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
@@ -151,7 +155,7 @@ extension SearchViewControll: MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-
+        
     }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
