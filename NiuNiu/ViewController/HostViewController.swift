@@ -11,50 +11,46 @@ import MultipeerConnectivity
 class HostViewController: UIViewController {
     
     // MARK: Variables
+    var myID: String!
     var peerID: MCPeerID!
     var mcSession: MCSession!
     var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser!
     
-    var playersInLobby: PeerList = PeerList()
+    var playersInLobby: [MCPeerID]!
     @IBOutlet weak var playersTableView: UITableView!
+    @IBOutlet weak var playersCounterLabel: UILabel!
     
     @IBOutlet weak var playButton: UIButton!
 
     // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.peerID = MCPeerID(displayName: (UIDevice.current.name + " #" + Utils.getRandomID(length: 4)))
-        self.mcSession = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
-        self.mcSession.delegate = self
-        
-        self.mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(
-            peer: self.peerID,
-            discoveryInfo: nil,
-            serviceType: "niu-niu-game"
-        )
-        self.mcNearbyServiceAdvertiser.delegate = self
+        self.setupConnectivity()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.playersInLobby.append(self.peerID)
         self.mcNearbyServiceAdvertiser.startAdvertisingPeer()
-        
-        self.playersTableView.delegate = self
-        self.playersTableView.dataSource = self
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.playersInLobby.removeAll()
         self.mcNearbyServiceAdvertiser.stopAdvertisingPeer()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? GameViewController {
-            vc.users = self.playersInLobby
+        if self.isMovingFromParent {
+            // TODO: send a message to close the lobby
         }
     }
     
-    // MARK: Actions
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Passing the data
+        //        if let vc = segue.destination as? GameViewController {
+//            vc.users = self.playersInLobby
+//        }
     }
-
+    
+    // MARK: Actions
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Start the game
         // TODO: Send a message to all players in waiting room
@@ -75,25 +71,56 @@ class HostViewController: UIViewController {
     }
     
     // MARK: Supporting functions
-    func updatePlayButton() {
-        if self.playersInLobby.list.count > 0 && !self.playButton.isEnabled {
+    func setupConnectivity() {
+        self.playersInLobby = [MCPeerID]()
+        self.peerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(self.myID!)")
+        
+        self.mcSession = MCSession(peer: self.peerID, securityIdentity: nil, encryptionPreference: .required)
+        self.mcSession.delegate = self
+        
+        self.mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(
+            peer: self.peerID,
+            discoveryInfo: nil,
+            serviceType: "niu-niu-game"
+        )
+        self.mcNearbyServiceAdvertiser.delegate = self
+        
+        self.playersTableView.delegate = self
+        self.playersTableView.dataSource = self
+    }
+    
+    func updateUI() {
+        // Label
+        self.playersCounterLabel.text = "\(self.playersInLobby.count) of 6 players found"
+        // Button play
+        if self.playersInLobby.count > 0 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
-        } else if self.playersInLobby.list.count == 0 && self.playButton.isEnabled {
+        } else if self.playersInLobby.count == 0 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
     }
     
+    func updateAdvertiser() {
+        if self.playersInLobby.count == 6 {
+            self.mcNearbyServiceAdvertiser.stopAdvertisingPeer()
+        } else {
+            self.mcNearbyServiceAdvertiser.startAdvertisingPeer()
+        }
+    }
+    
     func addPlayerWith(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.playersInLobby.list.count, section: 0)
-        self.playersInLobby.list.append(peerID)
+        let indexPath = IndexPath(row: self.playersInLobby.count, section: 0)
+        self.playersInLobby.append(peerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
-        self.updatePlayButton()
+        self.updateUI()
+        self.updateAdvertiser()
     }
     
     func removePlayerWith(indexPath: IndexPath) {
-        self.playersInLobby.list.remove(at: indexPath.row)
+        self.playersInLobby.remove(at: indexPath.row)
         self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
-        self.updatePlayButton()
+        self.updateUI()
+        self.updateAdvertiser()
     }
 }
 
@@ -111,9 +138,8 @@ extension HostViewController: MCSessionDelegate {
         case MCSessionState.notConnected:
             print("Not connected: \(peerID.displayName)")
             DispatchQueue.main.async { [self] in
-                if let index = self.playersInLobby.list.firstIndex(of: peerID) {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.removePlayerWith(indexPath: indexPath)
+                if let index = self.playersInLobby.firstIndex(of: peerID) {
+                    self.removePlayerWith(indexPath: IndexPath(row: index, section: 0))
                 }
             }
         @unknown default:
@@ -152,10 +178,10 @@ extension HostViewController: MCNearbyServiceAdvertiserDelegate {
 // MARK: TableView's delegate implementation
 extension HostViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.playersInLobby.list[indexPath.row]
+        let user = self.playersInLobby[indexPath.row]
         let alert = UIAlertController(
             title: "Remove user",
-            message: "Are you sure to remove the user " + user.displayName + "?",
+            message: "Do you want to remove the user " + user.displayName + "?",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
@@ -181,14 +207,14 @@ extension HostViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.playersInLobby.list.count
+        return self.playersInLobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = self.playersInLobby.convertListToString()[indexPath.row]
+        content.text = Utils.convertMCPeerIDListToString(list: self.playersInLobby)[indexPath.row]
         cell.contentConfiguration = content
         
         return cell

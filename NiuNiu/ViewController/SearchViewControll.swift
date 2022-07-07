@@ -11,61 +11,70 @@ import MultipeerConnectivity
 class SearchViewControll: UIViewController {
     
     // MARK: Variables
-    var peerID: MCPeerID!
-    var hostPeerID: MCPeerID?
+    var myID: String!
+    var myPeerID: MCPeerID!
+    var hostPeerID: MCPeerID!
     var mcNearbyServieBrowser: MCNearbyServiceBrowser!
     var mcSession: MCSession!
     
-    var hosts: PeerList = PeerList()
+    var hostsAvailable: [MCPeerID]!
     @IBOutlet weak var hostsTableView: UITableView!
     
     // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.peerID = MCPeerID(displayName: (UIDevice.current.name + " #" + Utils.getRandomID(length: 4)))
-        self.mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
-        self.mcSession.delegate = self
+        self.hostsAvailable = [MCPeerID]()
+        self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(self.myID!)")
+        self.mcSession = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
+        
+        self.mcNearbyServieBrowser = MCNearbyServiceBrowser(
+            peer: self.myPeerID,
+            serviceType: "niu-niu-game"
+        )
+        self.mcNearbyServieBrowser.delegate = self
         
         self.hostsTableView.delegate = self
         self.hostsTableView.dataSource = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.mcNearbyServieBrowser = MCNearbyServiceBrowser(
-            peer: self.peerID,
-            serviceType: "niu-niu-game"
-        )
-        self.mcNearbyServieBrowser.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.hostsAvailable.removeAll()
+        self.hostsTableView.reloadData()
         self.mcNearbyServieBrowser.startBrowsingForPeers()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+        
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.mcNearbyServieBrowser.stopBrowsingForPeers()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! LobbyViewController
-        vc.myPeerID = self.peerID
+        vc.myPeerID = self.myPeerID
         vc.hostPeerID = self.hostPeerID
         vc.mcSession = self.mcSession
     }
     
     // MARK: Actions
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true)
-    }
     
     // MARK: Supporting functions
     func addHostWith(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.hosts.list.count, section: 0)
-        self.hosts.list.append(peerID)
+        let indexPath = IndexPath(row: self.hostsAvailable.count, section: 0)
+        self.hostsAvailable.append(peerID)
         self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     func removeHostWith(indexPath: IndexPath) {
-        self.hosts.list.remove(at: indexPath.row)
+        self.hostsAvailable.remove(at: indexPath.row)
         self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
     }
 }
@@ -77,7 +86,7 @@ extension SearchViewControll: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = hosts.list[indexPath.row]
+        let user = hostsAvailable[indexPath.row]
         let alert = UIAlertController(
             title: "Join",
             message: "Do you want to join to the \(user.displayName) lobby?",
@@ -96,6 +105,8 @@ extension SearchViewControll: UITableViewDelegate {
                     withContext: nil,
                     timeout: 30
                 )
+                self.hostPeerID = user
+                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -109,13 +120,13 @@ extension SearchViewControll: UITableViewDelegate {
 // MARK: UITableViewDataSource implementation
 extension SearchViewControll: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return hosts.list.count
+        return hostsAvailable.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "JoinCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = hosts.convertListToString()[indexPath.row]
+        content.text = Utils.convertMCPeerIDListToString(list: hostsAvailable)[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }
@@ -128,45 +139,9 @@ extension SearchViewControll: MCNearbyServiceBrowserDelegate {
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        if let index = self.hosts.list.firstIndex(of: peerID) {
+        if let index = self.hostsAvailable.firstIndex(of: peerID) {
             let indexPath = IndexPath(row: index, section: 0)
             self.removeHostWith(indexPath: indexPath)
         }
-    }
-}
-
-// MARK: MCSessionDelegate
-extension SearchViewControll: MCSessionDelegate {
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        switch state {
-        case MCSessionState.connected:
-            print("Connected: \(peerID.displayName)")
-            DispatchQueue.main.async { [self] in
-                self.hostPeerID = peerID
-                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
-            }
-        case MCSessionState.connecting:
-            print("Connecting: \(peerID.displayName)")
-        case MCSessionState.notConnected:
-            print("Not connected: \(peerID.displayName)")
-        @unknown default:
-            print("Unknown state: \(state)")
-        }
-    }
-    
-    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        
-    }
-
-    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-
-    }
-
-    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-
-    }
-
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-
     }
 }

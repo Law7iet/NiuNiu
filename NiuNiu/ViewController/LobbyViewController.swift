@@ -15,37 +15,54 @@ class LobbyViewController: UIViewController {
     var hostPeerID: MCPeerID!
     var mcSession: MCSession!
     
-    var playersInLobby: PeerList = PeerList()
+    var playersInLobby: [MCPeerID]!
     @IBOutlet weak var playersTableView: UITableView!
+    @IBOutlet weak var playersCounterLabel: UILabel!
     
     // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.playersInLobby.list.append(hostPeerID)
-        self.playersInLobby.list.append(myPeerID)
-        self.mcSession.delegate = self
-        
-        self.playersTableView.dataSource = self
+        self.setupConnectivity()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.playersInLobby.append(hostPeerID)
+        self.playersInLobby.append(myPeerID)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.playersInLobby.removeAll()
+        if self.isMovingFromParent {
+            mcSession.disconnect()
+        }
     }
     
     // MARK: Supporting functions
+    func setupConnectivity() {
+        self.playersInLobby = [MCPeerID]()
+        self.mcSession.delegate = self
+        self.playersTableView.dataSource = self
+    }
+    
+    func updateUI() {
+        // Label
+        self.playersCounterLabel.text = "\(self.playersInLobby.count) of 6 players found"
+    }
+    
     func addPlayerWith(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.playersInLobby.list.count, section: 0)
-        self.playersInLobby.list.append(peerID)
+        let indexPath = IndexPath(row: self.playersInLobby.count, section: 0)
+        self.playersInLobby.append(peerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
+        self.updateUI()
     }
     
     func removePlayerWith(indexPath: IndexPath) {
-        self.playersInLobby.list.remove(at: indexPath.row)
+        self.playersInLobby.remove(at: indexPath.row)
         self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
+        self.updateUI()
     }
     
     // MARK: Actions
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true)
-    }
-    
 }
 
 // MARK: UITableViewDataSource implementation
@@ -55,14 +72,14 @@ extension LobbyViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.playersInLobby.list.count
+        return self.playersInLobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = self.playersInLobby.convertListToString()[indexPath.row]
+        content.text = Utils.convertMCPeerIDListToString(list: self.playersInLobby)[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
@@ -76,14 +93,16 @@ extension LobbyViewController: MCSessionDelegate {
         case MCSessionState.connected:
             print("Connected: \(peerID.displayName)")
             DispatchQueue.main.async {
-                self.addPlayerWith(peerID: peerID)
+                if peerID != self.hostPeerID {
+                    self.addPlayerWith(peerID: peerID)
+                }
             }
         case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("Not connected: \(peerID.displayName)")
             DispatchQueue.main.async {
-                if let index = self.playersInLobby.list.firstIndex(of: peerID) {
+                if let index = self.playersInLobby.firstIndex(of: peerID) {
                     let indexPath = IndexPath(row: index, section: 0)
                     self.removePlayerWith(indexPath: indexPath)
                 }
