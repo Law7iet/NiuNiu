@@ -55,7 +55,7 @@
         <!--Search-->
         <scene sceneID="2qi-MI-e10">
             <objects>
-                <viewController id="l9d-DM-1ku" customClass="SearchViewControll" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="l9d-DM-1ku" customClass="SearchViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Orf-V2-7qo">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -118,7 +118,7 @@
             </objects>
             <point key="canvasLocation" x="4010.7476635514017" y="473.6501079913607"/>
         </scene>
-        <!--Lobby-->
+        <!--Host-->
         <scene sceneID="Rmk-u6-yu6">
             <objects>
                 <viewController id="05W-vh-zCY" customClass="HostViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
@@ -189,7 +189,7 @@
                             <constraint firstItem="Grn-2N-r6M" firstAttribute="trailing" secondItem="cVF-e2-5vV" secondAttribute="trailing" id="woA-zX-u6W"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Lobby" id="PXd-uI-vqj">
+                    <navigationItem key="navigationItem" title="Host" id="PXd-uI-vqj">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="SR0-Ip-gBv">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="vLu-4z-w3w">
                                 <rect key="frame" x="313" y="5" width="95" height="34.333333333333336"/>
@@ -369,9 +369,6 @@
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="14U-pF-BIt">
                                                 <rect key="frame" x="143" y="0.3333333333333286" width="20" height="20"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="20" id="cKz-tm-fia"/>
-                                                </constraints>
                                             </activityIndicatorView>
                                         </subviews>
                                     </stackView>
@@ -402,27 +399,21 @@
                                     <constraint firstAttribute="trailing" secondItem="d77-ai-qFy" secondAttribute="trailing" constant="24" id="Tcy-yS-1Qo"/>
                                 </constraints>
                             </stackView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DzB-p4-Mdm">
-                                <rect key="frame" x="0.0" y="88" width="428.66666666666669" height="44"/>
-                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eDT-9n-eZL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="HvO-x4-Sjc" firstAttribute="leading" secondItem="eDT-9n-eZL" secondAttribute="leading" id="FUX-Qi-phZ"/>
-                            <constraint firstItem="DzB-p4-Mdm" firstAttribute="top" secondItem="eDT-9n-eZL" secondAttribute="top" id="Pwv-iU-UwH"/>
                             <constraint firstItem="HvO-x4-Sjc" firstAttribute="top" secondItem="eDT-9n-eZL" secondAttribute="top" constant="20" id="QcZ-OV-bc4"/>
                             <constraint firstItem="eDT-9n-eZL" firstAttribute="bottom" secondItem="HvO-x4-Sjc" secondAttribute="bottom" id="Quh-UJ-Ci7"/>
-                            <constraint firstItem="DzB-p4-Mdm" firstAttribute="trailing" secondItem="HvO-x4-Sjc" secondAttribute="trailing" id="b8I-ef-0JH"/>
-                            <constraint firstItem="eDT-9n-eZL" firstAttribute="trailing" secondItem="HvO-x4-Sjc" secondAttribute="trailing" id="lIa-F0-mZP"/>
-                            <constraint firstItem="DzB-p4-Mdm" firstAttribute="leading" secondItem="HvO-x4-Sjc" secondAttribute="leading" id="y9A-um-ZoV"/>
+                            <constraint firstItem="HvO-x4-Sjc" firstAttribute="trailing" secondItem="eDT-9n-eZL" secondAttribute="trailing" id="gLQ-ds-R1N"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Lobby" id="D6m-xB-qO3"/>
                     <connections>
                         <outlet property="playersCounterLabel" destination="xYx-89-Xce" id="3Pu-Pd-LFF"/>
                         <outlet property="playersTableView" destination="d77-ai-qFy" id="666-Wj-wZu"/>
-                        <segue destination="uRC-w6-dEM" kind="show" id="m1A-tP-Z5t"/>
+                        <segue destination="uRC-w6-dEM" kind="show" identifier="showGuestGameSegue" id="m1A-tP-Z5t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUi-Ua-eXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

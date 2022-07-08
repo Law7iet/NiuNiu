@@ -5,23 +5,20 @@
 //  Created by Han Chu on 07/07/22.
 //
 
-struct Card
-{
+struct Card: Codable {
     var rank: RankEnum
     var suit: SuitEnum
-    init(rank x: RankEnum, suit y: SuitEnum)
-    {
+    init(rank x: RankEnum, suit y: SuitEnum) {
         rank = x
         suit = y
     }
-    func getRankAsString() -> String
-    {
+    
+    func getRankAsString() -> String {
         return String(self.rank.rawValue)
     }
-    func getSuitAsString() -> String
-    {
-        switch suit
-        {
+    
+    func getSuitAsString() -> String {
+        switch suit {
         case .hearts:
             return "cuori"
         case .diamonds:

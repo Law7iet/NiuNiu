@@ -8,7 +8,7 @@
 import UIKit
 import MultipeerConnectivity
 
-class SearchViewControll: UIViewController {
+class SearchViewController: UIViewController {
     
     // MARK: Variables
     var myID: String!
@@ -26,6 +26,7 @@ class SearchViewControll: UIViewController {
         self.hostsAvailable = [MCPeerID]()
         self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(self.myID!)")
         self.mcSession = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
+        self.mcSession.delegate = self
         
         self.mcNearbyServieBrowser = MCNearbyServiceBrowser(
             peer: self.myPeerID,
@@ -80,7 +81,7 @@ class SearchViewControll: UIViewController {
 }
 
 // MARK: UITableViewDelegate implementation
-extension SearchViewControll: UITableViewDelegate {
+extension SearchViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
     }
@@ -118,7 +119,7 @@ extension SearchViewControll: UITableViewDelegate {
 }
 
 // MARK: UITableViewDataSource implementation
-extension SearchViewControll: UITableViewDataSource {
+extension SearchViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return hostsAvailable.count
     }
@@ -133,7 +134,7 @@ extension SearchViewControll: UITableViewDataSource {
 }
 
 // MARK: MCNearbyServiceBrowserDelegate implementation
-extension SearchViewControll: MCNearbyServiceBrowserDelegate {
+extension SearchViewController: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         self.addHostWith(peerID: peerID)
     }
@@ -143,5 +144,28 @@ extension SearchViewControll: MCNearbyServiceBrowserDelegate {
             let indexPath = IndexPath(row: index, section: 0)
             self.removeHostWith(indexPath: indexPath)
         }
+    }
+}
+
+// MARK: MCSessionDelegate implementation
+extension SearchViewController: MCSessionDelegate {
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        print("Hola from SearchViewController")
+    }
+    
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+
+    }
+
+    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+
+    }
+
+    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
+
+    }
+
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+
     }
 }

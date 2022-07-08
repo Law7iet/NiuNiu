@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GameEnum {
+enum MessageType: Codable {
     case startGame
     case startMatch
     case startBet
@@ -15,4 +15,9 @@ enum GameEnum {
     case chooseCard
     case endMatch
     case endGame
+    
+    case closeLobby
+    case closeConnection
+    
+    case error
 }

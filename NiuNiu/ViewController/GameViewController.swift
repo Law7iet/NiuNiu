@@ -12,7 +12,7 @@ class GameViewController: UIViewController {
     
     // MARK: Variables
     var receiver: MCPeerID!
-    var users: PeerList!
+    var users: [MCPeerID]!
     var session: MCSession!
     
     @IBOutlet weak var userButton: UIButton!
@@ -21,7 +21,7 @@ class GameViewController: UIViewController {
     // MARK: Functions
     func setUserButton() {
         var childrenActions: [UIAction] = []
-        for user in users.list {
+        for user in self.users {
             childrenActions.append(UIAction(title: user.displayName) { (action) in
                 self.receiver = user
             })
@@ -60,15 +60,5 @@ class GameViewController: UIViewController {
             print("try self.session.send error")
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }

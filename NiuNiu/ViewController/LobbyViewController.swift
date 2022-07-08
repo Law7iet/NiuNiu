@@ -113,7 +113,34 @@ extension LobbyViewController: MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-
+        let gameMessage = Message(data: data)
+        switch gameMessage.type {
+        case .closeLobby:
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(alert, animated: true)
+                self.mcSession.disconnect()
+            }
+        case .closeConnection:
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(alert, animated: true)
+                self.mcSession.disconnect()
+            }
+            
+        case .startGame:
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "showGuestGameSegue", sender: nil)
+            }
+        default:
+            print("Errore")
+        }
     }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

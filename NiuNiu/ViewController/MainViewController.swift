@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let hostVC = segue.destination as? HostViewController {
             hostVC.myID = self.myID
-        } else if let searchVC = segue.destination as? SearchViewControll {
+        } else if let searchVC = segue.destination as? SearchViewController {
             searchVC.myID = self.myID
         }
     }

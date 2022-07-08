@@ -5,8 +5,7 @@
 //  Created by Han Chu on 07/07/22.
 //
 
-enum RankEnum: Int, CaseIterable
-{
+enum RankEnum: Int, CaseIterable, Codable {
     case ace = 1
     case two = 2
     case three = 3
