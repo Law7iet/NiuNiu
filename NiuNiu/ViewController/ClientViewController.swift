@@ -1,5 +1,5 @@
 //
-//  LobbyViewController.swift
+//  ClientViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 06/07/22.
@@ -8,7 +8,7 @@
 import UIKit
 import MultipeerConnectivity
 
-class LobbyViewController: UIViewController {
+class ClientViewController: UIViewController {
 
     // MARK: Variables
     var myPeerID: MCPeerID!
@@ -34,6 +34,16 @@ class LobbyViewController: UIViewController {
         self.playersInLobby.removeAll()
         if self.isMovingFromParent {
             mcSession.disconnect()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Passing the data
+        if let vc = segue.destination as? ClientGameViewController {
+            vc.users = self.playersInLobby
+            vc.mcSession = self.mcSession
+            vc.myPeerID = self.myPeerID
+            vc.hostPeerID = self.hostPeerID
         }
     }
     
@@ -66,7 +76,7 @@ class LobbyViewController: UIViewController {
 }
 
 // MARK: UITableViewDataSource implementation
-extension LobbyViewController: UITableViewDataSource {
+extension ClientViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
@@ -87,7 +97,7 @@ extension LobbyViewController: UITableViewDataSource {
 }
 
 // MARK: MCSessionDelegate implementation
-extension LobbyViewController: MCSessionDelegate {
+extension ClientViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
@@ -133,11 +143,12 @@ extension LobbyViewController: MCSessionDelegate {
                 self.present(alert, animated: true)
                 self.mcSession.disconnect()
             }
-            
         case .startGame:
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "showGuestGameSegue", sender: nil)
+                self.performSegue(withIdentifier: "showClientGameSegue", sender: nil)
             }
+        case .testMessage:
+            print("Ack")
         default:
             print("Errore")
         }

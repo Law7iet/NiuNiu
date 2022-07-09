@@ -1,5 +1,5 @@
 //
-//  HostViewController.swift
+//  ServerViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 30/06/22.
@@ -8,7 +8,7 @@
 import UIKit
 import MultipeerConnectivity
 
-class HostViewController: UIViewController {
+class ServerViewController: UIViewController {
     
     // MARK: Variables
     var myID: String!
@@ -46,29 +46,34 @@ class HostViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the data
-        //        if let vc = segue.destination as? GameViewController {
-//            vc.users = self.playersInLobby
-//        }
+        if let vc = segue.destination as? ServerGameViewController {
+            vc.users = self.playersInLobby
+            vc.mcSession = self.mcSession
+            vc.myPeerID = self.myPeerID
+        }
     }
     
     // MARK: Actions
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Start the game
         // TODO: Send a message to all players in waiting room
-//        let data = Data(GameMessage(
-//            type: .startGame,
-//            message: nil,
-//            cards: nil
-//        ))
-//        do {
-//            try self.mcSession.send(
-//                data,
-//                toPeers: self.playersInLobby.list,
-//                with: .reliable
-//            )
-//        } catch {
-//            print("Data error")
-//        }
+        let message = Message(type: .startGame, text: nil, cards: nil)
+        if let data = message.convertToData() {
+            if let index = self.playersInLobby.firstIndex(of: self.myPeerID) {
+                // Remove himself from the destination's peers
+                self.playersInLobby.remove(at: index)
+            }
+            do {
+                try self.mcSession.send(
+                    data,
+                    toPeers: self.playersInLobby,
+                    with: .reliable
+                )
+            } catch {
+                print("mcSessione.send error")
+            }
+            self.performSegue(withIdentifier: "showServerGameSegue", sender: nil)
+        }
     }
     
     // MARK: Supporting functions
@@ -138,7 +143,7 @@ class HostViewController: UIViewController {
 }
 
 // MARK: Multipeer Connectivity Session's delegate implementation
-extension HostViewController: MCSessionDelegate {
+extension ServerViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
@@ -180,7 +185,7 @@ extension HostViewController: MCSessionDelegate {
 }
 
 // MARK: Multipeer Connectivity Advertiser's delegate implementation
-extension HostViewController: MCNearbyServiceAdvertiserDelegate {
+extension ServerViewController: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         invitationHandler(true, self.mcSession)
     }
@@ -191,7 +196,7 @@ extension HostViewController: MCNearbyServiceAdvertiserDelegate {
 }
 
 // MARK: TableView's delegate implementation
-extension HostViewController: UITableViewDelegate {
+extension ServerViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.playersInLobby[indexPath.row]
         if user == self.myPeerID {
@@ -222,7 +227,7 @@ extension HostViewController: UITableViewDelegate {
 }
 
 // MARK: DataSource's delegate implementation
-extension HostViewController: UITableViewDataSource {
+extension ServerViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
@@ -232,7 +237,7 @@ extension HostViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "hostCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "serverCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
         content.text = Utils.convertMCPeerIDListToString(list: self.playersInLobby)[indexPath.row]

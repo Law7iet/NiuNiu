@@ -1,5 +1,5 @@
 //
-//  JoinViewController.swift
+//  SeachViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 01/07/22.
@@ -59,7 +59,7 @@ class SearchViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! LobbyViewController
+        let vc = segue.destination as! ClientViewController
         vc.myPeerID = self.myPeerID
         vc.hostPeerID = self.hostPeerID
         vc.mcSession = self.mcSession
@@ -107,7 +107,7 @@ extension SearchViewController: UITableViewDelegate {
                     timeout: 30
                 )
                 self.hostPeerID = user
-                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
+                self.performSegue(withIdentifier: "showClientSegue", sender: nil)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -125,7 +125,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = hostsTableView.dequeueReusableCell(withIdentifier: "JoinCell", for: indexPath)
+        let cell = hostsTableView.dequeueReusableCell(withIdentifier: "clientCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
         content.text = Utils.convertMCPeerIDListToString(list: hostsAvailable)[indexPath.row]
         cell.contentConfiguration = content

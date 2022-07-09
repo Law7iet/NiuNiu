@@ -1,5 +1,5 @@
 //
-//  GuestViewController.swift
+//  ClientGameViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 05/07/22.
@@ -8,11 +8,18 @@
 import UIKit
 import MultipeerConnectivity
 
-class GuestViewController: UIViewController {
+class ClientGameViewController: UIViewController {
 
+    // MARK: Variables
+    var users: [MCPeerID]!
+    var myPeerID: MCPeerID!
+    var hostPeerID: MCPeerID!
+    var mcSession: MCSession!
+    
+    @IBOutlet weak var label: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
     

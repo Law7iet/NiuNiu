@@ -20,4 +20,5 @@ enum MessageType: Codable {
     case closeConnection
     
     case error
+    case testMessage
 }

@@ -1,5 +1,5 @@
 //
-//  GameViewController.swift
+//  ServerGameViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 05/07/22.
@@ -8,12 +8,13 @@
 import UIKit
 import MultipeerConnectivity
 
-class GameViewController: UIViewController {
+class ServerGameViewController: UIViewController {
     
     // MARK: Variables
     var receiver: MCPeerID!
     var users: [MCPeerID]!
-    var session: MCSession!
+    var myPeerID: MCPeerID!
+    var mcSession: MCSession!
     
     @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var textField: UITextField!
@@ -45,19 +46,19 @@ class GameViewController: UIViewController {
     
     // MARK: Actions
     @IBAction func sendMessage(_ sender: Any) {
-        let message = self.textField.text
-        if message == nil {
-            return
-        }
-        let data = Data(message!.utf8)
-        do {
-            try self.session.send(
-                data,
-                toPeers: [self.receiver],
-                with: .reliable
-            )
-        } catch {
-            print("try self.session.send error")
+        if let msg = self.textField.text {
+            let message = Message(type: .testMessage, text: msg, cards: nil)
+            if let data = message.convertToData() {
+                do {
+                    try self.mcSession.send(
+                        data,
+                        toPeers: [self.receiver],
+                        with: .reliable
+                    )
+                } catch {
+                    print("mcSession.send error")
+                }
+            }
         }
     }
     
