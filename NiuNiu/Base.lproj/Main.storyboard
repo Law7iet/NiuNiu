@@ -25,7 +25,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Host game" buttonSize="large"/>
                                         <connections>
-                                            <segue destination="05W-vh-zCY" kind="show" identifier="showHostSegue" id="Qca-Ly-WeK"/>
+                                            <segue destination="05W-vh-zCY" kind="show" identifier="" id="Qca-Ly-WeK"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
@@ -157,7 +157,7 @@
                                         <rect key="frame" x="24" y="80.666666666666686" width="380.33333333333331" height="703.33333333333326"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HostCell" id="kkf-KP-gTG">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="hostCell" id="kkf-KP-gTG">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="380.33333333333331" height="43.666667938232422"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kkf-KP-gTG" id="TGA-Ge-1la">
@@ -173,24 +173,18 @@
                                     <constraint firstAttribute="trailing" secondItem="wfs-Au-m2Q" secondAttribute="trailing" constant="24" id="obG-g4-9Rx"/>
                                 </constraints>
                             </stackView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6Z-r8-E1D">
-                                <rect key="frame" x="0.0" y="88" width="428.33333333333331" height="44"/>
-                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Grn-2N-r6M"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="leading" secondItem="cVF-e2-5vV" secondAttribute="leading" id="7Vj-19-0DP"/>
-                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="trailing" secondItem="cVF-e2-5vV" secondAttribute="trailing" id="LeY-9c-maX"/>
                             <constraint firstItem="cVF-e2-5vV" firstAttribute="leading" secondItem="Grn-2N-r6M" secondAttribute="leading" id="TFW-Ik-KJE"/>
                             <constraint firstItem="cVF-e2-5vV" firstAttribute="top" secondItem="Grn-2N-r6M" secondAttribute="top" constant="20" id="d0r-YU-Tr2"/>
                             <constraint firstItem="Grn-2N-r6M" firstAttribute="bottom" secondItem="cVF-e2-5vV" secondAttribute="bottom" id="iAM-M8-hBs"/>
-                            <constraint firstItem="f6Z-r8-E1D" firstAttribute="top" secondItem="Grn-2N-r6M" secondAttribute="top" id="wGK-8T-Vfp"/>
                             <constraint firstItem="Grn-2N-r6M" firstAttribute="trailing" secondItem="cVF-e2-5vV" secondAttribute="trailing" id="woA-zX-u6W"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Host" id="PXd-uI-vqj">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="SR0-Ip-gBv">
+                        <barButtonItem key="rightBarButtonItem" style="done" id="SR0-Ip-gBv">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="vLu-4z-w3w">
                                 <rect key="frame" x="313" y="5" width="95" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -403,10 +397,10 @@
                         <viewLayoutGuide key="safeArea" id="eDT-9n-eZL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="HvO-x4-Sjc" firstAttribute="leading" secondItem="eDT-9n-eZL" secondAttribute="leading" id="FUX-Qi-phZ"/>
                             <constraint firstItem="HvO-x4-Sjc" firstAttribute="top" secondItem="eDT-9n-eZL" secondAttribute="top" constant="20" id="QcZ-OV-bc4"/>
                             <constraint firstItem="eDT-9n-eZL" firstAttribute="bottom" secondItem="HvO-x4-Sjc" secondAttribute="bottom" id="Quh-UJ-Ci7"/>
-                            <constraint firstItem="HvO-x4-Sjc" firstAttribute="trailing" secondItem="eDT-9n-eZL" secondAttribute="trailing" id="gLQ-ds-R1N"/>
+                            <constraint firstItem="eDT-9n-eZL" firstAttribute="trailing" secondItem="HvO-x4-Sjc" secondAttribute="trailing" id="Qxt-ak-Of0"/>
+                            <constraint firstItem="eDT-9n-eZL" firstAttribute="leading" secondItem="HvO-x4-Sjc" secondAttribute="leading" id="lzl-cM-sze"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Lobby" id="D6m-xB-qO3"/>
@@ -431,7 +425,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="r3y-GR-cz2"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" destinationCreationSelector="firstSegue" id="r3y-GR-cz2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MZ1-9P-nhe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

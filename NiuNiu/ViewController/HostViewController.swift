@@ -232,7 +232,7 @@ extension HostViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "HostCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "hostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
         content.text = Utils.convertMCPeerIDListToString(list: self.playersInLobby)[indexPath.row]
