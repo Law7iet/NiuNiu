@@ -11,6 +11,7 @@ import MultipeerConnectivity
 class ServerGameViewController: UIViewController {
     
     // MARK: Variables
+    var serverManager: ServerManager!
     var receiver: MCPeerID!
     var users: [MCPeerID]!
     var myPeerID: MCPeerID!

@@ -14,14 +14,13 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.myID = Utils.getRandomID(length: 4)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let hostVC = segue.destination as? ServerViewController {
-            hostVC.myID = self.myID
+        if let serverVC = segue.destination as? ServerViewController {
+            serverVC.serverManager = ServerManager()
         } else if let searchVC = segue.destination as? SearchViewController {
-            searchVC.myID = self.myID
+            searchVC.searchManager = SearchManager()
         }
     }
     

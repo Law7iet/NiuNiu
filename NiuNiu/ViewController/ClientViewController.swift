@@ -11,68 +11,62 @@ import MultipeerConnectivity
 class ClientViewController: UIViewController {
 
     // MARK: Variables
-    var myPeerID: MCPeerID!
-    var hostPeerID: MCPeerID!
-    var mcSession: MCSession!
+    var clientManager: ClientManager!
     
-    var playersInLobby: [MCPeerID]!
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
     
     // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupConnectivity()
+        self.setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.playersInLobby.append(hostPeerID)
-        self.playersInLobby.append(myPeerID)
+        self.clientManager.clearPlayers()
+        self.playersTableView.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        self.playersInLobby.removeAll()
         if self.isMovingFromParent {
-            mcSession.disconnect()
+            self.clientManager.disconnectSession()
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the data
         if let vc = segue.destination as? ClientGameViewController {
-            vc.users = self.playersInLobby
-            vc.mcSession = self.mcSession
-            vc.myPeerID = self.myPeerID
-            vc.hostPeerID = self.hostPeerID
+            vc.users = self.clientManager.playersPeerID
+            vc.mcSession = self.clientManager.mcSession
+            vc.myPeerID = self.clientManager.myPeerID
+            vc.hostPeerID = self.clientManager.hostPeerID
         }
     }
     
     // MARK: Supporting functions
-    func setupConnectivity() {
-        self.playersInLobby = [MCPeerID]()
-        self.mcSession.delegate = self
+    func setupTableView() {
         self.playersTableView.dataSource = self
     }
     
     func updateUI() {
         // Label
-        self.playersCounterLabel.text = "\(self.playersInLobby.count) of 6 players found"
+        self.playersCounterLabel.text = "\(self.clientManager.getNumberOfPlayers()) of 6 players found"
     }
     
-    func addPlayerWith(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.playersInLobby.count, section: 0)
-        self.playersInLobby.append(peerID)
+    func addPlayerInTableView(mcPeerID: MCPeerID) {
+        let indexPath = IndexPath(row: self.clientManager.getNumberOfPlayers(), section: 0)
+        self.clientManager.addPlayer(mcPeerID: mcPeerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
     }
     
-    func removePlayerWith(indexPath: IndexPath) {
-        self.playersInLobby.remove(at: indexPath.row)
+    func removePlayerWith(mcPeerID: MCPeerID) {
+        self.clientManager.removePlayer(mcPeerID: mcPeerID)
+        let indexPath = IndexPath(row: self.clientManager.getNumberOfPlayers(), section: 0)
         self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
         self.updateUI()
     }
     
-    // MARK: Actions
 }
 
 // MARK: UITableViewDataSource implementation
@@ -82,47 +76,31 @@ extension ClientViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.playersInLobby.count
+        return self.clientManager.getNumberOfPlayers()
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "clientCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.convertMCPeerIDListToString(list: self.playersInLobby)[indexPath.row]
+        content.text = Utils.convertMCPeerIDListToString(list: self.clientManager.getPlayersInLobby())[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
     }
 }
 
-// MARK: MCSessionDelegate implementation
-extension ClientViewController: MCSessionDelegate {
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        switch state {
-        case MCSessionState.connected:
-            print("Connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
-                if peerID != self.hostPeerID {
-                    self.addPlayerWith(peerID: peerID)
-                }
-            }
-        case MCSessionState.connecting:
-            print("Connecting: \(peerID.displayName)")
-        case MCSessionState.notConnected:
-            print("Not connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
-                if let index = self.playersInLobby.firstIndex(of: peerID) {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    self.removePlayerWith(indexPath: indexPath)
-                }
-            }
-        @unknown default:
-            print("Unknown state: \(state)")
-        }
+extension ClientViewController: ClientManagerDelegate {
+    
+    func didConnected(who mcPeerID: MCPeerID) {
+        self.addPlayerInTableView(mcPeerID: mcPeerID)
     }
     
-    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+    func didDisconnected(who mcPeerID: MCPeerID) {
+        self.removePlayerWith(mcPeerID: mcPeerID)
+    }
+    
+    func didReciveMessage(from peerID: MCPeerID, what data: Data) {
         let gameMessage = Message(data: data)
         switch gameMessage.type {
         case .closeLobby:
@@ -132,7 +110,7 @@ extension ClientViewController: MCSessionDelegate {
                     self.navigationController?.popViewController(animated: true)
                 }))
                 self.present(alert, animated: true)
-                self.mcSession.disconnect()
+                self.clientManager.disconnectSession()
             }
         case .closeConnection:
             DispatchQueue.main.async {
@@ -141,7 +119,7 @@ extension ClientViewController: MCSessionDelegate {
                     self.navigationController?.popViewController(animated: true)
                 }))
                 self.present(alert, animated: true)
-                self.mcSession.disconnect()
+                self.clientManager.disconnectSession()
             }
         case .startGame:
             DispatchQueue.main.async {
@@ -153,16 +131,5 @@ extension ClientViewController: MCSessionDelegate {
             print("Errore")
         }
     }
-
-    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-
-    }
-
-    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-
-    }
-
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-
-    }
+    
 }
