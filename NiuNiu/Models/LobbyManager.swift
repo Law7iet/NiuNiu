@@ -1,5 +1,5 @@
 //
-//  ClientManager.swift
+//  LobbyManager.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 09/07/22.
@@ -14,7 +14,7 @@ protocol ClientManagerDelegate {
     func didReciveMessage(from peerID: MCPeerID, what data: Data)
 }
 
-class ClientManager: NSObject {
+class LobbyManager: NSObject {
     
     var myPeerID: MCPeerID
     var hostPeerID: MCPeerID
@@ -34,11 +34,11 @@ class ClientManager: NSObject {
     }
     
     func getPlayersInLobby() -> [MCPeerID] {
-        return [self.hostPeerID, self.myPeerID] + self.playersPeerID
+        return [self.myPeerID] + self.playersPeerID
     }
     
     func getNumberOfPlayers() -> Int {
-        return self.playersPeerID.count + 2
+        return self.playersPeerID.count + 1
     }
     
     func clearPlayers() {
@@ -49,10 +49,12 @@ class ClientManager: NSObject {
         self.playersPeerID.append(mcPeerID)
     }
     
-    func removePlayer(mcPeerID: MCPeerID) {
-        if let index = self.playersPeerID.firstIndex(of: mcPeerID) {
-            self.playersPeerID.remove(at: index)
-        }
+    func getIndexOf(player mcPeerID: MCPeerID) -> Int? {
+        return self.playersPeerID.firstIndex(of: mcPeerID)
+    }
+    
+    func removePlayerWith(index: Int) {
+        self.playersPeerID.remove(at: index)
     }
     
     func disconnectSession() {
@@ -71,23 +73,19 @@ class ClientManager: NSObject {
     
 }
 
-extension ClientManager: MCSessionDelegate {
+extension LobbyManager: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
             print("ClientManager connected: \(peerID.displayName)")
             // Add the connected player
-            self.playersPeerID.append(peerID)
             delegate?.didConnected(who: peerID)
         case MCSessionState.connecting:
             print("ClientManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ClientManager Not connected: \(peerID.displayName)")
             // Remove the disconnected player
-            if let index = self.playersPeerID.firstIndex(of: peerID) {
-                self.playersPeerID.remove(at: index)
-            }
             delegate?.didDisconnected(who: peerID)
         @unknown default:
             print("ClientManager Unknown state: \(state)")

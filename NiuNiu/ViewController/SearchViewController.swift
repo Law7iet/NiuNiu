@@ -36,8 +36,8 @@ class SearchViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! ClientViewController
-        vc.clientManager = ClientManager(
+        let vc = segue.destination as! LobbyViewController
+        vc.lobbyManager = LobbyManager(
             peerID: self.searchManager.myPeerID,
             hostPeerID: self.hostPeerID,
             mcSession: self.searchManager.mcSession)
@@ -50,15 +50,17 @@ class SearchViewController: UIViewController {
     }
     
     func addHostInTableView(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.searchManager.getNumberOfHosts(), section: 0)
         self.searchManager.addHost(peerID: peerID)
+        let indexPath = IndexPath(row: self.searchManager.getNumberOfHosts() - 1, section: 0)
         self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     func removeHostInTableView(peerID: MCPeerID) {
-        self.searchManager.removeHost(peerID: peerID)
-        let indexPath = IndexPath(row: self.searchManager.getNumberOfHosts(), section: 0)
-        self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
+        if let index = self.searchManager.getIndexOf(host: peerID) {
+            self.searchManager.removeHostWith(index: index)
+            let indexPath = IndexPath(row: index, section: 0)
+            self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
+        }        
     }
 }
 
@@ -99,7 +101,7 @@ extension SearchViewController: UITableViewDelegate {
                 // Join lobby
                 self.searchManager.requestToJoin(host: user)
                 self.hostPeerID = user
-                self.performSegue(withIdentifier: "showClientSegue", sender: nil)
+                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))
         alert.addAction(UIAlertAction(

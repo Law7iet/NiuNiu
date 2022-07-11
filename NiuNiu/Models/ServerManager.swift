@@ -15,10 +15,10 @@ protocol ServerManagerDelegate {
 
 class ServerManager: NSObject {
     
-    var myPeerID: MCPeerID!
-    var playersPeerID: [MCPeerID]!
-    var mcSession: MCSession!
-    var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser!
+    var myPeerID: MCPeerID
+    var playersPeerID: [MCPeerID]
+    var mcSession: MCSession
+    var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser
     var delegate: ServerManagerDelegate?
     
     override init() {
@@ -52,10 +52,16 @@ class ServerManager: NSObject {
         self.playersPeerID.append(peerID)
     }
     
-    func removePlayer(peerID: MCPeerID) {
-        if let index = self.playersPeerID.firstIndex(of: peerID) {
-            self.playersPeerID.remove(at: index)
-        }
+    func getIndexOf(player mcPeerID: MCPeerID) -> Int? {
+        return self.playersPeerID.firstIndex(of: mcPeerID)
+    }
+    
+    func removePlayerWith(index: Int) {
+        self.playersPeerID.remove(at: index)
+    }
+    
+    func disconnectSession() {
+        self.mcSession.disconnect()
     }
     
     func sendBroadcastMessage(message: Message) {

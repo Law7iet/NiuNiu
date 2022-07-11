@@ -51,10 +51,12 @@ class SearchManager: NSObject {
         self.hostsPeerID.append(peerID)
     }
     
-    func removeHost(peerID: MCPeerID) {
-        if let index = self.hostsPeerID.firstIndex(of: peerID) {
-            self.hostsPeerID.remove(at: index)
-        }
+    func getIndexOf(host mcPeerID: MCPeerID) -> Int? {
+        return self.hostsPeerID.firstIndex(of: mcPeerID)
+    }
+    
+    func removeHostWith(index: Int) {
+        self.hostsPeerID.remove(at: index)
     }
     
     func disconnectSession() {

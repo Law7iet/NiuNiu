@@ -26,15 +26,16 @@ class ServerViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Open Lobby
         self.serverManager.startAdvertising()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if self.isMovingFromParent {
-            self.closeLobby()
-        }
+        // Close lobby
         self.serverManager.stopAdvertising()
+        self.serverManager.disconnectSession()
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -87,17 +88,15 @@ class ServerViewController: UIViewController {
     }
     
     func removePlayerInTableView(peerID: MCPeerID) {
-        self.serverManager.removePlayer(peerID: peerID)
-        let indexPath = IndexPath(row: self.serverManager.getNumberOrPlayers(), section: 0)
-        self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
-        self.updateUI()
-        self.updateAdvertiser()
+        if let index = self.serverManager.getIndexOf(player: peerID) {
+            self.serverManager.removePlayerWith(index: index)
+            let indexPath = IndexPath(row: index + 1, section: 0)
+            self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
+            self.updateUI()
+            self.updateAdvertiser()
+        }
     }
     
-    func closeLobby() {
-        let message = Message(type: .closeLobby, text: nil, cards: nil)
-        self.serverManager.sendBroadcastMessage(message: message)
-    }
 }
 
 // MARK: DataSource's delegate implementation

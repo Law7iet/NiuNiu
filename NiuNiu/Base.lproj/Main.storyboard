@@ -111,7 +111,7 @@
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="hostsTableView" destination="DL7-Df-tRq" id="jZB-vG-09f"/>
-                        <segue destination="UzG-rR-XSM" kind="show" identifier="showClientSegue" id="1Ky-OL-M99"/>
+                        <segue destination="UzG-rR-XSM" kind="show" identifier="showLobbySegue" id="1Ky-OL-M99"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B60-W0-L7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -366,7 +366,7 @@
         <!--Lobby-->
         <scene sceneID="GBk-p7-7PE">
             <objects>
-                <viewController id="UzG-rR-XSM" customClass="ClientViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="UzG-rR-XSM" customClass="LobbyViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" ambiguous="YES" id="wZl-t3-zPl">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -402,7 +402,7 @@
                                         <rect key="frame" x="24" y="80.666666666666686" width="380.66666666666669" height="703.33333333333326"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="clientCell" id="QTc-Y4-st7">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="lobbyCell" id="QTc-Y4-st7">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="380.66666666666669" height="43.666667938232422"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QTc-Y4-st7" id="Cyd-LU-hPJ">
@@ -432,7 +432,7 @@
                     <connections>
                         <outlet property="playersCounterLabel" destination="hgN-Xm-2zi" id="2ix-kt-Pwx"/>
                         <outlet property="playersTableView" destination="Yxi-zM-vFM" id="HhT-D7-yFF"/>
-                        <segue destination="uRC-w6-dEM" kind="presentation" modalPresentationStyle="overCurrentContext" id="j4k-BM-N1F"/>
+                        <segue destination="uRC-w6-dEM" kind="presentation" identifier="showClientGameSegue" modalPresentationStyle="overCurrentContext" id="j4k-BM-N1F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LeX-YJ-QnS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
