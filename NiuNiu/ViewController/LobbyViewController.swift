@@ -37,10 +37,7 @@ class LobbyViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the data
         if let vc = segue.destination as? ClientGameViewController {
-            vc.users = self.lobbyManager.playersPeerID
-            vc.mcSession = self.lobbyManager.session
-            vc.myPeerID = self.lobbyManager.myPeerID
-            vc.hostPeerID = self.lobbyManager.hostPeerID
+            vc.clientManager = self.lobbyManager
         }
     }
     

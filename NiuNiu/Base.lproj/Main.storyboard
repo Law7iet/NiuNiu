@@ -281,6 +281,7 @@
                     </view>
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="label" destination="EV5-q7-cMw" id="BaB-gw-gy1"/>
                         <outlet property="textField" destination="ilX-vI-Ezy" id="GJ6-dB-9zI"/>
                         <outlet property="userButton" destination="Shk-Lv-nSC" id="muc-dR-EiX"/>
                     </connections>
@@ -315,6 +316,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Send"/>
+                                                <connections>
+                                                    <action selector="sendMessage:" destination="uRC-w6-dEM" eventType="touchUpInside" id="KNW-tj-kZC"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -339,6 +343,7 @@
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="label" destination="TEV-xV-rVT" id="w4l-fD-vuy"/>
+                        <outlet property="textField" destination="mJI-ue-zRw" id="eI3-LV-kjf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEQ-pJ-Jhu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -356,7 +361,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" destinationCreationSelector="firstSegue" id="r3y-GR-cz2"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="r3y-GR-cz2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MZ1-9P-nhe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
