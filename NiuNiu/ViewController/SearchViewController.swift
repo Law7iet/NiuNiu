@@ -40,7 +40,8 @@ class SearchViewController: UIViewController {
         vc.lobbyManager = LobbyManager(
             peerID: self.searchManager.myPeerID,
             hostPeerID: self.hostPeerID,
-            mcSession: self.searchManager.mcSession)
+            session: self.searchManager.session
+        )
     }
     
     // MARK: Supporting functions
@@ -50,7 +51,7 @@ class SearchViewController: UIViewController {
     }
     
     func addHostInTableView(peerID: MCPeerID) {
-        self.searchManager.addHost(peerID: peerID)
+        self.searchManager.addHostWith(peerID: peerID)
         let indexPath = IndexPath(row: self.searchManager.getNumberOfHosts() - 1, section: 0)
         self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
     }
@@ -99,7 +100,7 @@ extension SearchViewController: UITableViewDelegate {
                 // Disconnect from the old connection if it's not disconnected yet
                 self.searchManager.disconnectSession()
                 // Join lobby
-                self.searchManager.requestToJoin(host: user)
+                self.searchManager.requestToJoin(where: user)
                 self.hostPeerID = user
                 self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
@@ -114,11 +115,11 @@ extension SearchViewController: UITableViewDelegate {
 
 extension SearchViewController: SearchManagerDelegate {
 
-    func didFoundAHost(who peerID: MCPeerID) {
+    func didFoundHostWith(peerID: MCPeerID) {
         self.addHostInTableView(peerID: peerID)
     }
     
-    func didLostAHost(who peerID: MCPeerID) {
+    func didLostHostWith(peerID: MCPeerID) {
         self.removeHostInTableView(peerID: peerID)
     }
 

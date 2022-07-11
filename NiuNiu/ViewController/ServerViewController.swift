@@ -49,7 +49,7 @@ class ServerViewController: UIViewController {
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Notify the guests
         let message = Message(type: .startGame, text: nil, cards: nil)
-        self.serverManager.sendBroadcastMessage(message: message)
+        self.serverManager.sendBroadcastMessage(message)
         // Start the game
         self.performSegue(withIdentifier: "showServerGameSegue", sender: nil)
     }
@@ -140,7 +140,7 @@ extension ServerViewController: UITableViewDelegate {
             style: .default,
             handler: {(action: UIAlertAction) in
                 let msg = Message(type: .closeConnection, text: nil, cards: nil)
-                self.serverManager.sendMessageTo(who: user, message: msg)
+                self.serverManager.sendMessageTo(receiver: user, message: msg)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -155,19 +155,19 @@ extension ServerViewController: UITableViewDelegate {
 // MARK: ServerManager's delegate implementation
 extension ServerViewController: ServerManagerDelegate {
     
-    func didConnected(who peerID: MCPeerID) {
+    func didConnectedWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.addPlayerInTableView(peerID: peerID)
         }
     }
     
-    func didDisconnected(who peerID: MCPeerID) {
+    func didDisconnectedWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.removePlayerInTableView(peerID: peerID)
         }
     }
     
-    func didReciveMessage(from peerID: MCPeerID, what data: Data) {}
+    func didReciveMessageFrom(sender peerID: MCPeerID, message: Data) {}
     
 }
 

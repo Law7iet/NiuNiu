@@ -8,36 +8,36 @@
 import MultipeerConnectivity
 
 protocol ServerManagerDelegate {
-    func didConnected(who peerID: MCPeerID)
-    func didDisconnected(who peerID: MCPeerID)
-    func didReciveMessage(from peerID: MCPeerID, what data: Data)
+    func didConnectedWith(peerID: MCPeerID)
+    func didDisconnectedWith(peerID: MCPeerID)
+    func didReciveMessageFrom(sender peerID: MCPeerID, message: Data)
 }
 
 class ServerManager: NSObject {
     
     var myPeerID: MCPeerID
     var playersPeerID: [MCPeerID]
-    var mcSession: MCSession
-    var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser
+    var session: MCSession
+    var advertiser: MCNearbyServiceAdvertiser
     var delegate: ServerManagerDelegate?
     
     override init() {
         self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(Utils.getRandomID(length: 4))")
         self.playersPeerID = [MCPeerID]()
-        self.mcSession = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
-        self.mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(peer: self.myPeerID, discoveryInfo: nil, serviceType: "niu-niu-game")
+        self.session = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
+        self.advertiser = MCNearbyServiceAdvertiser(peer: self.myPeerID, discoveryInfo: nil, serviceType: "niu-niu-game")
         
         super.init()
-        self.mcSession.delegate = self
-        self.mcNearbyServiceAdvertiser.delegate = self
+        self.session.delegate = self
+        self.advertiser.delegate = self
     }
     
     func startAdvertising() {
-        self.mcNearbyServiceAdvertiser.startAdvertisingPeer()
+        self.advertiser.startAdvertisingPeer()
     }
     
     func stopAdvertising() {
-        self.mcNearbyServiceAdvertiser.stopAdvertisingPeer()
+        self.advertiser.stopAdvertisingPeer()
     }
     
     func getPlayersInLobby() -> [MCPeerID] {
@@ -52,8 +52,8 @@ class ServerManager: NSObject {
         self.playersPeerID.append(peerID)
     }
     
-    func getIndexOf(player mcPeerID: MCPeerID) -> Int? {
-        return self.playersPeerID.firstIndex(of: mcPeerID)
+    func getIndexOf(player peerID: MCPeerID) -> Int? {
+        return self.playersPeerID.firstIndex(of: peerID)
     }
     
     func removePlayerWith(index: Int) {
@@ -61,23 +61,23 @@ class ServerManager: NSObject {
     }
     
     func disconnectSession() {
-        self.mcSession.disconnect()
+        self.session.disconnect()
     }
     
-    func sendBroadcastMessage(message: Message) {
+    func sendBroadcastMessage(_ message: Message) {
         if let data = message.convertToData() {
             do {
-                try self.mcSession.send(data, toPeers: self.playersPeerID, with: .reliable)
+                try self.session.send(data, toPeers: self.playersPeerID, with: .reliable)
             } catch {
                 print("ServerManager.sendBroadcastMessage error")
             }
         }
     }
     
-    func sendMessageTo(who user: MCPeerID, message: Message) {
+    func sendMessageTo(receiver peerID: MCPeerID, message: Message) {
         if let data = message.convertToData() {
             do {
-                try self.mcSession.send(data, toPeers: [user], with: .reliable)
+                try self.session.send(data, toPeers: [peerID], with: .reliable)
             } catch {
                 print("ServerManager.sendMessage error")
             }
@@ -91,19 +91,19 @@ extension ServerManager: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("ServerManager connected: \(peerID.displayName)")
-            self.delegate?.didConnected(who: peerID)
+            self.delegate?.didConnectedWith(peerID: peerID)
         case MCSessionState.connecting:
             print("ServerManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ServerManager Not connected: \(peerID.displayName)")
-            self.delegate?.didDisconnected(who: peerID)
+            self.delegate?.didDisconnectedWith(peerID: peerID)
         @unknown default:
             print("ServerManager Unknown state: \(state)")
         }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        delegate?.didReciveMessage(from: peerID, what: data)
+        delegate?.didReciveMessageFrom(sender: peerID, message: data)
     }
     
     // Not used
@@ -116,7 +116,7 @@ extension ServerManager: MCSessionDelegate {
 extension ServerManager: MCNearbyServiceAdvertiserDelegate {
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        invitationHandler(true, self.mcSession)
+        invitationHandler(true, self.session)
     }
     
 }

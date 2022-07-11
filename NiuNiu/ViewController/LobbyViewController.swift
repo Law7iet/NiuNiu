@@ -38,7 +38,7 @@ class LobbyViewController: UIViewController {
         // Passing the data
         if let vc = segue.destination as? ClientGameViewController {
             vc.users = self.lobbyManager.playersPeerID
-            vc.mcSession = self.lobbyManager.mcSession
+            vc.mcSession = self.lobbyManager.session
             vc.myPeerID = self.lobbyManager.myPeerID
             vc.hostPeerID = self.lobbyManager.hostPeerID
         }
@@ -54,15 +54,15 @@ class LobbyViewController: UIViewController {
         self.playersCounterLabel.text = "\(self.lobbyManager.getNumberOfPlayers()) of 6 players found"
     }
     
-    func addPlayerInTableView(mcPeerID: MCPeerID) {
-        self.lobbyManager.addPlayer(mcPeerID: mcPeerID)
+    func addPlayerInTableView(peerID: MCPeerID) {
+        self.lobbyManager.addPlayerWith(peerID: peerID)
         let indexPath = IndexPath(row: self.lobbyManager.getNumberOfPlayers() - 1, section: 0)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
     }
     
-    func removePlayerWith(mcPeerID: MCPeerID) {
-        if let index = self.lobbyManager.getIndexOf(player: mcPeerID) {
+    func removePlayerInTableView(peerID: MCPeerID) {
+        if let index = self.lobbyManager.getIndexOf(player: peerID) {
             self.lobbyManager.removePlayerWith(index: index)
             let indexPath = IndexPath(row: index + 1, section: 0)
             self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
@@ -93,16 +93,16 @@ extension LobbyViewController: UITableViewDataSource {
     }
 }
 
-extension LobbyViewController: ClientManagerDelegate {
+extension LobbyViewController: LobbyManagerDelegate {
     
-    func didConnected(who mcPeerID: MCPeerID) {
+    func didConnectedWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
-            self.addPlayerInTableView(mcPeerID: mcPeerID)
+            self.addPlayerInTableView(peerID: peerID)
         }
     }
     
-    func didDisconnected(who mcPeerID: MCPeerID) {
-        if mcPeerID == self.lobbyManager.hostPeerID {
+    func didDisconnectedWith(peerID: MCPeerID) {
+        if peerID == self.lobbyManager.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
@@ -113,14 +113,14 @@ extension LobbyViewController: ClientManagerDelegate {
             }
         } else {
             DispatchQueue.main.async {
-                self.removePlayerWith(mcPeerID: mcPeerID)
+                self.removePlayerInTableView(peerID: peerID)
             }
         }
     }
     
-    func didReciveMessage(from peerID: MCPeerID, what data: Data) {
-        let gameMessage = Message(data: data)
-        switch gameMessage.type {
+    func didReciveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
+        let message = Message(data: messageData)
+        switch message.type {
         case .closeConnection:
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
