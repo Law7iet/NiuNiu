@@ -8,8 +8,8 @@
 import MultipeerConnectivity
 
 protocol SearchManagerDelegate {
-    func didFoundHostWith(peerID: MCPeerID)
-    func didLostHostWith(peerID: MCPeerID)
+    func didFindHostWith(peerID: MCPeerID)
+    func didLoseHostWith(peerID: MCPeerID)
 }
 
 class SearchManager: NSObject {
@@ -25,12 +25,11 @@ class SearchManager: NSObject {
         self.hostsPeerID = [MCPeerID]()
         self.session = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
         self.browser = MCNearbyServiceBrowser(peer: self.myPeerID, serviceType: "niu-niu-game")
-    
         super.init()
-        
         self.browser.delegate = self
     }
     
+    // MARK: Browser's methods
     func startBrowsing() {
         self.browser.startBrowsingForPeers()
     }
@@ -39,26 +38,32 @@ class SearchManager: NSObject {
         self.browser.stopBrowsingForPeers()
     }
 
+    // MARK: Hosts' methods
+    func getHosts() -> [MCPeerID] {
+        return self.hostsPeerID
+    }
+        
     func getNumberOfHosts() -> Int {
         return self.hostsPeerID.count
     }
     
-    func clearHosts() {
-        self.hostsPeerID = [MCPeerID]()
+    func getIndexOf(host mcPeerID: MCPeerID) -> Int? {
+        return self.hostsPeerID.firstIndex(of: mcPeerID)
     }
     
     func addHostWith(peerID: MCPeerID) {
         self.hostsPeerID.append(peerID)
     }
     
-    func getIndexOf(host peerID: MCPeerID) -> Int? {
-        return self.hostsPeerID.firstIndex(of: peerID)
-    }
-    
     func removeHostWith(index: Int) {
         self.hostsPeerID.remove(at: index)
     }
     
+    func clearHosts() {
+        self.hostsPeerID = [MCPeerID]()
+    }
+
+    // MARK: session's methods
     func disconnectSession() {
         self.session.disconnect()
     }
@@ -73,12 +78,12 @@ extension SearchManager: MCNearbyServiceBrowserDelegate {
     
     // A host is found
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        self.delegate?.didLostHostWith(peerID: peerID)
+        self.delegate?.didFindHostWith(peerID: peerID)
     }
     
     // A host is disappeared
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        self.delegate?.didLostHostWith(peerID: peerID)
+        self.delegate?.didLoseHostWith(peerID: peerID)
     }
     
 }

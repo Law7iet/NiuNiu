@@ -8,9 +8,9 @@
 import MultipeerConnectivity
 
 protocol ServerManagerDelegate {
-    func didConnectedWith(peerID: MCPeerID)
-    func didDisconnectedWith(peerID: MCPeerID)
-    func didReciveMessageFrom(sender peerID: MCPeerID, message: Data)
+    func didConnectWith(peerID: MCPeerID)
+    func didDisconnectWith(peerID: MCPeerID)
+    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData data: Data)
 }
 
 class ServerManager: NSObject {
@@ -26,12 +26,12 @@ class ServerManager: NSObject {
         self.playersPeerID = [MCPeerID]()
         self.session = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
         self.advertiser = MCNearbyServiceAdvertiser(peer: self.myPeerID, discoveryInfo: nil, serviceType: "niu-niu-game")
-        
         super.init()
         self.session.delegate = self
         self.advertiser.delegate = self
     }
     
+    // MARK: Advertise's methods
     func startAdvertising() {
         self.advertiser.startAdvertisingPeer()
     }
@@ -40,26 +40,28 @@ class ServerManager: NSObject {
         self.advertiser.stopAdvertisingPeer()
     }
     
+    // MARK: Players' methods
     func getPlayersInLobby() -> [MCPeerID] {
         return [self.myPeerID] + self.playersPeerID
     }
     
-    func getNumberOrPlayers() -> Int {
+    func getNumberOfPlayers() -> Int {
         return self.playersPeerID.count + 1
     }
     
-    func addPlayer(peerID: MCPeerID) {
-        self.playersPeerID.append(peerID)
+    func getIndexOf(player mcPeerID: MCPeerID) -> Int? {
+        return self.playersPeerID.firstIndex(of: mcPeerID)
     }
     
-    func getIndexOf(player peerID: MCPeerID) -> Int? {
-        return self.playersPeerID.firstIndex(of: peerID)
+    func addPlayerWith(peerID: MCPeerID) {
+        self.playersPeerID.append(peerID)
     }
     
     func removePlayerWith(index: Int) {
         self.playersPeerID.remove(at: index)
     }
     
+    // MARK: Session's methods
     func disconnectSession() {
         self.session.disconnect()
     }
@@ -91,19 +93,19 @@ extension ServerManager: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("ServerManager connected: \(peerID.displayName)")
-            self.delegate?.didConnectedWith(peerID: peerID)
+            self.delegate?.didConnectWith(peerID: peerID)
         case MCSessionState.connecting:
             print("ServerManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ServerManager Not connected: \(peerID.displayName)")
-            self.delegate?.didDisconnectedWith(peerID: peerID)
+            self.delegate?.didDisconnectWith(peerID: peerID)
         @unknown default:
             print("ServerManager Unknown state: \(state)")
         }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        delegate?.didReciveMessageFrom(sender: peerID, message: data)
+        delegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
     }
     
     // Not used

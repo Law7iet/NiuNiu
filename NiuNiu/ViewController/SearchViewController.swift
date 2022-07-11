@@ -115,11 +115,11 @@ extension SearchViewController: UITableViewDelegate {
 
 extension SearchViewController: SearchManagerDelegate {
 
-    func didFoundHostWith(peerID: MCPeerID) {
+    func didFindHostWith(peerID: MCPeerID) {
         self.addHostInTableView(peerID: peerID)
     }
     
-    func didLostHostWith(peerID: MCPeerID) {
+    func didLoseHostWith(peerID: MCPeerID) {
         self.removeHostInTableView(peerID: peerID)
     }
 

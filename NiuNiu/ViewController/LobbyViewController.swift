@@ -24,7 +24,7 @@ class LobbyViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.lobbyManager.clearPlayers()
+        self.lobbyManager.clearPlayersInLobby()
         self.playersTableView.reloadData()
     }
     
@@ -95,13 +95,13 @@ extension LobbyViewController: UITableViewDataSource {
 
 extension LobbyViewController: LobbyManagerDelegate {
     
-    func didConnectedWith(peerID: MCPeerID) {
+    func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.addPlayerInTableView(peerID: peerID)
         }
     }
     
-    func didDisconnectedWith(peerID: MCPeerID) {
+    func didDisconnectWith(peerID: MCPeerID) {
         if peerID == self.lobbyManager.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
@@ -118,7 +118,7 @@ extension LobbyViewController: LobbyManagerDelegate {
         }
     }
     
-    func didReciveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
+    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
         case .closeConnection:
