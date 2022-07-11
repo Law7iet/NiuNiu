@@ -24,22 +24,26 @@ class ServerViewController: UIViewController {
         self.serverManager.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Open Lobby
         self.serverManager.startAdvertising()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Notify the guests
+        self.serverManager.disconnectSession()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         // Close lobby
         self.serverManager.stopAdvertising()
-        self.serverManager.disconnectSession()
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Passing the data
+        // Passing the manager
         if let vc = segue.destination as? ServerGameViewController {
             vc.serverManager = self.serverManager
         }
@@ -49,7 +53,7 @@ class ServerViewController: UIViewController {
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Notify the guests
         let message = Message(type: .startGame, text: nil, cards: nil)
-        self.serverManager.sendBroadcastMessage(message: message)
+        self.serverManager.sendBroadcastMessage(message)
         // Start the game
         self.performSegue(withIdentifier: "showServerGameSegue", sender: nil)
     }
@@ -62,17 +66,17 @@ class ServerViewController: UIViewController {
     
     func updateUI() {
         // Label
-        self.playersCounterLabel.text = "\(self.serverManager.getNumberOrPlayers()) of 6 players found"
+        self.playersCounterLabel.text = "\(self.serverManager.getNumberOfPlayers()) of 6 players found"
         // Button play
-        if self.serverManager.getNumberOrPlayers() > 1 && !self.playButton.isEnabled {
+        if self.serverManager.getNumberOfPlayers() > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
-        } else if self.serverManager.getNumberOrPlayers() < 2 && self.playButton.isEnabled {
+        } else if self.serverManager.getNumberOfPlayers() < 2 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
     }
     
     func updateAdvertiser() {
-        if self.serverManager.getNumberOrPlayers() == 6 {
+        if self.serverManager.getNumberOfPlayers() == 6 {
             self.serverManager.stopAdvertising()
         } else {
             self.serverManager.startAdvertising()
@@ -80,8 +84,8 @@ class ServerViewController: UIViewController {
     }
     
     func addPlayerInTableView(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.serverManager.getNumberOrPlayers(), section: 0)
-        self.serverManager.addPlayer(peerID: peerID)
+        let indexPath = IndexPath(row: self.serverManager.getNumberOfPlayers(), section: 0)
+        self.serverManager.addPlayerWith(peerID: peerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
         self.updateAdvertiser()
@@ -106,7 +110,7 @@ extension ServerViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.serverManager.getNumberOrPlayers()
+        return self.serverManager.getNumberOfPlayers()
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,7 +144,7 @@ extension ServerViewController: UITableViewDelegate {
             style: .default,
             handler: {(action: UIAlertAction) in
                 let msg = Message(type: .closeConnection, text: nil, cards: nil)
-                self.serverManager.sendMessageTo(who: user, message: msg)
+                self.serverManager.sendMessageTo(receiver: user, message: msg)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -155,19 +159,19 @@ extension ServerViewController: UITableViewDelegate {
 // MARK: ServerManager's delegate implementation
 extension ServerViewController: ServerManagerDelegate {
     
-    func didConnected(who peerID: MCPeerID) {
+    func didConnectedWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.addPlayerInTableView(peerID: peerID)
         }
     }
     
-    func didDisconnected(who peerID: MCPeerID) {
+    func didDisconnectedWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.removePlayerInTableView(peerID: peerID)
         }
     }
     
-    func didReciveMessage(from peerID: MCPeerID, what data: Data) {}
+    func didReciveMessageFrom(sender peerID: MCPeerID, messageData data: Data) {}
     
 }
 

@@ -24,7 +24,7 @@ class LobbyViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.lobbyManager.clearPlayers()
+        self.lobbyManager.clearPlayersInLobby()
         self.playersTableView.reloadData()
     }
     
@@ -38,7 +38,7 @@ class LobbyViewController: UIViewController {
         // Passing the data
         if let vc = segue.destination as? ClientGameViewController {
             vc.users = self.lobbyManager.playersPeerID
-            vc.mcSession = self.lobbyManager.mcSession
+            vc.mcSession = self.lobbyManager.session
             vc.myPeerID = self.lobbyManager.myPeerID
             vc.hostPeerID = self.lobbyManager.hostPeerID
         }
@@ -55,7 +55,7 @@ class LobbyViewController: UIViewController {
     }
     
     func addPlayerInTableView(mcPeerID: MCPeerID) {
-        self.lobbyManager.addPlayer(mcPeerID: mcPeerID)
+        self.lobbyManager.addPlayerWith(peerID: mcPeerID)
         let indexPath = IndexPath(row: self.lobbyManager.getNumberOfPlayers() - 1, section: 0)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
@@ -95,13 +95,13 @@ extension LobbyViewController: UITableViewDataSource {
 
 extension LobbyViewController: ClientManagerDelegate {
     
-    func didConnected(who mcPeerID: MCPeerID) {
+    func didConnectedWith(peerID mcPeerID: MCPeerID) {
         DispatchQueue.main.async {
             self.addPlayerInTableView(mcPeerID: mcPeerID)
         }
     }
     
-    func didDisconnected(who mcPeerID: MCPeerID) {
+    func didDisconnectedWith(peerID mcPeerID: MCPeerID) {
         if mcPeerID == self.lobbyManager.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
@@ -118,7 +118,7 @@ extension LobbyViewController: ClientManagerDelegate {
         }
     }
     
-    func didReciveMessage(from peerID: MCPeerID, what data: Data) {
+    func didReciveMessageFrom(sender peerID: MCPeerID, messageData data: Data) {
         let gameMessage = Message(data: data)
         switch gameMessage.type {
         case .closeConnection:
