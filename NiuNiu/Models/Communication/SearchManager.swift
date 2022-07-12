@@ -8,8 +8,10 @@
 import MultipeerConnectivity
 
 protocol SearchManagerDelegate {
+    
     func didFindHostWith(peerID: MCPeerID)
     func didLoseHostWith(peerID: MCPeerID)
+
 }
 
 class SearchManager: NSObject {

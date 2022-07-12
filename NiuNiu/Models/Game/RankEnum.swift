@@ -6,6 +6,7 @@
 //
 
 enum RankEnum: Int, CaseIterable, Codable {
+    
     case ace = 1
     case two = 2
     case three = 3
@@ -19,4 +20,5 @@ enum RankEnum: Int, CaseIterable, Codable {
     case jack = 11
     case queen = 12
     case king = 13
+
 }

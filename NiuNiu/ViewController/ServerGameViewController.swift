@@ -13,6 +13,7 @@ class ServerGameViewController: UIViewController {
     // MARK: Variables
     var serverManager: ServerManager!
     var receiver: MCPeerID!
+    var dealer: Dealer!
     
     @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var textField: UITextField!
@@ -28,7 +29,6 @@ class ServerGameViewController: UIViewController {
         }
         
         // Setup the first/default value
-//        childrenActions[0].state = .on
         self.receiver = self.serverManager.playersPeerID[0]
         
         
@@ -45,17 +45,57 @@ class ServerGameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUserButton()
+        self.setUserButton()
         self.serverManager.delegate = self
+        self.dealer = Dealer()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        self.serverManager.sendBroadcastMessage(Message(type: .startGame))
+        self.dealer.shuffleCards()
+        for player in self.serverManager.playersPeerID {
+            let cards = self.dealer.getCards()
+            self.serverManager.sendMessageTo(receiver: player, message: Message(type: .receiveCards, text: nil, cards: cards))
+        }
+        // TODO: Start timer
+        self.serverManager.sendBroadcastMessage(Message(type: .startBet))
+        // TODO: Timer ends
+        self.serverManager.sendBroadcastMessage(Message(type: .endBet))
+        // TODO: Change status to the players whose didn't bet
+        var playersAvailable = [Player]()
+        // TODO: Start timer
+        for player in playersAvailable {
+            self.serverManager.sendMessageTo(receiver: player.id, message: Message(type: .startFixBet))
+        }
+        // TODO: Timer ends
+        for player in playersAvailable {
+            self.serverManager.sendMessageTo(receiver: player.id, message: Message(type: .endFixBet))
+        }
+        // TODO: Change status to the players whose didn't fixbet
+        playersAvailable = [Player]()
+        // TODO: Start timer
+        for player in playersAvailable {
+            self.serverManager.sendMessageTo(receiver: player.id, message: Message(type: .startPickCards))
+        }
+        // TODO: Timer ends
+        for player in playersAvailable {
+            self.serverManager.sendMessageTo(receiver: player.id, message: Message(type: .endPickCards))
+        }
+        // TODO: Change status to the players whose didn't pickCards
+        playersAvailable = [Player]()
+        // TODO: Compute the winner
+        for player in playersAvailable {
+            self.serverManager.sendMessageTo(receiver: player.id, message: Message(type: .showCards))
+        }
+        // TODO: notify the winner
+        // TODO: Give to the winner the prize
+        self.serverManager.sendBroadcastMessage(Message(type: .endMatch))
+
+        
     }
     
     // MARK: Actions
-    @IBAction func sendMessage(_ sender: Any) {
-        if let msg = self.textField.text {
-            let message = Message(type: .testMessage, text: msg, cards: nil)
-            self.serverManager.sendMessageTo(receiver: self.receiver, message: message)
-        }
-    }
     
 }
 
@@ -71,8 +111,17 @@ extension ServerGameViewController: ServerManagerDelegate {
             DispatchQueue.main.async {
                 self.label.text = message.text
             }
+        case .bet:
+            // TODO: Add the bid of the player with peerID
+            print("bet")
+        case .fixBet:
+            // TODO: Change the bid of the player with peerID
+            print("fixBet")
+        case .pickCards:
+            // TODO: change the picked cards of the player with peerID
+            print("pickCards")
         default:
-            print("???")
+            print("MessageType \(message.type) not allowed")
         }
     }
     

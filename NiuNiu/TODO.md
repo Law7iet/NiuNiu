@@ -6,3 +6,6 @@ DONE    - Quando l'host esce, la lobby si deve chiudere (viene notificato al gue
 DONE    - Quando l'host esce, l'host deve chiuedere l'advertising
 DONE    - L'host non può kickare se stesso
 DONE    - L'host notifica al guest se viene kickato 
+
+TODO    - Il rank delle carte J, Q, K devono avere valore 10
+TODO    - Gestione del player che è anche host

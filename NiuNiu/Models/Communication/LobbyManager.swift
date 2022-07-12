@@ -8,9 +8,11 @@
 import MultipeerConnectivity
 
 protocol LobbyManagerDelegate {
+    
     func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
+    
 }
 
 class LobbyManager: NSObject {

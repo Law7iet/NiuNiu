@@ -8,14 +8,21 @@
 import Foundation
 
 class Message: Codable {
-    var type: MessageType
+    
+    var type: MessageEnum
     var text: String?
     var cards: [Card]?
     
-    init(type: MessageType, text: String?, cards: [Card]?) {
+    init(type: MessageEnum, text: String?, cards: [Card]?) {
         self.type = type
         self.text = text
         self.cards = cards
+    }
+    
+    init(type: MessageEnum) {
+        self.type = type
+        self.text = nil
+        self.cards = nil
     }
     
     init(data: Data) {
@@ -39,4 +46,5 @@ class Message: Codable {
         )
         return try? JSONEncoder().encode(object)
     }
+    
 }

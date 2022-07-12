@@ -6,8 +6,10 @@
 //
 
 struct Card: Codable {
+    
     var rank: RankEnum
     var suit: SuitEnum
+    
     init(rank x: RankEnum, suit y: SuitEnum) {
         rank = x
         suit = y
@@ -29,4 +31,5 @@ struct Card: Codable {
             return "picche"
         }
     }
+
 }

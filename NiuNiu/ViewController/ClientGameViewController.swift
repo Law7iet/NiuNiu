@@ -44,6 +44,31 @@ extension ClientGameViewController: LobbyManagerDelegate {
                 DispatchQueue.main.async {
                     self.label.text = message.text
                 }
+            case .startGame:
+                print("startGame")
+            case .startMatch:
+                print("startMatch")
+            case .startBet:
+                print("startBet")
+            case .endBet:
+                print("endBet")
+            case .startFixBet:
+                print("startFixBet")
+            case .endFixBet:
+                print("endFixBet")
+            case .startPickCards:
+                print("startPickCards")
+            case .endPickCards:
+                print("endPickCards")
+            case .showCards:
+                print("showCards")
+            case .declareWinner:
+                print("declareWinner")
+            case .endMatch:
+                print("endMatch")
+            case .endGame:
+                print("endGame")
+            // TODO: check if there're closeConnection or closeLobby
             default:
                 print("???")
             }
