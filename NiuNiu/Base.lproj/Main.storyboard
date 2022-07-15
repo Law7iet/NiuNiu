@@ -115,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B60-W0-L7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4043" y="474"/>
+            <point key="canvasLocation" x="3997" y="474"/>
         </scene>
         <!--Host-->
         <scene sceneID="Rmk-u6-yu6">
@@ -204,7 +204,7 @@
                                 </connections>
                             </button>
                             <connections>
-                                <segue destination="dgX-Kf-yyD" kind="presentation" identifier="showServerGameSegue" id="imu-30-LaE"/>
+                                <segue destination="dgX-Kf-yyD" kind="presentation" identifier="showGameSegue" modalPresentationStyle="overCurrentContext" id="imu-30-LaE"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -216,13 +216,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fl6-TB-WyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4793" y="-215"/>
+            <point key="canvasLocation" x="4793" y="-209"/>
         </scene>
-        <!--Server Game View Controller-->
+        <!--Game View Controller-->
         <scene sceneID="nO1-w0-evX">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRg-QQ-pAc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <viewController id="dgX-Kf-yyD" customClass="ServerGameViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dgX-Kf-yyD" customClass="GameViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gFX-wr-Kur">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -295,17 +295,17 @@
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LNB-yQ-GyE" userLabel="Timer">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LNB-yQ-GyE" userLabel="Timer">
                                         <rect key="frame" x="169.66666666666666" y="127.33333333333336" width="49" height="48.666666666666671"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biM-cY-Qzo">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biM-cY-Qzo">
                                                 <rect key="frame" x="0.0" y="0.0" width="49" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krM-am-ier">
-                                                <rect key="frame" x="0.0" y="28.333333333333314" width="49" height="20.333333333333329"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krM-am-ier">
+                                                <rect key="frame" x="2.6666666666666856" y="28.333333333333314" width="43.666666666666664" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -359,9 +359,9 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Mu0-L7-KTN" secondAttribute="trailing" id="2MA-RW-Oh6"/>
+                                    <constraint firstItem="Mu0-L7-KTN" firstAttribute="trailing" secondItem="NPD-aB-NdC" secondAttribute="trailing" id="2MA-RW-Oh6"/>
                                     <constraint firstItem="Mu0-L7-KTN" firstAttribute="leading" secondItem="NPD-aB-NdC" secondAttribute="leading" id="HmQ-RQ-mfQ"/>
-                                    <constraint firstAttribute="trailing" secondItem="Af8-mZ-XqR" secondAttribute="trailing" id="KHn-MF-dbS"/>
+                                    <constraint firstItem="Af8-mZ-XqR" firstAttribute="trailing" secondItem="NPD-aB-NdC" secondAttribute="trailing" id="KHn-MF-dbS"/>
                                     <constraint firstItem="Af8-mZ-XqR" firstAttribute="leading" secondItem="NPD-aB-NdC" secondAttribute="leading" id="kj2-jW-5N4"/>
                                 </constraints>
                             </stackView>
@@ -381,6 +381,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="1_of_clubs"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="clickCard:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="qSQ-tC-Y5o"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bta-Vt-NnU">
                                                 <rect key="frame" x="67.666666666666657" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
@@ -392,6 +395,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="1_of_clubs"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="clickCard:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="gYu-kS-ktG"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Q7-me-mmH">
                                                 <rect key="frame" x="135.33333333333334" y="0.0" width="117.33333333333334" height="163.66666666666666"/>
@@ -403,6 +409,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="1_of_clubs"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="clickCard:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="t8J-Xp-Ozv"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUk-Gf-OU4">
                                                 <rect key="frame" x="202.66666666666666" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
@@ -414,6 +423,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="1_of_clubs"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="clickCard:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="alx-8d-vOP"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EmI-gl-qhE">
                                                 <rect key="frame" x="270.33333333333331" y="0.0" width="117.66666666666669" height="163.66666666666666"/>
@@ -425,6 +437,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="1_of_clubs"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="clickCard:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="UhT-jp-fnt"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -489,6 +504,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Bet"/>
+                                                <connections>
+                                                    <action selector="bet:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="kLH-aL-iFJ"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -521,25 +539,27 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="bidLabel" destination="fwK-e0-TD8" id="bcE-FD-PVW"/>
+                        <outlet property="bidSlider" destination="deS-Uo-F2U" id="gUt-t7-pjy"/>
+                        <outlet property="pointsLabel" destination="6Cf-sR-5wK" id="Wtq-EK-aN4"/>
+                        <outlet property="statusLabel" destination="biM-cY-Qzo" id="wXB-A0-tLa"/>
+                        <outlet property="timerLabel" destination="krM-am-ier" id="suz-8r-Wxd"/>
+                        <outlet property="userLabel" destination="PUv-TV-xKh" id="XCj-HQ-JDA"/>
+                        <outletCollection property="playersLabel" destination="Lt6-Yr-T2p" collectionClass="NSMutableArray" id="pgP-zc-Ulh"/>
+                        <outletCollection property="cardsButton" destination="Bta-Vt-NnU" collectionClass="NSMutableArray" id="jSC-jr-VER"/>
+                        <outletCollection property="playersLabel" destination="zhV-4N-B33" collectionClass="NSMutableArray" id="hgy-XR-wyo"/>
+                        <outletCollection property="playersLabel" destination="M2K-Zs-PV7" collectionClass="NSMutableArray" id="jaK-iA-Bwu"/>
+                        <outletCollection property="playersLabel" destination="SYY-yW-8CZ" collectionClass="NSMutableArray" id="keV-Fw-BIK"/>
+                        <outletCollection property="playersLabel" destination="fnJ-II-kSt" collectionClass="NSMutableArray" id="g1w-IE-Gqe"/>
+                        <outletCollection property="cardsButton" destination="uRr-8v-9LD" collectionClass="NSMutableArray" id="gFo-dR-Cwb"/>
+                        <outletCollection property="cardsButton" destination="4Q7-me-mmH" collectionClass="NSMutableArray" id="7Bi-3C-dLT"/>
+                        <outletCollection property="cardsButton" destination="mUk-Gf-OU4" collectionClass="NSMutableArray" id="PlT-nd-Xbg"/>
+                        <outletCollection property="cardsButton" destination="EmI-gl-qhE" collectionClass="NSMutableArray" id="ocM-hP-Bkz"/>
+                    </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="5580" y="-215.44227886056973"/>
-        </scene>
-        <!--Client Game View Controller-->
-        <scene sceneID="AVU-Hf-rQK">
-            <objects>
-                <viewController id="uRC-w6-dEM" customClass="ClientGameViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6eg-9I-y9l">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="ZFu-mg-fVH"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iEQ-pJ-Jhu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5581" y="474"/>
+            <point key="canvasLocation" x="5722" y="94"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6hv-UB-kQt">
@@ -631,6 +651,7 @@
                     <connections>
                         <outlet property="playersCounterLabel" destination="Pks-f6-bBt" id="eV4-e9-xTo"/>
                         <outlet property="playersTableView" destination="02C-Qg-Iwc" id="cJe-ta-IKW"/>
+                        <segue destination="dgX-Kf-yyD" kind="presentation" identifier="showGameSegue" modalPresentationStyle="overCurrentContext" id="GEP-jV-hl9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tck-xP-v5j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -638,6 +659,9 @@
             <point key="canvasLocation" x="4793" y="474"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="GEP-jV-hl9"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="1_of_clubs" width="500" height="726"/>
         <image name="person" catalog="system" width="128" height="117"/>

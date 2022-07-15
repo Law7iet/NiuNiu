@@ -8,44 +8,27 @@
 import UIKit
 import MultipeerConnectivity
 
-class ServerGameViewController: UIViewController {
+class GameViewController: UIViewController {
     
     // MARK: Variables
     var serverManager: ServerManager!
     var receiver: MCPeerID!
     var dealer: Dealer!
     
-    @IBOutlet weak var userButton: UIButton!
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var timerLabel: UILabel!
+    
+    @IBOutlet var playersLabel: [UILabel]!
+    @IBOutlet var cardsButton: [UIButton]!
+    
+    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var pointsLabel: UILabel!
+    @IBOutlet weak var bidLabel: UILabel!
+    @IBOutlet weak var bidSlider: UISlider!
     
     // MARK: Functions
-    func setUserButton() {
-        var childrenActions: [UIAction] = []
-        for user in self.serverManager.playersPeerID {
-            childrenActions.append(UIAction(title: user.displayName) { (action) in
-                self.receiver = user
-            })
-        }
-        
-        // Setup the first/default value
-        self.receiver = self.serverManager.playersPeerID[0]
-        
-        
-        userButton.menu = UIMenu(
-            title: "Choose the receiver",
-            image: nil,
-            identifier: .application,
-            options: [],
-            children: childrenActions
-        )
-        userButton.showsMenuAsPrimaryAction = true
-        userButton.changesSelectionAsPrimaryAction = true
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setUserButton()
         self.serverManager.delegate = self
         self.dealer = Dealer()
     }
@@ -96,10 +79,16 @@ class ServerGameViewController: UIViewController {
     }
     
     // MARK: Actions
+    @IBAction func bet(_ sender: Any) {
     
+    }
+    
+    @IBAction func clickCard(_ sender: Any) {
+        
+    }
 }
 
-extension ServerGameViewController: ServerManagerDelegate {
+extension GameViewController: ServerManagerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {}
     func didDisconnectWith(peerID: MCPeerID) {}
@@ -107,10 +96,6 @@ extension ServerGameViewController: ServerManagerDelegate {
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
-        case .testMessage:
-            DispatchQueue.main.async {
-                self.label.text = message.text
-            }
         case .bet:
             // TODO: Add the bid of the player with peerID
             print("bet")

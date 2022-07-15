@@ -129,7 +129,7 @@ extension LobbyViewController: LobbyManagerDelegate {
             }
         case .startGame:
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "showClientGameSegue", sender: nil)
+                self.performSegue(withIdentifier: "showGameSegue", sender: nil)
             }
         case .testMessage:
             print("Ack")
