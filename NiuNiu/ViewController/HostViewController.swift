@@ -1,5 +1,5 @@
 //
-//  ServerViewController.swift
+//  HostViewController.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 30/06/22.
@@ -8,7 +8,7 @@
 import UIKit
 import MultipeerConnectivity
 
-class ServerViewController: UIViewController {
+class HostViewController: UIViewController {
     
     // MARK: Variables
     var serverManager: ServerManager!
@@ -104,7 +104,7 @@ class ServerViewController: UIViewController {
 }
 
 // MARK: DataSource's delegate implementation
-extension ServerViewController: UITableViewDataSource {
+extension HostViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
@@ -126,7 +126,7 @@ extension ServerViewController: UITableViewDataSource {
 
 
 // MARK: TableView's delegate implementation
-extension ServerViewController: UITableViewDelegate {
+extension HostViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.serverManager.getPlayersInLobby()[indexPath.row]
@@ -157,7 +157,7 @@ extension ServerViewController: UITableViewDelegate {
 }
 
 // MARK: ServerManager's delegate implementation
-extension ServerViewController: ServerManagerDelegate {
+extension HostViewController: ServerManagerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {

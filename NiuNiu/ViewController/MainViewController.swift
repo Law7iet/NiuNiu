@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let serverVC = segue.destination as? ServerViewController {
+        if let serverVC = segue.destination as? HostViewController {
             serverVC.serverManager = ServerManager()
         } else if let searchVC = segue.destination as? SearchViewController {
             searchVC.searchManager = SearchManager()
