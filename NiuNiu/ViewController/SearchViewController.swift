@@ -10,13 +10,13 @@ import MultipeerConnectivity
 
 class SearchViewController: UIViewController {
     
-    // MARK: Variables
+    // MARK: Properties
     var searchManager: SearchManager!
     var hostPeerID: MCPeerID!
     
     @IBOutlet weak var hostsTableView: UITableView!
     
-    // MARK: Functions
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
@@ -113,6 +113,7 @@ extension SearchViewController: UITableViewDelegate {
     }
 }
 
+// MARK: SearchManagerDelegate implementation
 extension SearchViewController: SearchManagerDelegate {
 
     func didFindHostWith(peerID: MCPeerID) {

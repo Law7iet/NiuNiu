@@ -17,8 +17,11 @@ protocol LobbyManagerDelegate {
 
 class LobbyManager: NSObject {
     
+    ///  The own MCPeerID
     var myPeerID: MCPeerID
+    /// The host's MCPeerID
     var hostPeerID: MCPeerID
+    /// The list of the players in the lobby, except himself
     var playersPeerID: [MCPeerID]
     var session: MCSession
     var delegate: LobbyManagerDelegate?
@@ -33,6 +36,8 @@ class LobbyManager: NSObject {
     }
     
     // MARK: Players' methods
+    /// Returns the list of the all the players in the lobby, included himself in the first position of the list
+    /// - Returns: the list of all the players in the lobby
     func getPlayersInLobby() -> [MCPeerID] {
         return [self.myPeerID] + self.playersPeerID
     }

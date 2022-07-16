@@ -10,26 +10,39 @@ import MultipeerConnectivity
 
 class ClientGameViewController: UIViewController {
 
-    // MARK: Variables
+    // MARK: Properties
     var clientManager: LobbyManager!
     
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var timerLabel: UILabel!
     
+    @IBOutlet var playersLabel: [UILabel]!
+    @IBOutlet var cardsButton: [UIButton]!
+    
+    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var pointsLabel: UILabel!
+    @IBOutlet weak var bidLabel: UILabel!
+    @IBOutlet weak var bidSlider: UISlider!
+    
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         clientManager.delegate = self
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func sendMessage(_ sender: Any) {
-        if let msg = self.textField.text {
-            let message = Message(type: .testMessage, text: msg, cards: nil)
-            self.clientManager.sendMessageTo(receiver: self.clientManager.hostPeerID, message: message)
-        }
+    // MARK: Actions
+    @IBAction func bet(_ sender: Any) {
+    
     }
+    
+    @IBAction func clickCard(_ sender: Any) {
+        
+    }
+
 }
 
+// MARK: LobbyManagerDelegate implementation
 extension ClientGameViewController: LobbyManagerDelegate {
     
     // Not used
@@ -40,10 +53,6 @@ extension ClientGameViewController: LobbyManagerDelegate {
         if peerID == self.clientManager.hostPeerID {
             let message = Message(data: messageData)
             switch message.type {
-            case .testMessage:
-                DispatchQueue.main.async {
-                    self.label.text = message.text
-                }
             case .startGame:
                 print("startGame")
             case .startMatch:

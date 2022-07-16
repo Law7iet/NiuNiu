@@ -23,6 +23,8 @@ class Deck {
         self.cards.shuffle()
     }
     
+    /// Returns 5 cards form the deck
+    /// - Returns: The 5 cards
     func getCards() -> [Card] {
         var myCards = [Card]()
         for _ in 1...5 {

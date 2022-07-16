@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-protocol ServerManagerDelegate {
+protocol HostManagerDelegate {
     
     func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
@@ -15,13 +15,15 @@ protocol ServerManagerDelegate {
 
 }
 
-class ServerManager: NSObject {
+class HostManager: NSObject {
     
+    /// The host's MCPeerID
     var myPeerID: MCPeerID
+    /// The list of the guests in the lobby except himself (the host)
     var playersPeerID: [MCPeerID]
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
-    var delegate: ServerManagerDelegate?
+    var delegate: HostManagerDelegate?
     
     override init() {
         self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(Utils.getRandomID(length: 4))")
@@ -43,6 +45,8 @@ class ServerManager: NSObject {
     }
     
     // MARK: Players' methods
+    /// Returns the list of the all the players in the lobby, included himself (the host is also a player) in the first position of the list
+    /// - Returns: the list of all the players in the lobby
     func getPlayersInLobby() -> [MCPeerID] {
         return [self.myPeerID] + self.playersPeerID
     }
@@ -78,10 +82,10 @@ class ServerManager: NSObject {
         }
     }
     
-    func sendMessageTo(receiver peerID: MCPeerID, message: Message) {
+    func sendMessageTo(receivers peersID: [MCPeerID], message: Message) {
         if let data = message.convertToData() {
             do {
-                try self.session.send(data, toPeers: [peerID], with: .reliable)
+                try self.session.send(data, toPeers: peersID, with: .reliable)
             } catch {
                 print("ServerManager.sendMessage error")
             }
@@ -89,7 +93,7 @@ class ServerManager: NSObject {
     }
 }
 
-extension ServerManager: MCSessionDelegate {
+extension HostManager: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
@@ -117,7 +121,7 @@ extension ServerManager: MCSessionDelegate {
     
 }
 
-extension ServerManager: MCNearbyServiceAdvertiserDelegate {
+extension HostManager: MCNearbyServiceAdvertiserDelegate {
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         invitationHandler(true, self.session)

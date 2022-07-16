@@ -10,50 +10,50 @@ import MultipeerConnectivity
 
 class HostViewController: UIViewController {
     
-    // MARK: Variables
-    var serverManager: ServerManager!
+    // MARK: Properties
+    var hostManager: HostManager!
 
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
 
-    // MARK: Functions
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        self.serverManager.delegate = self
+        self.hostManager.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Open Lobby
-        self.serverManager.startAdvertising()
+        self.hostManager.startAdvertising()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Notify the guests
-        self.serverManager.disconnectSession()
+        self.hostManager.disconnectSession()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // Close lobby
-        self.serverManager.stopAdvertising()
+        self.hostManager.stopAdvertising()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-        if let vc = segue.destination as? GameViewController {
-            vc.serverManager = self.serverManager
+        if let vc = segue.destination as? ServerGameViewController {
+            vc.dealer = Dealer(serverManager: self.hostManager, players: self.hostManager.getPlayersInLobby(), timer: nil)
         }
     }
     
     // MARK: Actions
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Notify the guests
-        let message = Message(type: .startGame, text: nil, cards: nil)
-        self.serverManager.sendBroadcastMessage(message)
+        let message = Message(type: .startGame)
+        self.hostManager.sendBroadcastMessage(message)
         // Start the game
         self.performSegue(withIdentifier: "showGameSegue", sender: nil)
     }
@@ -66,34 +66,34 @@ class HostViewController: UIViewController {
     
     func updateUI() {
         // Label
-        self.playersCounterLabel.text = "\(self.serverManager.getNumberOfPlayers()) of 6 players found"
+        self.playersCounterLabel.text = "\(self.hostManager.getNumberOfPlayers()) of 6 players found"
         // Button play
-        if self.serverManager.getNumberOfPlayers() > 1 && !self.playButton.isEnabled {
+        if self.hostManager.getNumberOfPlayers() > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
-        } else if self.serverManager.getNumberOfPlayers() < 2 && self.playButton.isEnabled {
+        } else if self.hostManager.getNumberOfPlayers() < 2 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
     }
     
     func updateAdvertiser() {
-        if self.serverManager.getNumberOfPlayers() == 6 {
-            self.serverManager.stopAdvertising()
+        if self.hostManager.getNumberOfPlayers() == 6 {
+            self.hostManager.stopAdvertising()
         } else {
-            self.serverManager.startAdvertising()
+            self.hostManager.startAdvertising()
         }
     }
     
     func addPlayerInTableView(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.serverManager.getNumberOfPlayers(), section: 0)
-        self.serverManager.addPlayerWith(peerID: peerID)
+        let indexPath = IndexPath(row: self.hostManager.getNumberOfPlayers(), section: 0)
+        self.hostManager.addPlayerWith(peerID: peerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
         self.updateAdvertiser()
     }
     
     func removePlayerInTableView(peerID: MCPeerID) {
-        if let index = self.serverManager.getIndexOf(player: peerID) {
-            self.serverManager.removePlayerWith(index: index)
+        if let index = self.hostManager.getIndexOf(player: peerID) {
+            self.hostManager.removePlayerWith(index: index)
             let indexPath = IndexPath(row: index + 1, section: 0)
             self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
             self.updateUI()
@@ -103,21 +103,21 @@ class HostViewController: UIViewController {
     
 }
 
-// MARK: DataSource's delegate implementation
+// MARK: UITableViewDataSource implementation
 extension HostViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.serverManager.getNumberOfPlayers()
+        return self.hostManager.getNumberOfPlayers()
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "serverCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "hostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.convertMCPeerIDListToString(list: self.serverManager.getPlayersInLobby())[indexPath.row]
+        content.text = Utils.convertMCPeerIDListToString(list: self.hostManager.getPlayersInLobby())[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
@@ -125,12 +125,12 @@ extension HostViewController: UITableViewDataSource {
 }
 
 
-// MARK: TableView's delegate implementation
+// MARK: UITableViewDelegate implementation
 extension HostViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.serverManager.getPlayersInLobby()[indexPath.row]
-        if user == self.serverManager.myPeerID {
+        let user = self.hostManager.getPlayersInLobby()[indexPath.row]
+        if user == self.hostManager.myPeerID {
             // Do nothing - The host can't kick himself
             return
         }
@@ -143,8 +143,8 @@ extension HostViewController: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: {(action: UIAlertAction) in
-                let msg = Message(type: .closeConnection, text: nil, cards: nil)
-                self.serverManager.sendMessageTo(receiver: user, message: msg)
+                let msg = Message(type: .closeConnection)
+                self.hostManager.sendMessageTo(receivers: [user], message: msg)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -156,8 +156,8 @@ extension HostViewController: UITableViewDelegate {
     
 }
 
-// MARK: ServerManager's delegate implementation
-extension HostViewController: ServerManagerDelegate {
+// MARK: HostManagerDelegate implementation
+extension HostViewController: HostManagerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {

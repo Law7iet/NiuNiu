@@ -10,13 +10,13 @@ import MultipeerConnectivity
 
 class LobbyViewController: UIViewController {
 
-    // MARK: Variables
+    // MARK: Properties
     var lobbyManager: LobbyManager!
     
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
     
-    // MARK: Functions
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
@@ -35,7 +35,7 @@ class LobbyViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Passing the data
+        // Passing the manager
         if let vc = segue.destination as? ClientGameViewController {
             vc.clientManager = self.lobbyManager
         }
@@ -90,6 +90,7 @@ extension LobbyViewController: UITableViewDataSource {
     }
 }
 
+// MARK: LobbyManagerDelegate implementation
 extension LobbyViewController: LobbyManagerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
@@ -131,8 +132,6 @@ extension LobbyViewController: LobbyManagerDelegate {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "showGameSegue", sender: nil)
             }
-        case .testMessage:
-            print("Ack")
         default:
             print("Errore")
         }

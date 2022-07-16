@@ -15,8 +15,16 @@ class Utils {
     
     static func convertMCPeerIDListToString(list: [MCPeerID]) -> [String] {
         var peerList = [String]()
-        for el in list {
-            peerList.append(el.displayName)
+        for element in list {
+            peerList.append(element.displayName)
+        }
+        return peerList
+    }
+    
+    static func convertPlayersToMCPeerIDList(players: [Player]) -> [MCPeerID] {
+        var peerList = [MCPeerID]()
+        for player in players {
+            peerList.append(player.id)
         }
         return peerList
     }

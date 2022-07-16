@@ -29,7 +29,8 @@ enum MessageEnum: Codable {
     case closeLobby
     case closeConnection
     
-    case error
-    case testMessage
+    case timer
     
+    case error
+    case test
 }
