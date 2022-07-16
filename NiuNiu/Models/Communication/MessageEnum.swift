@@ -31,6 +31,8 @@ enum MessageEnum: Codable {
     
     case timer
     
+    case fold
+    case none
     case error
     case test
 }

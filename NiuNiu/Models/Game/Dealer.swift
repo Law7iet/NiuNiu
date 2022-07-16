@@ -19,29 +19,26 @@ class Dealer {
     var serverManager: HostManager
     
     var deck: Deck
-    var players: [Player]
+    var players: Players
+    var activePlayers: Players
+    var leadPlayer: Player
     var maxBid: Int
     var totalBid: Int
-    var timer: Int
+    var time: Int
     var timerCounter: Int
-    var activePlayers: [MCPeerID]
     
     var delegate: DealerDelegate?
     
     // MARK: Methods
-    init(serverManager: HostManager, players: [MCPeerID], timer: Int?) {
+    init(serverManager: HostManager, players: [MCPeerID], time: Int?) {
         self.serverManager = serverManager
-        
         self.deck = Deck()
-        self.players = [Player]()
-        for player in players {
-            self.players.append(Player(id: player, points: nil))
-        }
+        self.players = Players(players: players, points: nil)
+        self.activePlayers = Players(players: self.players.list)
         self.maxBid = 0
         self.totalBid = 0
-        self.timer = timer ?? 30
+        self.time = time ?? 30
         self.timerCounter = 0
-        self.activePlayers = [MCPeerID]()
     }
     
     // MARK: Supporting functions
@@ -49,36 +46,23 @@ class Dealer {
         self.deck = Deck()
         self.deck.shuffle()
     }
-        
-    func findPlayerWith(peerID: MCPeerID) -> Player? {
-        for player in players {
-            if player.id == peerID {
-                return player
-            }
-        }
-        return nil
-    }
-    
-    func findActivePlayers() -> [Player] {
-        var activePlayers = [Player]()
-        for player in self.players {
-            if player.isOut {
-                activePlayers.append(player)
-            }
-        }
-        return activePlayers
-    }
     
     func startTimerWithEndMessage(type: MessageEnum, time: Int) {
         var timerCounter = 0
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.serverManager.sendMessageTo(receivers: self.activePlayers, message: Message(type: .timer, amount: time - timerCounter))
+            self.serverManager.sendMessageTo(
+                receivers: self.activePlayers.getMCPeersID(),
+                message: Message(type: .timer, amount: time - timerCounter)
+            )
             timerCounter = timerCounter + 1
             if timerCounter == time {
                 // Timer ends
                 timer.invalidate()
-                self.serverManager.sendMessageTo(receivers: self.activePlayers, message: Message(type: type))
+                self.serverManager.sendMessageTo(
+                    receivers: self.activePlayers.getMCPeersID(),
+                    message: Message(type: type)
+                )
             }
         }
     }
@@ -87,12 +71,17 @@ class Dealer {
     func playGame() {
         
         // Start the game
-        self.serverManager.sendBroadcastMessage(Message(type: .startGame))
+        self.activePlayers = self.players
+        self.serverManager.sendMessageTo(
+            receivers: self.activePlayers.getMCPeersID(),
+            message: Message(type: .startGame)
+        )
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
-        for player in self.players {
+        for player in self.players.list {
             let cards = self.deck.getCards()
-            player.cards = cards
+            player.setCards(cards: cards)
+            // Check if the player is himself or not
             if player.id == self.serverManager.myPeerID {
                 // Change UI of the server
                 self.delegate?.didReciveCards(cards: player.cards)
@@ -101,43 +90,51 @@ class Dealer {
                 self.serverManager.sendMessageTo(receivers: [player.id], message: Message(type: .receiveCards, cards: cards))
             }
         }
-        self.activePlayers = Utils.convertPlayersToMCPeerIDList(players: self.findActivePlayers())
         
         // Bet
-        self.serverManager.sendBroadcastMessage(Message(type: .startBet))
-        self.startTimerWithEndMessage(type: .endBet, time: self.timer)
+        self.serverManager.sendMessageTo(
+            receivers: self.activePlayers.getMCPeersID(),
+            message: Message(type: .startBet)
+        )
+        self.startTimerWithEndMessage(type: .endBet, time: self.time)
         
         // Change status to the players whose didn't bet
-        for player in self.players {
+        for player in self.players.list {
             if player.bid == 0 {
-                player.isOut = false
+                player.status = .fold
             }
         }
-        self.activePlayers = Utils.convertPlayersToMCPeerIDList(players: self.findActivePlayers())
+        self.activePlayers.findActivePlayers()
         
         // Fix bet
-        self.serverManager.sendMessageTo(receivers: activePlayers, message: Message(type: .startFixBet))
-        self.startTimerWithEndMessage(type: .endFixBet, time: self.timer)
+        self.serverManager.sendMessageTo(
+            receivers: self.activePlayers.getMCPeersID(),
+            message: Message(type: .startFixBet)
+        )
+        self.startTimerWithEndMessage(type: .endFixBet, time: self.time)
         
         // Change status to the players whose didn't fixbet
-        for player in self.players {
+        for player in self.players.list {
             if player.bid == self.maxBid {
-                player.isOut = false
+                player.status = .fold
             }
         }
-        self.activePlayers = Utils.convertPlayersToMCPeerIDList(players: self.findActivePlayers())
+        self.activePlayers.findActivePlayers()
         
         // Start pick cards
-        self.serverManager.sendMessageTo(receivers: activePlayers, message: Message(type: .startPickCards))
-        self.startTimerWithEndMessage(type: .endPickCards, time: self.timer)
+        self.serverManager.sendMessageTo(
+            receivers: self.activePlayers.getMCPeersID(),
+            message: Message(type: .startPickCards)
+        )
+        self.startTimerWithEndMessage(type: .endPickCards, time: self.time)
                 
         // Change status to the players whose didn't pickCards
-        for player in self.players {
+        for player in self.players.list {
             if player.pickedCards.isEmpty {
-                player.isOut = false
+                player.status = .fold
             }
         }
-        self.activePlayers = Utils.convertPlayersToMCPeerIDList(players: self.findActivePlayers())
+        self.activePlayers.findActivePlayers()
         
         // Compute the winner
 //        for player in self.activePlayers {

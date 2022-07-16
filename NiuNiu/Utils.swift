@@ -20,12 +20,5 @@ class Utils {
         }
         return peerList
     }
-    
-    static func convertPlayersToMCPeerIDList(players: [Player]) -> [MCPeerID] {
-        var peerList = [MCPeerID]()
-        for player in players {
-            peerList.append(player.id)
-        }
-        return peerList
-    }
+
 }

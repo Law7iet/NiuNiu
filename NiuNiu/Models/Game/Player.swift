@@ -11,30 +11,24 @@ class Player {
     
     // MARK: Properties
     var id: MCPeerID!
-    var isPlaying: Bool
+    var status: MessageEnum
     var points: Int
     var bid: Int
     var score: ScoreEnum
-    var cards: [Card]
-    var pickedCards: [Card]
+    var cards: Cards
     
     // MARK: Methods
     init(id: MCPeerID, points: Int?) {
         self.id = id
-        self.isPlaying = true
+        self.status = .none
         self.bid = 0
         self.points = points ?? 100
-        self.cards = [Card]()
-        self.pickedCards = [Card]()
-        self.score = .one
+        self.cards = Cards()
+        self.score = .none
     }
     
-    func didBet() -> Bool {
-        if self.bid > 0 {
-            return true
-        } else {
-            return false
-        }
+    func setCards(cards: [Card]) {
+        self.cards.setCards(cards: cards)
     }
     
     func bet(amount: Int) -> Bool {
@@ -44,6 +38,12 @@ class Player {
             self.bid = self.bid + amount
             return true
         }
+    }
+    
+    // TODO: Which type in input?
+    func pickCards() {
+//        let index = 0
+//        self.cards.pickCardAt(index: index)
     }
     
 }

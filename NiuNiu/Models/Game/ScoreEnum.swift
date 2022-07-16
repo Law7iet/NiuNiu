@@ -7,6 +7,8 @@
 
 enum ScoreEnum: Int, Codable {
     
+    case none = 0
+    
     case one = 1
     case two = 2
     case three = 3
