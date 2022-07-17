@@ -36,5 +36,14 @@ class Players {
         }
         return peerList
     }
+    
+    func findPlayerById(_ id: MCPeerID ) -> Player? {
+        let player = Player(id: id, points: nil)
+        if let index = self.elements.firstIndex(of: player) {
+            return self.elements[index]
+        } else {
+            return nil
+        }        
+    }
 
 }

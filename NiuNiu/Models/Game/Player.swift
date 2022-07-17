@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-class Player {
+class Player: Comparable {
     
     // MARK: Properties
     var id: MCPeerID!
@@ -54,6 +54,14 @@ class Player {
     func pickCards() {
 //        let index = 0
 //        self.cards.pickCardAt(index: index)
+    }
+    
+    static func < (lhs: Player, rhs: Player) -> Bool {
+        return lhs.points < rhs.points
+    }
+
+    static func == (lhs: Player, rhs: Player) -> Bool {
+        return lhs.id.displayName == rhs.id.displayName
     }
     
 }

@@ -9,7 +9,9 @@ import MultipeerConnectivity
 
 protocol DealerDelegate {
     
-    func didReciveCards(cards: Cards)
+    func didStartGame(player: Player)
+    func didStartMatch(players: Players)
+    func didReceiveCards(cards: Cards)
     
 }
 
@@ -81,6 +83,14 @@ class Dealer {
             receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
             message: Message(type: .startGame, amount: self.points)
         )
+        if let himself = self.players.findPlayerById(self.serverManager.myPeerID) {
+            self.delegate?.didStartGame(player: himself)
+        } else {
+            // Error
+            return
+        }
+        // Start the match
+        
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
         for player in self.players.elements {
@@ -89,7 +99,7 @@ class Dealer {
             // Check if the player is himself or not
             if player.id == self.serverManager.myPeerID {
                 // Change UI of the server
-                self.delegate?.didReciveCards(cards: player.cards!)
+                self.delegate?.didReceiveCards(cards: player.cards!)
             } else {
                 // Send a message with cards to the guests
                 self.serverManager.sendMessageTo(
