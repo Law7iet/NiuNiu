@@ -5,7 +5,7 @@
 //  Created by Han Chu on 07/07/22.
 //
 
-struct Card: Codable {
+struct Card: Codable, Comparable {
     
     var rank: RankEnum
     var suit: SuitEnum
@@ -29,6 +29,17 @@ struct Card: Codable {
             return "fiori"
         case .spades:
             return "picche"
+        default:
+            return "nil"
+        }
+    }
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank.rawValue != rhs.rank.rawValue {
+            return lhs.rank.rawValue < rhs.rank.rawValue
+        } else {
+            // Equal rank value
+            return lhs.suit.rawValue < rhs.suit.rawValue
         }
     }
 

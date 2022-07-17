@@ -14,7 +14,11 @@ class Player {
     var status: MessageEnum
     var points: Int
     var bid: Int
-    var score: ScoreEnum
+    var score: ScoreEnum {
+        get {
+            self.cards.score
+        }
+    }
     var cards: Cards
     
     // MARK: Methods
@@ -24,7 +28,6 @@ class Player {
         self.bid = 0
         self.points = points ?? 100
         self.cards = Cards()
-        self.score = .none
     }
     
     func setCards(cards: [Card]) {

@@ -5,8 +5,8 @@
 //  Created by Han Chu on 16/07/22.
 //
 
-enum ScoreEnum: Int, Codable {
-    
+enum ScoreEnum: Int, Codable, Comparable {
+
     case none = 0
     
     case one = 1
@@ -31,5 +31,9 @@ enum ScoreEnum: Int, Codable {
     case niuNine = 19
     case niuNiu = 20
 
+    static func < (lhs: ScoreEnum, rhs: ScoreEnum) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
 }
 

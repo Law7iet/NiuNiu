@@ -27,7 +27,6 @@ class ServerGameViewController: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.dealer.serverManager.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -42,6 +41,15 @@ class ServerGameViewController: UIViewController {
     @IBAction func clickCard(_ sender: Any) {
         
     }
+    
+    @IBAction func pickCards(_ sender: Any) {
+        
+    }
+    
+    @IBAction func fold(_ sender: Any) {
+        
+    }
+    
 }
 
 

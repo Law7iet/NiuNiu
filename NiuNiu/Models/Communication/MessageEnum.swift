@@ -5,8 +5,6 @@
 //  Created by Han Chu on 06/07/22.
 //
 
-import Foundation
-
 enum MessageEnum: Codable {
     
     case startGame
@@ -32,6 +30,7 @@ enum MessageEnum: Codable {
     case timer
     
     case fold
+    case winner
     case none
     case error
     case test

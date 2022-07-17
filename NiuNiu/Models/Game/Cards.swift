@@ -5,15 +5,18 @@
 //  Created by Han Chu on 16/07/22.
 //
 
-class Cards {
+class Cards: Codable {
     var cards: [Card]
     var isPicked: [Bool]
     var numberOfPickedCards: Int
+    var score: ScoreEnum
+    var tieBreakerCard: Card?
     
     init() {
         self.cards = [Card]()
         self.isPicked = [false, false, false, false, false]
         self.numberOfPickedCards = 0
+        self.score = .none
     }
     
     func setCards(cards: [Card]) {
@@ -21,6 +24,7 @@ class Cards {
     }
     
     func pickCardAt(index: Int) {
+        // Card
         if self.isPicked[index] == false {
             self.isPicked[index] = true
             self.numberOfPickedCards = self.numberOfPickedCards + 1
@@ -28,13 +32,12 @@ class Cards {
             self.isPicked[index] = false
             self.numberOfPickedCards = self.numberOfPickedCards - 1
         }
-    }
-    
-    func score() -> ScoreEnum {
+        // Score and tie-breaker card
         if self.numberOfPickedCards == 1 {
             // No Niu
             let index = self.isPicked.firstIndex(of: true)!
-            return ScoreEnum(rawValue: self.cards[index].rank.rawValue)!
+            self.score = ScoreEnum(rawValue: self.cards[index].rank.rawValue)!
+            self.tieBreakerCard = self.cards[index]
         } else if self.numberOfPickedCards == 3 {
             // Niu
             var totalThree = 0
@@ -44,18 +47,28 @@ class Cards {
                     totalThree = totalThree + self.cards[index].rank.rawValue
                 } else {
                     totalTwo = totalTwo + self.cards[index].rank.rawValue
+                    // Compute the tie-breaker card
+                    if self.tieBreakerCard == nil {
+                        self.tieBreakerCard = self.cards[index]
+                    } else {
+                        if self.tieBreakerCard! < self.cards[index] {
+                            self.tieBreakerCard = self.cards[index]
+                        }
+                    }
                 }
             }
             if totalThree % 10 == 0 {
                 // Compute the remain 2 cards
-                return ScoreEnum(rawValue: (totalTwo % 10) + 10)!
+                self.score =  ScoreEnum(rawValue: (totalTwo % 10) + 10)!
             } else {
                 // Error: picked cards not allowed
-                return .none
+                self.score = .none
+                self.tieBreakerCard = nil
             }
         } else {
             // Error: picked an illegal numbers of cards
-            return .none
+            self.score = .none
+            self.tieBreakerCard = nil
         }
     }
     

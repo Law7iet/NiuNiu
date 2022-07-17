@@ -6,35 +6,40 @@
 //
 
 import Foundation
+import MultipeerConnectivity
 
 class Message: Codable {
     
     var type: MessageEnum
-    var cards: [Card]?
+    var cards: Cards?
     var amount: Int?
+    var player: String?
     
     init(type: MessageEnum) {
         self.type = type
-        self.cards = nil
-        self.amount = nil
     }
 
-    init(type: MessageEnum, cards: [Card]?) {
+    init(type: MessageEnum, cards: Cards) {
         self.type = type
         self.cards = cards
-        self.amount = nil
     }
     
     init(type: MessageEnum, amount: Int?) {
         self.type = type
         self.amount = amount
-        self.cards = nil
     }
     
-    init(type: MessageEnum, cards: [Card]?, amount: Int?) {
+    init(type: MessageEnum, amount: Int?, player: String?) {
+        self.type = type
+        self.amount = amount
+        self.player = player
+    }
+    
+    init(type: MessageEnum, cards: Cards?, amount: Int?, player: String?) {
         self.type = type
         self.cards = cards
         self.amount = amount
+        self.player = player
     }
     
     init(data: Data) {
@@ -43,10 +48,9 @@ class Message: Codable {
             self.type = object!.type
             self.cards = object!.cards
             self.amount = object!.amount
+            self.player = object!.player
         } else {
             self.type = .error
-            self.cards = nil
-            self.amount = nil
         }
     }
     
@@ -54,7 +58,8 @@ class Message: Codable {
         let object = Message(
             type: self.type,
             cards: self.cards,
-            amount: self.amount
+            amount: self.amount,
+            player: self.player
         )
         return try? JSONEncoder().encode(object)
     }

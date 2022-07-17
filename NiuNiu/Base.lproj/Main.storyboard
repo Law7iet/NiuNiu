@@ -442,14 +442,33 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYn-F1-Phk">
-                                        <rect key="frame" x="147.33333333333334" y="178.66666666666663" width="93.333333333333343" height="31"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="mL6-up-A6b"/>
-                                        </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="Pick Cards"/>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="eaj-4N-S6v">
+                                        <rect key="frame" x="93.333333333333329" y="178.66666666666663" width="201.66666666666669" height="31"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYn-F1-Phk">
+                                                <rect key="frame" x="0.0" y="0.0" width="93.333333333333329" height="31"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="31" id="mL6-up-A6b"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Pick Cards"/>
+                                                <connections>
+                                                    <action selector="pickCards:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="3vf-1T-leD"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eR3-Fu-WVw">
+                                                <rect key="frame" x="108.33333333333334" y="0.0" width="93.333333333333343" height="31"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="31" id="ZiG-76-qsD"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Fold"/>
+                                                <connections>
+                                                    <action selector="fold:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="kTt-PG-lT8"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="ewq-se-cvc" firstAttribute="trailing" secondItem="531-2d-U4l" secondAttribute="trailing" id="b8n-39-LmQ"/>
@@ -476,37 +495,35 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="FbT-HI-inE" userLabel="User Stack View 2">
-                                        <rect key="frame" x="0.0" y="25.333333333333368" width="388" height="38.666666666666657"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="FbT-HI-inE" userLabel="User Stack View 2">
+                                        <rect key="frame" x="0.0" y="25.333333333333371" width="388" height="31"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your bid: xxxx" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fwK-e0-TD8" userLabel="Bid label">
-                                                <rect key="frame" x="0.0" y="9.3333333333332558" width="388" height="20.333333333333329"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your bid: xxxxxxxxxxxx" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fwK-e0-TD8" userLabel="Bid label">
+                                                <rect key="frame" x="0.0" y="5.3333333333332575" width="173.66666666666666" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="eNT-2r-ySQ" userLabel="User Stack View 3">
-                                        <rect key="frame" x="0.0" y="69" width="388" height="31"/>
-                                        <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="deS-Uo-F2U">
-                                                <rect key="frame" x="-2" y="0.66666666666662877" width="254" height="31"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-8S-MGJ">
+                                                <rect key="frame" x="308" y="0.0" width="80" height="31"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="250" id="UyD-Tr-jAR"/>
-                                                </constraints>
-                                            </slider>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f3b-uW-RIy">
-                                                <rect key="frame" x="260" y="0.0" width="128" height="31"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="G10-Zx-1ig"/>
+                                                    <constraint firstAttribute="height" constant="31" id="1aS-AR-6VJ"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="rpp-Er-nd1"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Bet"/>
                                                 <connections>
-                                                    <action selector="bet:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="kLH-aL-iFJ"/>
+                                                    <action selector="bet:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="QtJ-0E-MWU"/>
                                                 </connections>
                                             </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="eNT-2r-ySQ" userLabel="User Stack View 3">
+                                        <rect key="frame" x="0.0" y="61.333333333333371" width="388" height="38.666666666666657"/>
+                                        <subviews>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="deS-Uo-F2U">
+                                                <rect key="frame" x="-2" y="4.3333333333332575" width="392" height="31"/>
+                                            </slider>
                                         </subviews>
                                     </stackView>
                                 </subviews>

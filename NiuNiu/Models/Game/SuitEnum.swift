@@ -7,9 +7,11 @@
 
 enum SuitEnum: Int, CaseIterable, Codable {
     
-    case hearts = 1
-    case diamonds = 2
-    case clubs = 3
-    case spades = 4
+    case hearts = 4
+    case diamonds = 3
+    case clubs = 2
+    case spades = 1
+    
+    case none = 0
     
 }
