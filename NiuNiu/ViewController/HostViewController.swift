@@ -45,7 +45,7 @@ class HostViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
         if let vc = segue.destination as? ServerGameViewController {
-            vc.dealer = Dealer(serverManager: self.hostManager, players: self.hostManager.getPlayersInLobby(), time: nil)
+            vc.dealer = Dealer(serverManager: self.hostManager, players: self.hostManager.getPlayersInLobby(), time: nil, points: nil)
         }
     }
     
@@ -55,7 +55,7 @@ class HostViewController: UIViewController {
         let message = Message(type: .startGame)
         self.hostManager.sendBroadcastMessage(message)
         // Start the game
-        self.performSegue(withIdentifier: "showGameSegue", sender: nil)
+        self.performSegue(withIdentifier: "showServerGameSegue", sender: nil)
     }
     
     // MARK: Supporting functions

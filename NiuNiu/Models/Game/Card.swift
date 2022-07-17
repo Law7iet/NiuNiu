@@ -22,16 +22,20 @@ struct Card: Codable, Comparable {
     func getSuitAsString() -> String {
         switch suit {
         case .hearts:
-            return "cuori"
+            return "hearts"
         case .diamonds:
-            return "quadri"
+            return "diamonds"
         case .clubs:
-            return "fiori"
+            return "clubs"
         case .spades:
-            return "picche"
+            return "spades"
         default:
             return "nil"
         }
+    }
+    
+    func getName() -> String {
+        return "\(self.getRankAsString())_of_\(self.getSuitAsString())"
     }
     
     static func < (lhs: Card, rhs: Card) -> Bool {

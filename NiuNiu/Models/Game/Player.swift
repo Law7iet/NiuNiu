@@ -27,7 +27,7 @@ class Player {
         self.status = .none
         self.bid = 0
         self.points = points ?? 100
-        self.cards = Cards()
+        self.cards = Cards(cards: [Card]())
     }
     
     func setCards(cards: [Card]) {

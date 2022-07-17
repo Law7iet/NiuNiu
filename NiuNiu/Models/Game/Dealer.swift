@@ -25,20 +25,24 @@ class Dealer {
 //    var leadPlayer: Player
     var maxBid: Int
     var totalBid: Int
-    var time: Int
     var timerCounter: Int
+    // Game Settings
+    var time: Int
+    var points: Int
     
     var delegate: DealerDelegate?
     
     // MARK: Methods
-    init(serverManager: HostManager, players: [MCPeerID], time: Int?) {
+    init(serverManager: HostManager, players: [MCPeerID], time: Int?, points: Int?) {
+        self.time = time ?? 30
+        self.points = points ?? 100
+        
         self.serverManager = serverManager
         self.deck = Deck()
-        self.players = Players(players: players, points: nil)
+        self.players = Players(players: players, points: self.points)
         self.activePlayers = Players(players: self.players.list)
         self.maxBid = 0
         self.totalBid = 0
-        self.time = time ?? 30
         self.timerCounter = 0
     }
     
@@ -75,92 +79,92 @@ class Dealer {
         self.activePlayers = self.players
         self.serverManager.sendMessageTo(
             receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .startGame)
+            message: Message(type: .startGame, amount: self.points)
         )
         // Prepare the cards and give 5 cards to each player
-        self.makeDeck()
-        for player in self.players.list {
-            let cards = self.deck.getCards()
-            player.setCards(cards: cards)
-            // Check if the player is himself or not
-            if player.id == self.serverManager.myPeerID {
-                // Change UI of the server
-                self.delegate?.didReciveCards(cards: player.cards)
-            } else {
-                // Send a message with cards to the guests
-                self.serverManager.sendMessageTo(receivers: [player.id], message: Message(type: .receiveCards, cards: player.cards))
-            }
-        }
+//        self.makeDeck()
+//        for player in self.players.list {
+//            let cards = self.deck.getCards()
+//            player.setCards(cards: cards)
+//            // Check if the player is himself or not
+//            if player.id == self.serverManager.myPeerID {
+//                // Change UI of the server
+//                self.delegate?.didReciveCards(cards: player.cards)
+//            } else {
+//                // Send a message with cards to the guests
+//                self.serverManager.sendMessageTo(receivers: [player.id], message: Message(type: .receiveCards, cards: player.cards))
+//            }
+//        }
         
-        // Bet
-        self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .startBet)
-        )
-        self.startTimerWithEndMessage(type: .endBet, time: self.time)
-        
-        // Change status to the players whose didn't bet
-        for player in self.players.list {
-            if player.bid == 0 {
-                player.status = .fold
-            }
-        }
-        self.activePlayers.findActivePlayers()
-        
-        // Fix bet
-        self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .startFixBet)
-        )
-        self.startTimerWithEndMessage(type: .endFixBet, time: self.time)
-        
-        // Change status to the players whose didn't fixbet
-        for player in self.players.list {
-            if player.bid == self.maxBid {
-                player.status = .fold
-            }
-        }
-        self.activePlayers.findActivePlayers()
-        
-        // Start pick cards
-        self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .startPickCards)
-        )
-        self.startTimerWithEndMessage(type: .endPickCards, time: self.time)
-                
-        // Change status to the players whose didn't pickCards
-        for player in self.players.list {
-            if player.cards.numberOfPickedCards != 1 || player.cards.numberOfPickedCards != 3 {
-                player.status = .fold
-            }
-        }
-        self.activePlayers.findActivePlayers()
-        
-        // Compute the winner
-        for player in self.activePlayers.list {
-            if self.winner == nil {
-                self.winner = player
-            } else {
-                if self.winner!.score < player.score {
-                    self.winner = player
-                }
-            }
-        }
-        // Show cards
-        self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .showCards)
-        )
-        // Notify the winner and give him the prize
-        self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
-            message: Message(type: .winner, amount: self.totalBid, player: self.winner!.id.displayName)
-        )
-        
-        // End Game
-        self.serverManager.sendBroadcastMessage(Message(type: .endMatch))
-        self.activePlayers = self.players
+//        // Bet
+//        self.serverManager.sendMessageTo(
+//            receivers: self.activePlayers.getMCPeersID(),
+//            message: Message(type: .startBet)
+//        )
+//        self.startTimerWithEndMessage(type: .endBet, time: self.time)
+//
+//        // Change status to the players whose didn't bet
+//        for player in self.players.list {
+//            if player.bid == 0 {
+//                player.status = .fold
+//            }
+//        }
+//        self.activePlayers.findActivePlayers()
+//
+//        // Fix bet
+//        self.serverManager.sendMessageTo(
+//            receivers: self.activePlayers.getMCPeersID(),
+//            message: Message(type: .startFixBid)
+//        )
+//        self.startTimerWithEndMessage(type: .endFixBid, time: self.time)
+//
+//        // Change status to the players whose didn't fixbet
+//        for player in self.players.list {
+//            if player.bid == self.maxBid {
+//                player.status = .fold
+//            }
+//        }
+//        self.activePlayers.findActivePlayers()
+//
+//        // Start pick cards
+//        self.serverManager.sendMessageTo(
+//            receivers: self.activePlayers.getMCPeersID(),
+//            message: Message(type: .startChooseCards)
+//        )
+//        self.startTimerWithEndMessage(type: .endChooseCards, time: self.time)
+//
+//        // Change status to the players whose didn't pickCards
+//        for player in self.players.list {
+//            if player.cards.numberOfPickedCards != 1 || player.cards.numberOfPickedCards != 3 {
+//                player.status = .fold
+//            }
+//        }
+//        self.activePlayers.findActivePlayers()
+//
+//        // Compute the winner
+//        for player in self.activePlayers.list {
+//            if self.winner == nil {
+//                self.winner = player
+//            } else {
+//                if self.winner!.score < player.score {
+//                    self.winner = player
+//                }
+//            }
+//        }
+//        // Show cards
+//        self.serverManager.sendMessageTo(
+//            receivers: self.activePlayers.getMCPeersID(),
+//            message: Message(type: .showCards)
+//        )
+//        // Notify the winner and give him the prize
+//        self.serverManager.sendMessageTo(
+//            receivers: self.activePlayers.getMCPeersID(),
+//            message: Message(type: .winner, amount: self.totalBid, player: self.winner!.id.displayName)
+//        )
+//
+//        // End Game
+//        self.serverManager.sendBroadcastMessage(Message(type: .endMatch))
+//        self.activePlayers = self.players
     }
         
 }
@@ -190,7 +194,7 @@ extension Dealer: HostManagerDelegate {
             } else {
                 print("Message .bet has nil amount")
             }
-        case .fixBet:
+        case .fixBid:
             // Change the bid of the player with peerID
             print("fixBet")
             if let bid = message.amount {
@@ -203,7 +207,7 @@ extension Dealer: HostManagerDelegate {
             } else {
                 print("Message .fixBet has nil amount")
             }
-        case .pickCards:
+        case .chooseCards:
             // Change the picked cards of the player with peerID
             print("pickCards")
             if let cards = message.cards {

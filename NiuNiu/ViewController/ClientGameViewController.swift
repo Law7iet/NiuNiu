@@ -12,6 +12,7 @@ class ClientGameViewController: UIViewController {
 
     // MARK: Properties
     var clientManager: LobbyManager!
+    var user: Player!
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -40,6 +41,14 @@ class ClientGameViewController: UIViewController {
         
     }
 
+    @IBAction func pickCards(_ sender: Any) {
+        
+    }
+    
+    @IBAction func fold(_ sender: Any) {
+    
+    }
+    
 }
 
 // MARK: LobbyManagerDelegate implementation
@@ -55,23 +64,33 @@ extension ClientGameViewController: LobbyManagerDelegate {
             switch message.type {
             case .startGame:
                 print("startGame")
+                let points = message.amount!
+                self.user = Player(id: self.clientManager.myPeerID, points: points)
             case .startMatch:
                 print("startMatch")
+            case .receiveCards:
+                print("ReceiveCards")
+                let cards = message.cards!
+                self.user.setCards(cards: cards.cards)
+                for index in 0...4 {
+                    let image = UIImage(named: cards.cards[index].getName())
+                    cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
+                }
             case .startBet:
                 print("startBet")
             case .endBet:
                 print("endBet")
-            case .startFixBet:
+            case .startFixBid:
                 print("startFixBet")
-            case .endFixBet:
+            case .endFixBid:
                 print("endFixBet")
-            case .startPickCards:
+            case .startChooseCards:
                 print("startPickCards")
-            case .endPickCards:
+            case .endChooseCards:
                 print("endPickCards")
             case .showCards:
                 print("showCards")
-            case .declareWinner:
+            case .winner:
                 print("declareWinner")
             case .endMatch:
                 print("endMatch")
@@ -83,6 +102,5 @@ extension ClientGameViewController: LobbyManagerDelegate {
             }
         }
     }
-    
     
 }

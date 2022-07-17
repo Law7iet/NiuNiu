@@ -12,8 +12,8 @@ class Cards: Codable {
     var score: ScoreEnum
     var tieBreakerCard: Card?
     
-    init() {
-        self.cards = [Card]()
+    init(cards: [Card]) {
+        self.cards = cards
         self.isPicked = [false, false, false, false, false]
         self.numberOfPickedCards = 0
         self.score = .none
