@@ -13,13 +13,17 @@ class Player {
     var id: MCPeerID!
     var status: MessageEnum
     var points: Int
+    var cards: Cards?
     var bid: Int
     var score: ScoreEnum {
         get {
-            self.cards.score
+            if self.cards != nil {
+                return self.cards!.score
+            } else {
+                return .none
+            }
         }
     }
-    var cards: Cards
     
     // MARK: Methods
     init(id: MCPeerID, points: Int?) {
@@ -27,11 +31,14 @@ class Player {
         self.status = .none
         self.bid = 0
         self.points = points ?? 100
-        self.cards = Cards(cards: [Card]())
     }
     
     func setCards(cards: [Card]) {
-        self.cards.setCards(cards: cards)
+        self.cards = Cards(elements: cards)
+    }
+    
+    func setCards(cards: Cards) {
+        self.cards = cards
     }
     
     func bet(amount: Int) -> Bool {

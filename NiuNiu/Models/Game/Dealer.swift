@@ -16,31 +16,32 @@ protocol DealerDelegate {
 class Dealer {
     
     // MARK: Properties
+    // Data Strucutres
     var serverManager: HostManager
-    
-    var deck: Deck
     var players: Players
-    var activePlayers: Players
-    var winner: Player?
-//    var leadPlayer: Player
-    var maxBid: Int
-    var totalBid: Int
-    var timerCounter: Int
+    var deck: Deck
     // Game Settings
     var time: Int
     var points: Int
+    // Others
+    var winner: Player?
+    var maxBid: Int
+    var totalBid: Int
+    var timerCounter: Int
+    
     
     var delegate: DealerDelegate?
     
     // MARK: Methods
     init(serverManager: HostManager, players: [MCPeerID], time: Int?, points: Int?) {
+        // Game Settings
         self.time = time ?? 30
         self.points = points ?? 100
-        
+        // Data Structures
         self.serverManager = serverManager
         self.deck = Deck()
         self.players = Players(players: players, points: self.points)
-        self.activePlayers = Players(players: self.players.list)
+        // Others
         self.maxBid = 0
         self.totalBid = 0
         self.timerCounter = 0
@@ -57,7 +58,7 @@ class Dealer {
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.serverManager.sendMessageTo(
-                receivers: self.activePlayers.getMCPeersID(),
+                receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
                 message: Message(type: .timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
@@ -65,7 +66,7 @@ class Dealer {
                 // Timer ends
                 timer.invalidate()
                 self.serverManager.sendMessageTo(
-                    receivers: self.activePlayers.getMCPeersID(),
+                    receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
                     message: Message(type: type)
                 )
             }
@@ -76,25 +77,26 @@ class Dealer {
     func playGame() {
         
         // Start the game
-        self.activePlayers = self.players
         self.serverManager.sendMessageTo(
-            receivers: self.activePlayers.getMCPeersID(),
+            receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
             message: Message(type: .startGame, amount: self.points)
         )
         // Prepare the cards and give 5 cards to each player
-//        self.makeDeck()
-//        for player in self.players.list {
-//            let cards = self.deck.getCards()
-//            player.setCards(cards: cards)
-//            // Check if the player is himself or not
-//            if player.id == self.serverManager.myPeerID {
-//                // Change UI of the server
-//                self.delegate?.didReciveCards(cards: player.cards)
-//            } else {
-//                // Send a message with cards to the guests
-//                self.serverManager.sendMessageTo(receivers: [player.id], message: Message(type: .receiveCards, cards: player.cards))
-//            }
-//        }
+        self.makeDeck()
+        for player in self.players.elements {
+            let cards = self.deck.getCards()
+            player.setCards(cards: cards)
+            // Check if the player is himself or not
+            if player.id == self.serverManager.myPeerID {
+                // Change UI of the server
+                self.delegate?.didReciveCards(cards: player.cards!)
+            } else {
+                // Send a message with cards to the guests
+                self.serverManager.sendMessageTo(
+                    receivers: [player.id],
+                    message: Message(type: .receiveCards, cards: player.cards!))
+            }
+        }
         
 //        // Bet
 //        self.serverManager.sendMessageTo(
@@ -176,50 +178,50 @@ extension Dealer: HostManagerDelegate {
     func didDisconnectWith(peerID: MCPeerID) {}
     
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
-        let message = Message(data: messageData)
-        switch message.type {
-        case .bet:
-            // Add the bid of the player with peerID
-            print("bet")
-            if let bid = message.amount {
-                let player = self.activePlayers.findPlayerWith(peerID: peerID)
-                if player?.bet(amount: bid) == true {
-                    self.totalBid = self.totalBid + message.amount!
-                    if bid > self.maxBid {
-                        self.maxBid = bid
-                    }
-                } else {
-                    print("Error server shouldn't receive this message: player has not enough points for his bid")
-                }
-            } else {
-                print("Message .bet has nil amount")
-            }
-        case .fixBid:
-            // Change the bid of the player with peerID
-            print("fixBet")
-            if let bid = message.amount {
-                let player = self.activePlayers.findPlayerWith(peerID: peerID)
-                if player?.bet(amount: bid) == true {
-                    self.totalBid = self.totalBid + message.amount!
-                } else {
-                    print("Error server shouldn't receive this message: player has not enough points for his bid")
-                }
-            } else {
-                print("Message .fixBet has nil amount")
-            }
-        case .chooseCards:
-            // Change the picked cards of the player with peerID
-            print("pickCards")
-            if let cards = message.cards {
-                let player = self.activePlayers.findPlayerWith(peerID: peerID)
-                player?.cards = cards
-            } else {
-                print("Message .pickCards has nil cards")
-            }
-            
-        default:
-            print("MessageType \(message.type) not allowed")
-        }
+//        let message = Message(data: messageData)
+//        switch message.type {
+//        case .bet:
+//            // Add the bid of the player with peerID
+//            print("bet")
+//            if let bid = message.amount {
+//                let player = self.activePlayers.findPlayerWith(peerID: peerID)
+//                if player?.bet(amount: bid) == true {
+//                    self.totalBid = self.totalBid + message.amount!
+//                    if bid > self.maxBid {
+//                        self.maxBid = bid
+//                    }
+//                } else {
+//                    print("Error server shouldn't receive this message: player has not enough points for his bid")
+//                }
+//            } else {
+//                print("Message .bet has nil amount")
+//            }
+//        case .fixBid:
+//            // Change the bid of the player with peerID
+//            print("fixBet")
+//            if let bid = message.amount {
+//                let player = self.activePlayers.findPlayerWith(peerID: peerID)
+//                if player?.bet(amount: bid) == true {
+//                    self.totalBid = self.totalBid + message.amount!
+//                } else {
+//                    print("Error server shouldn't receive this message: player has not enough points for his bid")
+//                }
+//            } else {
+//                print("Message .fixBet has nil amount")
+//            }
+//        case .chooseCards:
+//            // Change the picked cards of the player with peerID
+//            print("pickCards")
+//            if let cards = message.cards {
+//                let player = self.activePlayers.findPlayerWith(peerID: peerID)
+//                player?.cards = cards
+//            } else {
+//                print("Message .pickCards has nil cards")
+//            }
+//            
+//        default:
+//            print("MessageType \(message.type) not allowed")
+//        }
     }
     
 }

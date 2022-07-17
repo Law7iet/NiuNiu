@@ -828,72 +828,57 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="-50" translatesAutoresizingMaskIntoConstraints="NO" id="P2z-MA-eAO">
                                         <rect key="frame" x="0.0" y="0.0" width="388" height="163.66666666666666"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIL-Gp-1TC">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIL-Gp-1TC">
                                                 <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="yIL-Gp-1TC" secondAttribute="height" multiplier="64:89" id="ETX-yh-cW8"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="wLB-4f-Ca0"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <backgroundConfiguration key="background" image="1_of_clubs"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="clickCard:" destination="FAH-0o-gOG" eventType="touchUpInside" id="DZX-2A-1D3"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUV-0q-PNJ">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUV-0q-PNJ">
                                                 <rect key="frame" x="67.666666666666657" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kUV-0q-PNJ" secondAttribute="height" multiplier="64:89" id="BTA-ro-8yB"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="kez-62-dv1"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <backgroundConfiguration key="background" image="1_of_clubs"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="clickCard:" destination="FAH-0o-gOG" eventType="touchUpInside" id="YkW-Jk-ffz"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tt9-Cl-J7B">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tt9-Cl-J7B">
                                                 <rect key="frame" x="135.33333333333334" y="0.0" width="117.33333333333334" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="8IN-3Z-3yO"/>
                                                     <constraint firstAttribute="width" secondItem="tt9-Cl-J7B" secondAttribute="height" multiplier="64:89" id="Iuu-Xm-hP9"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <backgroundConfiguration key="background" image="1_of_clubs"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="clickCard:" destination="FAH-0o-gOG" eventType="touchUpInside" id="qT7-Mc-XN5"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGh-VA-CFW">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGh-VA-CFW">
                                                 <rect key="frame" x="202.66666666666666" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="EXT-Tb-owp"/>
                                                     <constraint firstAttribute="width" secondItem="KGh-VA-CFW" secondAttribute="height" multiplier="64:89" id="YT9-Qm-N0x"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <backgroundConfiguration key="background" image="1_of_clubs"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="clickCard:" destination="FAH-0o-gOG" eventType="touchUpInside" id="M0E-rI-lfL"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kE4-Ca-o9L">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kE4-Ca-o9L">
                                                 <rect key="frame" x="270.33333333333331" y="0.0" width="117.66666666666669" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kE4-Ca-o9L" secondAttribute="height" multiplier="64:89" id="VNC-5s-e5d"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="gYG-JY-cds"/>
                                                 </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <backgroundConfiguration key="background" image="1_of_clubs"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="clickCard:" destination="FAH-0o-gOG" eventType="touchUpInside" id="5lP-PN-q9j"/>
                                                 </connections>

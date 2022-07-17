@@ -6,53 +6,50 @@
 //
 
 class Cards: Codable {
-    var cards: [Card]
-    var isPicked: [Bool]
+    
+    var elements: [Card]
+    var chosenCards: [Bool]
     var numberOfPickedCards: Int
     var score: ScoreEnum
     var tieBreakerCard: Card?
     
-    init(cards: [Card]) {
-        self.cards = cards
-        self.isPicked = [false, false, false, false, false]
+    init(elements: [Card]) {
+        self.elements = elements
+        self.chosenCards = [false, false, false, false, false]
         self.numberOfPickedCards = 0
         self.score = .none
     }
     
-    func setCards(cards: [Card]) {
-        self.cards = cards
-    }
-    
     func pickCardAt(index: Int) {
         // Card
-        if self.isPicked[index] == false {
-            self.isPicked[index] = true
+        if self.chosenCards[index] == false {
+            self.chosenCards[index] = true
             self.numberOfPickedCards = self.numberOfPickedCards + 1
         } else {
-            self.isPicked[index] = false
+            self.chosenCards[index] = false
             self.numberOfPickedCards = self.numberOfPickedCards - 1
         }
         // Score and tie-breaker card
         if self.numberOfPickedCards == 1 {
             // No Niu
-            let index = self.isPicked.firstIndex(of: true)!
-            self.score = ScoreEnum(rawValue: self.cards[index].rank.rawValue)!
-            self.tieBreakerCard = self.cards[index]
+            let index = self.chosenCards.firstIndex(of: true)!
+            self.score = ScoreEnum(rawValue: self.elements[index].rank.rawValue)!
+            self.tieBreakerCard = self.elements[index]
         } else if self.numberOfPickedCards == 3 {
             // Niu
             var totalThree = 0
             var totalTwo = 0
             for index in 0...4 {
-                if self.isPicked[index] == true {
-                    totalThree = totalThree + self.cards[index].rank.rawValue
+                if self.chosenCards[index] == true {
+                    totalThree = totalThree + self.elements[index].rank.rawValue
                 } else {
-                    totalTwo = totalTwo + self.cards[index].rank.rawValue
+                    totalTwo = totalTwo + self.elements[index].rank.rawValue
                     // Compute the tie-breaker card
                     if self.tieBreakerCard == nil {
-                        self.tieBreakerCard = self.cards[index]
+                        self.tieBreakerCard = self.elements[index]
                     } else {
-                        if self.tieBreakerCard! < self.cards[index] {
-                            self.tieBreakerCard = self.cards[index]
+                        if self.tieBreakerCard! < self.elements[index] {
+                            self.tieBreakerCard = self.elements[index]
                         }
                     }
                 }

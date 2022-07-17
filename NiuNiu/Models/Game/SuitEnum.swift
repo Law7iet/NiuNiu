@@ -12,6 +12,4 @@ enum SuitEnum: Int, CaseIterable, Codable {
     case clubs = 2
     case spades = 1
     
-    case none = 0
-    
 }

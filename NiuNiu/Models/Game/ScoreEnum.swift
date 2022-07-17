@@ -8,7 +8,7 @@
 enum ScoreEnum: Int, Codable, Comparable {
 
     case none = 0
-    
+    // No Niu
     case one = 1
     case two = 2
     case three = 3
@@ -19,7 +19,7 @@ enum ScoreEnum: Int, Codable, Comparable {
     case eight = 8
     case nine = 9
     case ten = 10
-    
+    // Niu
     case niuOne = 11
     case niuTwo = 12
     case niuThree = 13

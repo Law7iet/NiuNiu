@@ -29,8 +29,6 @@ struct Card: Codable, Comparable {
             return "clubs"
         case .spades:
             return "spades"
-        default:
-            return "nil"
         }
     }
     

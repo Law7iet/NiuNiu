@@ -23,6 +23,7 @@ class HostManager: NSObject {
     var playersPeerID: [MCPeerID]
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
+    
     var delegate: HostManagerDelegate?
     
     override init() {
