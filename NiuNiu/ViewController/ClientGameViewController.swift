@@ -11,8 +11,11 @@ import MultipeerConnectivity
 class ClientGameViewController: UIViewController {
 
     // MARK: Properties
-    var clientManager: LobbyManager!
+    var clientManager: Client!
     var user: Player!
+    
+    var myPeerID: MCPeerID!
+    var serverPeerID: MCPeerID!
     
     var clickedButtons = [false, false, false, false, false]
     
@@ -65,37 +68,37 @@ class ClientGameViewController: UIViewController {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension ClientGameViewController: LobbyManagerDelegate {
+extension ClientGameViewController: ClientDelegate {
     
     // Not used
     func didConnectWith(peerID: MCPeerID) {}
     func didDisconnectWith(peerID: MCPeerID) {}
     
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
-        if peerID == self.clientManager.hostPeerID {
-            let message = Message(data: messageData)
-            switch message.type {
-            case .startGame:
-                print("startGame")
-                let points = message.amount!
-                self.user = Player(id: self.clientManager.myPeerID, points: points)
-                DispatchQueue.main.async {
-                    self.userLabel.text = self.user.id.displayName
-                    self.pointsLabel.text = "Points: \(self.user.points)"
-                    self.bidLabel.text = "Your bid: 0 points"
-                }
+//        if peerID == self.clientManager.hostPeerID {
+//            let message = Message(data: messageData)
+//            switch message.type {
+//            case .startGame:
+//                print("startGame")
+//                let points = message.amount!
+//                self.user = Player(id: self.clientManager.myPeerID, points: points)
+//                DispatchQueue.main.async {
+//                    self.userLabel.text = self.user.id.displayName
+//                    self.pointsLabel.text = "Points: \(self.user.points)"
+//                    self.bidLabel.text = "Your bid: 0 points"
+//                }
 //            case .startMatch:
 //                print("startMatch")
-            case .receiveCards:
-                print("ReceiveCards")
-                let cards = message.cards!
-                self.user.setCards(cards: cards)
-                for index in 0...4 {
-                    DispatchQueue.main.async {
-                        let image = UIImage(named: cards.elements[index].getName())
-                        self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
-                    }
-                }
+//            case .receiveCards:
+//                print("ReceiveCards")
+//                let cards = message.cards!
+//                self.user.setCards(cards: cards)
+//                for index in 0...4 {
+//                    DispatchQueue.main.async {
+//                        let image = UIImage(named: cards.elements[index].getName())
+//                        self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
+//                    }
+//                }
 //            case .startBet:
 //                print("startBet")
 //            case .endBet:
@@ -116,11 +119,11 @@ extension ClientGameViewController: LobbyManagerDelegate {
 //                print("endMatch")
 //            case .endGame:
 //                print("endGame")
-            // TODO: check if there're closeConnection or closeLobby
-            default:
-                print("???")
-            }
-        }
+//            // TODO: check if there're closeConnection or closeLobby
+//            default:
+//                print("???")
+//            }
+//        }
     }
     
 }

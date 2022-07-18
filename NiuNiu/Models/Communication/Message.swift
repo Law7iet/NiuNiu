@@ -15,36 +15,36 @@ class Message: Codable {
     var amount: Int?
     var user: User?
     
-    init(type: MessageEnum) {
+    init(_ type: MessageEnum) {
         self.type = type
     }
     
     // Player
-    init(type: MessageEnum, user: User?) {
+    init(_ type: MessageEnum, user: User?) {
         self.type = type
         self.user = user
     }
     
     // Send cards to clients
-    init(type: MessageEnum, cards: Cards) {
+    init(_ type: MessageEnum, cards: Cards) {
         self.type = type
         self.cards = cards
     }
     
     // Bet and fixBid
-    init(type: MessageEnum, amount: Int?) {
+    init(_ type: MessageEnum, amount: Int?) {
         self.type = type
         self.amount = amount
     }
     
     // Winner
-    init(type: MessageEnum, amount: Int?, user: User?) {
+    init(_ type: MessageEnum, amount: Int?, user: User?) {
         self.type = type
         self.amount = amount
         self.user = user
     }
     
-    init(type: MessageEnum, cards: Cards?, amount: Int?, user: User?) {
+    init(_ type: MessageEnum, cards: Cards?, amount: Int?, user: User?) {
         self.type = type
         self.cards = cards
         self.amount = amount
@@ -65,7 +65,7 @@ class Message: Codable {
     
     func convertToData() -> Data? {
         let object = Message(
-            type: self.type,
+            self.type,
             cards: self.cards,
             amount: self.amount,
             user: self.user

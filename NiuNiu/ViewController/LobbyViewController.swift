@@ -11,7 +11,8 @@ import MultipeerConnectivity
 class LobbyViewController: UIViewController {
 
     // MARK: Properties
-    var lobbyManager: LobbyManager!
+    var lobbyManager: Client!
+    var gameLobby: Lobby!
     
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
@@ -24,7 +25,7 @@ class LobbyViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.lobbyManager.clearPlayersInLobby()
+        self.gameLobby.clearPlayers()
         self.playersTableView.reloadData()
     }
     
@@ -36,8 +37,10 @@ class LobbyViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-        if let vc = segue.destination as? ClientGameViewController {
-            vc.clientManager = self.lobbyManager
+        if let clientVC = segue.destination as? ClientGameViewController {
+            clientVC.clientManager = self.lobbyManager
+            clientVC.myPeerID = self.gameLobby.myPeerID
+            clientVC.serverPeerID = self.gameLobby.hostPeerID
         }
     }
     
@@ -48,20 +51,20 @@ class LobbyViewController: UIViewController {
     
     func updateUI() {
         // Label
-        self.playersCounterLabel.text = "\(self.lobbyManager.getNumberOfPlayers()) of 6 players found"
+        self.playersCounterLabel.text = "\(self.gameLobby.count) of 6 players found"
     }
     
     func addPlayerInTableView(peerID: MCPeerID) {
-        self.lobbyManager.addPlayerWith(peerID: peerID)
-        let indexPath = IndexPath(row: self.lobbyManager.getNumberOfPlayers() - 1, section: 0)
+        self.gameLobby.addUser(withPeerID: peerID)
+        let indexPath = IndexPath(row: self.gameLobby.count - 1, section: 0)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
     }
     
     func removePlayerInTableView(peerID: MCPeerID) {
-        if let index = self.lobbyManager.getIndexOf(player: peerID) {
-            self.lobbyManager.removePlayerWith(index: index)
-            let indexPath = IndexPath(row: index + 1, section: 0)
+        if let index = self.gameLobby.getIndex(ofPlayer: peerID) {
+            self.gameLobby.removeUser(withIndex: index)
+            let indexPath = IndexPath(row: index, section: 0)
             self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
             self.updateUI()
         }
@@ -76,14 +79,14 @@ extension LobbyViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.lobbyManager.getNumberOfPlayers()
+        return self.gameLobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.convertMCPeerIDListToString(list: self.lobbyManager.getPlayersInLobby())[indexPath.row]
+        content.text = self.gameLobby.getUsersName()[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
@@ -91,7 +94,7 @@ extension LobbyViewController: UITableViewDataSource {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension LobbyViewController: LobbyManagerDelegate {
+extension LobbyViewController: ClientDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {
@@ -100,7 +103,7 @@ extension LobbyViewController: LobbyManagerDelegate {
     }
     
     func didDisconnectWith(peerID: MCPeerID) {
-        if peerID == self.lobbyManager.hostPeerID {
+        if peerID == self.gameLobby.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in

@@ -11,8 +11,8 @@ import MultipeerConnectivity
 class HostViewController: UIViewController {
     
     // MARK: Properties
-    var hostManager: HostManager!
-//    var lobby: Lobby
+    var hostManager: Server!
+    var gameLobby: Lobby!
 
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
@@ -45,16 +45,19 @@ class HostViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-        if let vc = segue.destination as? ServerGameViewController {
-            vc.dealer = Dealer(serverManager: self.hostManager, players: self.hostManager.getPlayersInLobby(), time: nil, points: nil)
+        if let serverGameVC = segue.destination as? ServerGameViewController {
+            serverGameVC.dealer = Dealer(serverManager: self.hostManager, lobby: self.gameLobby, time: nil, points: nil)
+            serverGameVC.myPeerID = self.gameLobby.myPeerID
+            serverGameVC.serverPeerID = self.gameLobby.hostPeerID
         }
     }
     
     // MARK: Actions
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Notify the guests
-        let message = Message(type: .startGame)
-        self.hostManager.sendBroadcastMessage(message)
+        self.hostManager.sendMessageTo(self.gameLobby.getSendablePeersID(), message: Message(.startGame))
+        // Close adversiting
+        self.hostManager.stopAdvertising()
         // Start the game
         self.performSegue(withIdentifier: "showServerGameSegue", sender: nil)
     }
@@ -66,18 +69,18 @@ class HostViewController: UIViewController {
     }
     
     func updateUI() {
-        // Label
-        self.playersCounterLabel.text = "\(self.hostManager.getNumberOfPlayers()) of 6 players found"
-        // Button play
-        if self.hostManager.getNumberOfPlayers() > 1 && !self.playButton.isEnabled {
+        // Player Counter Label
+        self.playersCounterLabel.text = "\(self.gameLobby.count) of 6 players found"
+        // Play Button
+        if self.gameLobby.count > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
-        } else if self.hostManager.getNumberOfPlayers() < 2 && self.playButton.isEnabled {
+        } else if self.gameLobby.count < 2 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
     }
     
     func updateAdvertiser() {
-        if self.hostManager.getNumberOfPlayers() == 6 {
+        if self.gameLobby.count == 6 {
             self.hostManager.stopAdvertising()
         } else {
             self.hostManager.startAdvertising()
@@ -85,17 +88,17 @@ class HostViewController: UIViewController {
     }
     
     func addPlayerInTableView(peerID: MCPeerID) {
-        let indexPath = IndexPath(row: self.hostManager.getNumberOfPlayers(), section: 0)
-        self.hostManager.addPlayerWith(peerID: peerID)
+        let indexPath = IndexPath(row: self.gameLobby.count, section: 0)
+        self.gameLobby.addUser(withPeerID: peerID)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
         self.updateAdvertiser()
     }
     
     func removePlayerInTableView(peerID: MCPeerID) {
-        if let index = self.hostManager.getIndexOf(player: peerID) {
-            self.hostManager.removePlayerWith(index: index)
-            let indexPath = IndexPath(row: index + 1, section: 0)
+        if let index = self.gameLobby.getIndex(ofPlayer: peerID) {
+            self.gameLobby.removeUser(withIndex: index)
+            let indexPath = IndexPath(row: index, section: 0)
             self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
             self.updateUI()
             self.updateAdvertiser()
@@ -106,19 +109,20 @@ class HostViewController: UIViewController {
 
 // MARK: UITableViewDataSource implementation
 extension HostViewController: UITableViewDataSource {
+    
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.hostManager.getNumberOfPlayers()
+        return self.gameLobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "hostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.convertMCPeerIDListToString(list: self.hostManager.getPlayersInLobby())[indexPath.row]
+        content.text = self.gameLobby.getUsersName()[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
@@ -130,8 +134,8 @@ extension HostViewController: UITableViewDataSource {
 extension HostViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.hostManager.getPlayersInLobby()[indexPath.row]
-        if user == self.hostManager.myPeerID {
+        let user = self.gameLobby.usersPeerID[indexPath.row]
+        if user == self.gameLobby.myPeerID {
             // Do nothing - The host can't kick himself
             return
         }
@@ -144,8 +148,8 @@ extension HostViewController: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: {(action: UIAlertAction) in
-                let msg = Message(type: .closeConnection)
-                self.hostManager.sendMessageTo(receivers: [user], message: msg)
+                let msg = Message(.closeConnection)
+                self.hostManager.sendMessageTo([user], message: msg)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -158,7 +162,7 @@ extension HostViewController: UITableViewDelegate {
 }
 
 // MARK: HostManagerDelegate implementation
-extension HostViewController: HostManagerDelegate {
+extension HostViewController: ServerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {

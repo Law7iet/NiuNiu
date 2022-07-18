@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-protocol HostManagerDelegate {
+protocol ServerDelegate {
     
     func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
@@ -15,22 +15,15 @@ protocol HostManagerDelegate {
 
 }
 
-class HostManager: NSObject {
+class Server: NSObject {
     
-    /// The host's MCPeerID
-    var myPeerID: MCPeerID
-    /// The list of the guests in the lobby except himself (the host)
-    var playersPeerID: [MCPeerID]
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
+    var delegate: ServerDelegate?
     
-    var delegate: HostManagerDelegate?
-    
-    override init() {
-        self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(Utils.getRandomID(length: 4))")
-        self.playersPeerID = [MCPeerID]()
-        self.session = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
-        self.advertiser = MCNearbyServiceAdvertiser(peer: self.myPeerID, discoveryInfo: nil, serviceType: "niu-niu-game")
+    init(peerID: MCPeerID) {
+        self.session = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
+        self.advertiser = MCNearbyServiceAdvertiser(peer: peerID, discoveryInfo: nil, serviceType: "niu-niu-game")
         super.init()
         self.session.delegate = self
         self.advertiser.delegate = self
@@ -45,48 +38,15 @@ class HostManager: NSObject {
         self.advertiser.stopAdvertisingPeer()
     }
     
-    // MARK: Players' methods
-    /// Returns the list of the all the players in the lobby, included himself (the host is also a player) in the first position of the list
-    /// - Returns: the list of all the players in the lobby
-    func getPlayersInLobby() -> [MCPeerID] {
-        return [self.myPeerID] + self.playersPeerID
-    }
-    
-    func getNumberOfPlayers() -> Int {
-        return self.playersPeerID.count + 1
-    }
-    
-    func getIndexOf(player mcPeerID: MCPeerID) -> Int? {
-        return self.playersPeerID.firstIndex(of: mcPeerID)
-    }
-    
-    func addPlayerWith(peerID: MCPeerID) {
-        self.playersPeerID.append(peerID)
-    }
-    
-    func removePlayerWith(index: Int) {
-        self.playersPeerID.remove(at: index)
-    }
-    
     // MARK: Session's methods
     func disconnectSession() {
         self.session.disconnect()
     }
     
-    func sendBroadcastMessage(_ message: Message) {
+    func sendMessageTo(_ peerIDs: [MCPeerID], message: Message) {
         if let data = message.convertToData() {
             do {
-                try self.session.send(data, toPeers: self.playersPeerID, with: .reliable)
-            } catch {
-                print("ServerManager.sendBroadcastMessage error")
-            }
-        }
-    }
-    
-    func sendMessageTo(receivers peersID: [MCPeerID], message: Message) {
-        if let data = message.convertToData() {
-            do {
-                try self.session.send(data, toPeers: peersID, with: .reliable)
+                try self.session.send(data, toPeers: peerIDs, with: .reliable)
             } catch {
                 print("ServerManager.sendMessage error")
             }
@@ -94,7 +54,7 @@ class HostManager: NSObject {
     }
 }
 
-extension HostManager: MCSessionDelegate {
+extension Server: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
@@ -122,7 +82,7 @@ extension HostManager: MCSessionDelegate {
     
 }
 
-extension HostManager: MCNearbyServiceAdvertiserDelegate {
+extension Server: MCNearbyServiceAdvertiserDelegate {
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         invitationHandler(true, self.session)

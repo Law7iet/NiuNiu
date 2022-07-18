@@ -8,11 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class SearchViewController: UIViewController {
+class SeacherViewController: UIViewController {
     
     // MARK: Properties
-    var searchManager: SearchManager!
-    var hostPeerID: MCPeerID!
+    var searchManager: Search!
+    var searchLobby: Lobby!
     
     @IBOutlet weak var hostsTableView: UITableView!
     
@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.searchManager.clearHosts()
+        self.searchLobby.clearHosts()
         self.hostsTableView.reloadData()
         self.searchManager.startBrowsing()
     }
@@ -36,12 +36,9 @@ class SearchViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! LobbyViewController
-        vc.lobbyManager = LobbyManager(
-            peerID: self.searchManager.myPeerID,
-            hostPeerID: self.hostPeerID,
-            session: self.searchManager.session
-        )
+        let lobbyVC = segue.destination as! LobbyViewController
+        lobbyVC.lobbyManager = Client(session: self.searchManager.session)
+        lobbyVC.gameLobby = self.searchLobby
     }
     
     // MARK: Supporting functions
@@ -51,14 +48,14 @@ class SearchViewController: UIViewController {
     }
     
     func addHostInTableView(peerID: MCPeerID) {
-        self.searchManager.addHostWith(peerID: peerID)
-        let indexPath = IndexPath(row: self.searchManager.getNumberOfHosts() - 1, section: 0)
+        self.searchLobby.addUser(withPeerID: peerID)
+        let indexPath = IndexPath(row: self.searchLobby.count - 1, section: 0)
         self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     func removeHostInTableView(peerID: MCPeerID) {
-        if let index = self.searchManager.getIndexOf(host: peerID) {
-            self.searchManager.removeHostWith(index: index)
+        if let index = self.searchLobby.getIndex(ofPlayer: peerID) {
+            self.searchLobby.removeUser(withIndex: index)
             let indexPath = IndexPath(row: index, section: 0)
             self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
         }        
@@ -66,28 +63,28 @@ class SearchViewController: UIViewController {
 }
 
 // MARK: UITableViewDataSource implementation
-extension SearchViewController: UITableViewDataSource {
+extension SeacherViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.searchManager.getNumberOfHosts()
+        return self.searchLobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.convertMCPeerIDListToString(list: self.searchManager.hostsPeerID)[indexPath.row]
+        content.text = self.searchLobby.getUsersName()[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }
 }
 
 // MARK: UITableViewDelegate implementation
-extension SearchViewController: UITableViewDelegate {
+extension SeacherViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.searchManager.hostsPeerID[indexPath.row]
+        let user = self.searchLobby.usersPeerID[indexPath.row]
         let alert = UIAlertController(
             title: "Join",
             message: "Do you want to join to \(user.displayName) lobby?",
@@ -101,7 +98,7 @@ extension SearchViewController: UITableViewDelegate {
                 self.searchManager.disconnectSession()
                 // Join lobby
                 self.searchManager.requestToJoin(where: user)
-                self.hostPeerID = user
+                self.searchLobby.hostPeerID = user
                 self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))
@@ -114,7 +111,7 @@ extension SearchViewController: UITableViewDelegate {
 }
 
 // MARK: SearchManagerDelegate implementation
-extension SearchViewController: SearchManagerDelegate {
+extension SeacherViewController: SearchDelegate {
 
     func didFindHostWith(peerID: MCPeerID) {
         self.addHostInTableView(peerID: peerID)

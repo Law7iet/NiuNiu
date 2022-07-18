@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-protocol LobbyManagerDelegate {
+protocol ClientDelegate {
     
     func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
@@ -15,51 +15,15 @@ protocol LobbyManagerDelegate {
     
 }
 
-class LobbyManager: NSObject {
+class Client: NSObject {
     
-    ///  The own MCPeerID
-    var myPeerID: MCPeerID
-    /// The host's MCPeerID
-    var hostPeerID: MCPeerID
-    /// The list of the players in the lobby, except himself
-    var playersPeerID: [MCPeerID]
     var session: MCSession
-    var delegate: LobbyManagerDelegate?
+    var delegate: ClientDelegate?
     
-    init(peerID: MCPeerID, hostPeerID: MCPeerID, session: MCSession) {
-        self.myPeerID = peerID
-        self.hostPeerID = hostPeerID
-        self.playersPeerID = [MCPeerID]()
+    init(session: MCSession) {
         self.session = session
         super.init()
         self.session.delegate = self
-    }
-    
-    // MARK: Players' methods
-    /// Returns the list of the all the players in the lobby, included himself in the first position of the list
-    /// - Returns: the list of all the players in the lobby
-    func getPlayersInLobby() -> [MCPeerID] {
-        return [self.myPeerID] + self.playersPeerID
-    }
-    
-    func getNumberOfPlayers() -> Int {
-        return self.playersPeerID.count + 1
-    }
-    
-    func getIndexOf(player peerID: MCPeerID) -> Int? {
-        return self.playersPeerID.firstIndex(of: peerID)
-    }
-    
-    func addPlayerWith(peerID: MCPeerID) {
-        self.playersPeerID.append(peerID)
-    }
-    
-    func removePlayerWith(index: Int) {
-        self.playersPeerID.remove(at: index)
-    }
-    
-    func clearPlayersInLobby() {
-        self.playersPeerID.removeAll()
     }
     
     // MARK: Session's methods
@@ -67,7 +31,7 @@ class LobbyManager: NSObject {
         self.session.disconnect()
     }
     
-    func sendMessageTo(receiver user: MCPeerID, message: Message) {
+    func sendMessageTo(_ user: MCPeerID, message: Message) {
         if let data = message.convertToData() {
             do {
                 try self.session.send(data, toPeers: [user], with: .reliable)
@@ -79,19 +43,17 @@ class LobbyManager: NSObject {
     
 }
 
-extension LobbyManager: MCSessionDelegate {
+extension Client: MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
             print("ClientManager connected: \(peerID.displayName)")
-            // Add the connected player
             delegate?.didConnectWith(peerID: peerID)
         case MCSessionState.connecting:
             print("ClientManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ClientManager Not connected: \(peerID.displayName)")
-            // Remove the disconnected player
             delegate?.didDisconnectWith(peerID: peerID)
         @unknown default:
             print("ClientManager Unknown state: \(state)")

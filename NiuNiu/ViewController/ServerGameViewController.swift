@@ -14,6 +14,9 @@ class ServerGameViewController: UIViewController {
     var dealer: Dealer!
     var himself: Player!
     
+    var myPeerID: MCPeerID!
+    var serverPeerID: MCPeerID!
+    
     var bidValue = 0
     var clickedButtons = [false, false, false, false, false]
     

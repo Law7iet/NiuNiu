@@ -19,7 +19,7 @@ class Dealer {
     
     // MARK: Properties
     // Data Strucutres
-    var serverManager: HostManager
+    var serverManager: Server
     var players: Players
     var deck: Deck
     var himself: Player
@@ -36,15 +36,15 @@ class Dealer {
     var delegate: DealerDelegate?
     
     // MARK: Methods
-    init(serverManager: HostManager, players: [MCPeerID], time: Int?, points: Int?) {
+    init(serverManager: Server, lobby: Lobby, time: Int?, points: Int?) {
         // Game Settings
         self.time = time ?? 30
         self.points = points ?? 100
         // Data Structures
         self.serverManager = serverManager
         self.deck = Deck()
-        self.players = Players(players: players, points: self.points)
-        self.himself = self.players.findPlayerById(self.serverManager.myPeerID)!
+        self.players = Players(players: lobby.usersPeerID, points: self.points)
+        self.himself = self.players.findPlayerById(lobby.myPeerID)!
         // Others
         self.maxBid = 0
         self.totalBid = 0
@@ -62,16 +62,16 @@ class Dealer {
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.serverManager.sendMessageTo(
-                receivers: self.players.getAvailableMCPeersID(except: self.himself.id),
-                message: Message(type: .timer, amount: time - timerCounter)
+                self.players.getAvailableMCPeersID(except: self.himself.id),
+                message: Message(.timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
             if timerCounter == time {
                 // Timer ends
                 timer.invalidate()
                 self.serverManager.sendMessageTo(
-                    receivers: self.players.getAvailableMCPeersID(except: self.himself.id),
-                    message: Message(type: type)
+                    self.players.getAvailableMCPeersID(except: self.himself.id),
+                    message: Message(type)
                 )
             }
         }
@@ -82,17 +82,12 @@ class Dealer {
         
         // Start the game
         self.serverManager.sendMessageTo(
-            receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
-            message: Message(type: .startGame, amount: self.points)
+            self.players.getAvailableMCPeersID(except: self.himself.id),
+            message: Message(.startGame, amount: self.points)
         )
-        if let himself = self.players.findPlayerById(self.serverManager.myPeerID) {
-            self.delegate?.didStartGame(player: himself)
-        } else {
-            // Error
-            return
-        }
-        // Start the match
-
+        self.delegate?.didStartGame(player: self.himself)
+        
+        // TODO: Start the match
         
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
@@ -100,14 +95,14 @@ class Dealer {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
             // Check if the player is himself or not
-            if player.id == self.serverManager.myPeerID {
+            if player.id == self.himself.id {
                 // Change UI of the server
                 self.delegate?.didReceiveCards(cards: player.cards!)
             } else {
                 // Send a message with cards to the guests
                 self.serverManager.sendMessageTo(
-                    receivers: [player.id],
-                    message: Message(type: .receiveCards, cards: player.cards!))
+                    [player.id],
+                    message: Message(.receiveCards, cards: player.cards!))
             }
         }
         
@@ -185,7 +180,7 @@ class Dealer {
 }
 
 // MARK: HostManagerDelegate implementation
-extension Dealer: HostManagerDelegate {
+extension Dealer: ServerDelegate {
     
     func didConnectWith(peerID: MCPeerID) {}
     func didDisconnectWith(peerID: MCPeerID) {}

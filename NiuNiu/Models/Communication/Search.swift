@@ -7,26 +7,22 @@
 
 import MultipeerConnectivity
 
-protocol SearchManagerDelegate {
+protocol SearchDelegate {
     
     func didFindHostWith(peerID: MCPeerID)
     func didLoseHostWith(peerID: MCPeerID)
 
 }
 
-class SearchManager: NSObject {
-    
-    var myPeerID: MCPeerID
-    var hostsPeerID: [MCPeerID]
+class Search: NSObject {
+
     var session: MCSession
     var browser: MCNearbyServiceBrowser
-    var delegate: SearchManagerDelegate?
+    var delegate: SearchDelegate?
     
-    override init() {
-        self.myPeerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(Utils.getRandomID(length: 4))")
-        self.hostsPeerID = [MCPeerID]()
-        self.session = MCSession(peer: self.myPeerID, securityIdentity: nil, encryptionPreference: .required)
-        self.browser = MCNearbyServiceBrowser(peer: self.myPeerID, serviceType: "niu-niu-game")
+    init(peerID: MCPeerID) {
+        self.session = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
+        self.browser = MCNearbyServiceBrowser(peer: peerID, serviceType: "niu-niu-game")
         super.init()
         self.browser.delegate = self
     }
@@ -40,31 +36,6 @@ class SearchManager: NSObject {
         self.browser.stopBrowsingForPeers()
     }
 
-    // MARK: Hosts' methods
-    func getHosts() -> [MCPeerID] {
-        return self.hostsPeerID
-    }
-        
-    func getNumberOfHosts() -> Int {
-        return self.hostsPeerID.count
-    }
-    
-    func getIndexOf(host mcPeerID: MCPeerID) -> Int? {
-        return self.hostsPeerID.firstIndex(of: mcPeerID)
-    }
-    
-    func addHostWith(peerID: MCPeerID) {
-        self.hostsPeerID.append(peerID)
-    }
-    
-    func removeHostWith(index: Int) {
-        self.hostsPeerID.remove(at: index)
-    }
-    
-    func clearHosts() {
-        self.hostsPeerID = [MCPeerID]()
-    }
-
     // MARK: session's methods
     func disconnectSession() {
         self.session.disconnect()
@@ -76,7 +47,7 @@ class SearchManager: NSObject {
     
 }
 
-extension SearchManager: MCNearbyServiceBrowserDelegate {
+extension Search: MCNearbyServiceBrowserDelegate {
     
     // A host is found
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
