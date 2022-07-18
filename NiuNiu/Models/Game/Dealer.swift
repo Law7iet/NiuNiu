@@ -22,6 +22,7 @@ class Dealer {
     var serverManager: HostManager
     var players: Players
     var deck: Deck
+    var himself: Player
     // Game Settings
     var time: Int
     var points: Int
@@ -43,6 +44,7 @@ class Dealer {
         self.serverManager = serverManager
         self.deck = Deck()
         self.players = Players(players: players, points: self.points)
+        self.himself = self.players.findPlayerById(self.serverManager.myPeerID)!
         // Others
         self.maxBid = 0
         self.totalBid = 0
@@ -60,7 +62,7 @@ class Dealer {
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.serverManager.sendMessageTo(
-                receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
+                receivers: self.players.getAvailableMCPeersID(except: self.himself.id),
                 message: Message(type: .timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
@@ -68,7 +70,7 @@ class Dealer {
                 // Timer ends
                 timer.invalidate()
                 self.serverManager.sendMessageTo(
-                    receivers: self.players.getAvailableMCPeersID(except: self.serverManager.myPeerID),
+                    receivers: self.players.getAvailableMCPeersID(except: self.himself.id),
                     message: Message(type: type)
                 )
             }
@@ -90,6 +92,7 @@ class Dealer {
             return
         }
         // Start the match
+
         
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()

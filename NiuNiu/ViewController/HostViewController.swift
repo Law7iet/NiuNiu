@@ -12,6 +12,7 @@ class HostViewController: UIViewController {
     
     // MARK: Properties
     var hostManager: HostManager!
+//    var lobby: Lobby
 
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!

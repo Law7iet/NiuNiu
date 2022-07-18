@@ -49,7 +49,7 @@ class ServerGameViewController: UIViewController {
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
                 sender.layer.cornerRadius = 3
-                sender.layer.borderWidth = 2
+                sender.layer.borderWidth = 3
                 sender.layer.borderColor = UIColor.red.cgColor
             } else {
                 self.clickedButtons[index] = false
@@ -77,6 +77,7 @@ extension ServerGameViewController: DealerDelegate {
     func didStartGame(player: Player) {
         self.himself = player
         DispatchQueue.main.async {
+            self.statusLabel.text = "Game started!"
             self.userLabel.text = self.himself.id.displayName
             self.pointsLabel.text = "Points: \(self.himself.points)"
             self.bidLabel.text = "Your bid: \(self.bidValue) points"
@@ -85,6 +86,9 @@ extension ServerGameViewController: DealerDelegate {
         }
     }
     
+    func didStartMatch(players: Players) {
+        // Comunica i dati degli altri giocatori
+    }
     
     
     func didReceiveCards(cards: Cards) {

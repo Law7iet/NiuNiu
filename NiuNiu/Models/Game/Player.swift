@@ -56,6 +56,10 @@ class Player: Comparable {
 //        self.cards.pickCardAt(index: index)
     }
     
+    func convertToUser() -> User {
+        return User(player: self)
+    }
+    
     static func < (lhs: Player, rhs: Player) -> Bool {
         return lhs.points < rhs.points
     }
