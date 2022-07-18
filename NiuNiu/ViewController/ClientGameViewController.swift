@@ -48,7 +48,7 @@ class ClientGameViewController: UIViewController {
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
                 sender.layer.cornerRadius = 3
-                sender.layer.borderWidth = 3
+                sender.layer.borderWidth = 5
                 sender.layer.borderColor = UIColor.red.cgColor
             } else {
                 self.clickedButtons[index] = false

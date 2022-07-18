@@ -51,7 +51,7 @@ class ServerGameViewController: UIViewController {
         if let index = self.cardsButton.firstIndex(of: sender) {
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
-                sender.layer.cornerRadius = 3
+                sender.layer.cornerRadius = 5
                 sender.layer.borderWidth = 3
                 sender.layer.borderColor = UIColor.red.cgColor
             } else {
