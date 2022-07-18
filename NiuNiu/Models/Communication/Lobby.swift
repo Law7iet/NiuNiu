@@ -9,6 +9,7 @@ import MultipeerConnectivity
 
 class Lobby {
     
+    // MARK: Properties
     /// The own PeerID
     var myPeerID: MCPeerID!
     /// The host PeerID
@@ -21,6 +22,7 @@ class Lobby {
         }
     }
     
+    // MARK: Methods
     init(himself: MCPeerID) {
         self.myPeerID = himself
         self.usersPeerID = [himself]
@@ -36,7 +38,7 @@ class Lobby {
         }
     }
     
-    // MARK: Methods
+    // MARK: SUpporting Functions
     func getIndex(ofPlayer peerID: MCPeerID) -> Int? {
         return self.usersPeerID.firstIndex(of: peerID)
     }
@@ -51,12 +53,24 @@ class Lobby {
     
     /// Get all the users' name as String.
     /// - Returns: The users' name.
-    func getUsersName() -> [String] {
+    func getUserNames() -> [String] {
         var array = [String]()
         for player in self.usersPeerID {
             array.append(player.displayName)
         }
         return array
+    }
+    
+    /// Get the user MCPeerID by its displayName.
+    /// - Parameter name: The name that will match with the user's displayName.
+    /// - Returns: The matched user as MCPeerID. If none matches with the parameters, it returns nil
+    func getMCPeerID(ofUser name: String) -> MCPeerID? {
+        for user in self.usersPeerID {
+            if user.displayName == name {
+                return user
+            }
+        }
+        return nil
     }
     
     // MARK: Server Methods

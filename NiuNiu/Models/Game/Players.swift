@@ -21,29 +21,27 @@ class Players {
         }
     }
     
-    /// Get an array of MCPeerID of the guests in the game, except the MCPeerID passed by parameter and the players with .fold status.
-    /// This is the list of the players that the serverManager has to send a message.
+    /// Get an array of MCPeerID of the players in the class with .fold status.
+    /// This is the list of the players that the Server has to send a message.
     /// - Parameter host: The MCPeerID that won't be in the returned array.
     /// - Returns: The array of MCPeerID
-    func getAvailableMCPeersID(except host: MCPeerID) -> [MCPeerID] {
+    func getAvailableMCPeerIDs() -> [MCPeerID] {
         var peerList = [MCPeerID]()
         for player in self.elements {
             if player.status != .fold {
-                if player.id != host {
-                    peerList.append(player.id)
-                }
+                peerList.append(player.id)
             }
         }
         return peerList
     }
     
-    func findPlayerById(_ id: MCPeerID ) -> Player? {
-        let player = Player(id: id, points: nil)
-        if let index = self.elements.firstIndex(of: player) {
-            return self.elements[index]
-        } else {
-            return nil
-        }        
+    func findPlayer(byID id: MCPeerID) -> Player? {
+        for player in self.elements {
+            if player.id == id {
+                return player
+            }
+        }
+        return nil
     }
 
 }

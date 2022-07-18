@@ -71,7 +71,7 @@ extension SeacherViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = self.searchLobby.getUsersName()[indexPath.row]
+        content.text = self.searchLobby.getUserNames()[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }

@@ -18,20 +18,26 @@ protocol DealerDelegate {
 class Dealer {
     
     // MARK: Properties
-    // Data Strucutres
-    var serverManager: Server
-    var players: Players
+    /// The class that communicates with clients.
+    var comms: Server
+    /// The cards
     var deck: Deck
-    var himself: Player
+
+    /// The host player.
+    var hostPlayer: Player
+    /// The players in the lobby, excluded the host player.
+    var lobbyPlayers: Players
+
+    
     // Game Settings
     var time: Int
     var points: Int
+    
     // Others
     var winner: Player?
     var maxBid: Int
     var totalBid: Int
     var timerCounter: Int
-    
     
     var delegate: DealerDelegate?
     
@@ -40,11 +46,14 @@ class Dealer {
         // Game Settings
         self.time = time ?? 30
         self.points = points ?? 100
+        
         // Data Structures
-        self.serverManager = serverManager
+        self.comms = serverManager
         self.deck = Deck()
-        self.players = Players(players: lobby.usersPeerID, points: self.points)
-        self.himself = self.players.findPlayerById(lobby.myPeerID)!
+        
+        self.hostPlayer = Player(id: lobby.hostPeerID, points: points)
+        self.lobbyPlayers = Players(players: lobby.getSendablePeersID(), points: points)
+        
         // Others
         self.maxBid = 0
         self.totalBid = 0
@@ -56,21 +65,21 @@ class Dealer {
         self.deck = Deck()
         self.deck.shuffle()
     }
-    
+        
     func startTimerWithEndMessage(type: MessageEnum, time: Int) {
         var timerCounter = 0
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.serverManager.sendMessageTo(
-                self.players.getAvailableMCPeersID(except: self.himself.id),
+            self.comms.sendMessageTo(
+                self.lobbyPlayers.getAvailableMCPeerIDs(),
                 message: Message(.timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
             if timerCounter == time {
                 // Timer ends
                 timer.invalidate()
-                self.serverManager.sendMessageTo(
-                    self.players.getAvailableMCPeersID(except: self.himself.id),
+                self.comms.sendMessageTo(
+                    self.lobbyPlayers.getAvailableMCPeerIDs(),
                     message: Message(type)
                 )
             }
@@ -81,30 +90,27 @@ class Dealer {
     func playGame() {
         
         // Start the game
-        self.serverManager.sendMessageTo(
-            self.players.getAvailableMCPeersID(except: self.himself.id),
+        self.comms.sendMessageTo(
+            self.lobbyPlayers.getAvailableMCPeerIDs(),
             message: Message(.startGame, amount: self.points)
         )
-        self.delegate?.didStartGame(player: self.himself)
+        self.delegate?.didStartGame(player: self.hostPlayer)
         
         // TODO: Start the match
         
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
-        for player in self.players.elements {
+        for player in self.lobbyPlayers.elements {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
-            // Check if the player is himself or not
-            if player.id == self.himself.id {
-                // Change UI of the server
-                self.delegate?.didReceiveCards(cards: player.cards!)
-            } else {
-                // Send a message with cards to the guests
-                self.serverManager.sendMessageTo(
-                    [player.id],
-                    message: Message(.receiveCards, cards: player.cards!))
-            }
+            self.comms.sendMessageTo(
+                [player.id],
+                message: Message(.receiveCards, cards: player.cards!)
+            )
         }
+        let cards = self.deck.getCards()
+        self.hostPlayer.setCards(cards: cards)
+        self.delegate?.didReceiveCards(cards: self.hostPlayer.cards!)
         
 //        // Bet
 //        self.serverManager.sendMessageTo(

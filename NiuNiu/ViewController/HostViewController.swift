@@ -122,7 +122,7 @@ extension HostViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "hostCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = self.gameLobby.getUsersName()[indexPath.row]
+        content.text = self.gameLobby.getUserNames()[indexPath.row]
         cell.contentConfiguration = content
         
         return cell

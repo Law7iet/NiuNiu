@@ -5,6 +5,8 @@
 //  Created by Han Chu on 18/07/22.
 //
 
+/// A class that rapresents the Player class.
+/// This class is used to pass the player's information between devices.
 class User: Codable {
     
     // MARK: Properties
