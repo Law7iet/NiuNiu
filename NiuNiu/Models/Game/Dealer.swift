@@ -10,7 +10,7 @@ import MultipeerConnectivity
 protocol DealerDelegate {
     
     func didStartGame(player: Player)
-    func didStartMatch(players: Players)
+    func didStartMatch(users: [User])
     func didReceiveCards(cards: Cards)
     
 }
@@ -96,17 +96,20 @@ class Dealer {
         )
         self.delegate?.didStartGame(player: self.hostPlayer)
         
-        // TODO: Start the match
+        // Start the match
+        for receiver in self.lobbyPlayers.elements {
+            var players = self.lobbyPlayers.getUsers(except: receiver)
+            players.append(self.hostPlayer.convertToUser())
+            self.comms.sendMessageTo([receiver.id], message: Message(.startMatch, users: players))
+        }
+        self.delegate?.didStartMatch(users: self.lobbyPlayers.getUsers(except: self.hostPlayer))
         
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
         for player in self.lobbyPlayers.elements {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
-            self.comms.sendMessageTo(
-                [player.id],
-                message: Message(.receiveCards, cards: player.cards!)
-            )
+            self.comms.sendMessageTo([player.id], message: Message(.receiveCards, cards: player.cards!))
         }
         let cards = self.deck.getCards()
         self.hostPlayer.setCards(cards: cards)

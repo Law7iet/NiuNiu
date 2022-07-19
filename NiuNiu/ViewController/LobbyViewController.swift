@@ -21,7 +21,7 @@ class LobbyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        lobbyManager.delegate = self
+        lobbyManager.lobbyDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,7 +94,7 @@ extension LobbyViewController: UITableViewDataSource {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension LobbyViewController: ClientDelegate {
+extension LobbyViewController: LobbyDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
         DispatchQueue.main.async {

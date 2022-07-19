@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -227,134 +228,83 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="NPD-aB-NdC" userLabel="Players Stack View">
-                                <rect key="frame" x="20" y="64" width="388" height="257"/>
+                                <rect key="frame" x="20" y="64" width="388" height="325"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XlU-Za-OJ6" userLabel="Player 3">
-                                        <rect key="frame" x="144" y="0.0" width="100" height="53"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="XlU-Za-OJ6" userLabel="Player 3">
+                                        <rect key="frame" x="161.33333333333334" y="0.0" width="65.333333333333343" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lt6-Yr-T2p">
-                                                <rect key="frame" x="28.333333333333339" y="0.0" width="43.666666666666657" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pcP-ql-diF">
-                                                <rect key="frame" x="35" y="24.666666666666657" width="30" height="27.333333333333343"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUV-q9-s89" userLabel="Player 3">
+                                                <rect key="frame" x="0.0" y="0.0" width="65.333333333333329" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="pcP-ql-diF" secondAttribute="height" multiplier="1:1" id="Oat-dn-54C"/>
-                                                    <constraint firstAttribute="width" constant="30" id="ZnC-cN-O6O"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Vse-hf-t6t"/>
+                                                    <constraint firstAttribute="height" constant="70" id="tqb-pv-Xb6"/>
                                                 </constraints>
-                                            </imageView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="5oi-Ph-3MC"/>
-                                        </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="Mu0-L7-KTN" userLabel="Players 2 and 4">
-                                        <rect key="frame" x="0.0" y="68" width="388" height="53"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mu0-L7-KTN" userLabel="Players 2 and 4">
+                                        <rect key="frame" x="0.0" y="85" width="388" height="70"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="sYR-NV-SEF" userLabel="Player 2">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="53"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhV-4N-B33">
-                                                        <rect key="frame" x="28.333333333333339" y="0.0" width="43.666666666666657" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vGH-nh-MSm">
-                                                        <rect key="frame" x="35" y="24.666666666666657" width="30" height="27.333333333333343"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="vGH-nh-MSm" secondAttribute="height" multiplier="1:1" id="98f-ib-2sJ"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G05-nD-gs4" userLabel="Player 2">
+                                                <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="Q6H-CR-jAW"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="3a5-Jc-BKa"/>
+                                                    <constraint firstAttribute="height" constant="70" id="8lX-TX-h9G"/>
                                                 </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="SE2-kY-sKW" userLabel="Player 4">
-                                                <rect key="frame" x="288" y="0.0" width="100" height="53"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2K-Zs-PV7">
-                                                        <rect key="frame" x="28.333333333333311" y="0.0" width="43.666666666666657" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="81g-hz-LF1">
-                                                        <rect key="frame" x="35" y="24.666666666666657" width="30" height="27.333333333333343"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="81g-hz-LF1" secondAttribute="height" multiplier="1:1" id="uAt-TG-bHN"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5Q-sh-SLu" userLabel="Player 4">
+                                                <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="wea-L7-Rwb"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="CTt-DQ-GBS"/>
+                                                    <constraint firstAttribute="height" constant="70" id="n5e-J9-UG1"/>
                                                 </constraints>
-                                            </stackView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LNB-yQ-GyE" userLabel="Timer">
-                                        <rect key="frame" x="169.66666666666666" y="136" width="49" height="53"/>
+                                        <rect key="frame" x="169.66666666666666" y="170" width="49" height="70"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biM-cY-Qzo">
-                                                <rect key="frame" x="0.0" y="0.0" width="49" height="24.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="49" height="41.666666666666664"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krM-am-ier">
-                                                <rect key="frame" x="19.333333333333343" y="32.666666666666657" width="10.333333333333336" height="20.333333333333329"/>
+                                                <rect key="frame" x="19.333333333333343" y="49.666666666666686" width="10.333333333333336" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="Af8-mZ-XqR" userLabel="Players 1 and 5">
-                                        <rect key="frame" x="0.0" y="204" width="388" height="53"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Af8-mZ-XqR" userLabel="Players 1 and 5">
+                                        <rect key="frame" x="0.0" y="255" width="388" height="70"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Hqi-ef-eiB" userLabel="Player 1">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="53"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYY-yW-8CZ">
-                                                        <rect key="frame" x="28.333333333333339" y="0.0" width="43.666666666666657" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="gsQ-19-kxK">
-                                                        <rect key="frame" x="35" y="24.666666666666657" width="30" height="27.333333333333343"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="gsQ-19-kxK" secondAttribute="height" multiplier="1:1" id="fkF-Du-xLm"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bPe-uq-6vG" userLabel="Player 1">
+                                                <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="jZ0-Gz-FQs"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Iov-zp-GoD"/>
+                                                    <constraint firstAttribute="height" constant="70" id="a2c-g7-fCC"/>
                                                 </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="44g-iI-QZW" userLabel="Player 5">
-                                                <rect key="frame" x="288" y="0.0" width="100" height="53"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnJ-II-kSt">
-                                                        <rect key="frame" x="28.333333333333311" y="0.0" width="43.666666666666657" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Pwh-4h-tdw">
-                                                        <rect key="frame" x="35" y="24.666666666666657" width="30" height="27.333333333333343"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="Pwh-4h-tdw" secondAttribute="height" multiplier="1:1" id="CxC-Au-nlT"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrj-c8-dNM" userLabel="Player 5">
+                                                <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="5tb-ur-BjU"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="9Gf-wm-rCb"/>
+                                                    <constraint firstAttribute="height" constant="70" id="iA3-xi-U0q"/>
                                                 </constraints>
-                                            </stackView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -362,11 +312,7 @@
                                     <constraint firstItem="Mu0-L7-KTN" firstAttribute="trailing" secondItem="NPD-aB-NdC" secondAttribute="trailing" id="2MA-RW-Oh6"/>
                                     <constraint firstItem="Mu0-L7-KTN" firstAttribute="leading" secondItem="NPD-aB-NdC" secondAttribute="leading" id="HmQ-RQ-mfQ"/>
                                     <constraint firstItem="Af8-mZ-XqR" firstAttribute="trailing" secondItem="NPD-aB-NdC" secondAttribute="trailing" id="KHn-MF-dbS"/>
-                                    <constraint firstItem="gsQ-19-kxK" firstAttribute="width" secondItem="pcP-ql-diF" secondAttribute="width" id="TmU-Oo-oID"/>
                                     <constraint firstItem="Af8-mZ-XqR" firstAttribute="leading" secondItem="NPD-aB-NdC" secondAttribute="leading" id="kj2-jW-5N4"/>
-                                    <constraint firstItem="vGH-nh-MSm" firstAttribute="width" secondItem="pcP-ql-diF" secondAttribute="width" id="oBB-yS-VB0"/>
-                                    <constraint firstItem="Pwh-4h-tdw" firstAttribute="width" secondItem="pcP-ql-diF" secondAttribute="width" id="pRN-pF-ncx"/>
-                                    <constraint firstItem="81g-hz-LF1" firstAttribute="width" secondItem="pcP-ql-diF" secondAttribute="width" id="sZY-N0-KUT"/>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="531-2d-U4l" userLabel="Cards Stack View">
@@ -555,16 +501,16 @@
                         <outlet property="statusLabel" destination="biM-cY-Qzo" id="wXB-A0-tLa"/>
                         <outlet property="timerLabel" destination="krM-am-ier" id="suz-8r-Wxd"/>
                         <outlet property="userLabel" destination="PUv-TV-xKh" id="XCj-HQ-JDA"/>
-                        <outletCollection property="playersLabel" destination="Lt6-Yr-T2p" collectionClass="NSMutableArray" id="pgP-zc-Ulh"/>
                         <outletCollection property="cardsButton" destination="Bta-Vt-NnU" collectionClass="NSMutableArray" id="jSC-jr-VER"/>
-                        <outletCollection property="playersLabel" destination="zhV-4N-B33" collectionClass="NSMutableArray" id="hgy-XR-wyo"/>
-                        <outletCollection property="playersLabel" destination="M2K-Zs-PV7" collectionClass="NSMutableArray" id="jaK-iA-Bwu"/>
-                        <outletCollection property="playersLabel" destination="SYY-yW-8CZ" collectionClass="NSMutableArray" id="keV-Fw-BIK"/>
-                        <outletCollection property="playersLabel" destination="fnJ-II-kSt" collectionClass="NSMutableArray" id="g1w-IE-Gqe"/>
                         <outletCollection property="cardsButton" destination="uRr-8v-9LD" collectionClass="NSMutableArray" id="gFo-dR-Cwb"/>
                         <outletCollection property="cardsButton" destination="4Q7-me-mmH" collectionClass="NSMutableArray" id="7Bi-3C-dLT"/>
                         <outletCollection property="cardsButton" destination="mUk-Gf-OU4" collectionClass="NSMutableArray" id="PlT-nd-Xbg"/>
                         <outletCollection property="cardsButton" destination="EmI-gl-qhE" collectionClass="NSMutableArray" id="ocM-hP-Bkz"/>
+                        <outletCollection property="playersButton" destination="bPe-uq-6vG" collectionClass="NSMutableArray" id="nvV-Dh-qUf"/>
+                        <outletCollection property="playersButton" destination="G05-nD-gs4" collectionClass="NSMutableArray" id="A7W-QA-VuF"/>
+                        <outletCollection property="playersButton" destination="ZUV-q9-s89" collectionClass="NSMutableArray" id="T3e-pg-uRf"/>
+                        <outletCollection property="playersButton" destination="u5Q-sh-SLu" collectionClass="NSMutableArray" id="Y6k-re-82b"/>
+                        <outletCollection property="playersButton" destination="lrj-c8-dNM" collectionClass="NSMutableArray" id="kwe-ev-zza"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRg-QQ-pAc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -678,133 +624,83 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Q6t-DQ-SGZ" userLabel="Players Stack View">
-                                <rect key="frame" x="20" y="63.999999999999986" width="388" height="239.66666666666663"/>
+                                <rect key="frame" x="20" y="64" width="388" height="325"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qdf-59-wDh" userLabel="Player 3">
-                                        <rect key="frame" x="144" y="0.0" width="100" height="48.666666666666664"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qdf-59-wDh" userLabel="Player 3">
+                                        <rect key="frame" x="161.33333333333334" y="0.0" width="65.333333333333343" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DbX-5h-Asy">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XmR-4j-WG2">
-                                                <rect key="frame" x="0.0" y="24.666666666666664" width="100" height="23"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fX7-Zu-Lox" userLabel="Player 3">
+                                                <rect key="frame" x="0.0" y="0.0" width="65.333333333333329" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="Xr2-tU-eZC"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Wjw-Cg-gmG"/>
+                                                    <constraint firstAttribute="height" constant="70" id="fgA-w7-Si9"/>
                                                 </constraints>
-                                            </imageView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="9Y4-qT-ecK"/>
-                                        </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ViQ-2y-bZZ" userLabel="Players 2 and 4">
-                                        <rect key="frame" x="0.0" y="63.666666666666671" width="388" height="48.666666666666671"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ViQ-2y-bZZ" userLabel="Players 2 and 4">
+                                        <rect key="frame" x="0.0" y="85" width="388" height="70"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="0uS-zw-qeG" userLabel="Player 2">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="48.666666666666664"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZG-Rq-69k">
-                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9tb-sq-krz">
-                                                        <rect key="frame" x="0.0" y="24.66666666666665" width="100" height="23"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="dgy-nQ-Q2H"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6u-2n-MpO" userLabel="Player 2">
+                                                <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="JHe-0d-0oR"/>
+                                                    <constraint firstAttribute="height" constant="70" id="4Sl-do-Oht"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="ggi-zH-ei6"/>
                                                 </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="6iM-pM-RcZ" userLabel="Player 4">
-                                                <rect key="frame" x="288" y="0.0" width="100" height="48.666666666666664"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Te-R9-YfH">
-                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8iv-1V-LRH">
-                                                        <rect key="frame" x="0.0" y="24.66666666666665" width="100" height="23"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="Pb0-Zm-c2g"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xt6-T0-WA9" userLabel="Player 4">
+                                                <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="sFW-kd-1lw"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="YLt-1u-XYF"/>
+                                                    <constraint firstAttribute="height" constant="70" id="hLk-Tb-WWx"/>
                                                 </constraints>
-                                            </stackView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vVG-id-CFi" userLabel="Timer">
-                                        <rect key="frame" x="169.66666666666666" y="127.33333333333336" width="49" height="48.666666666666671"/>
+                                        <rect key="frame" x="169.66666666666666" y="170" width="49" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2t-jS-MHq">
-                                                <rect key="frame" x="0.0" y="0.0" width="49" height="20.333333333333332"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2t-jS-MHq">
+                                                <rect key="frame" x="0.0" y="0.0" width="49" height="41.666666666666664"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGu-Ro-85R">
-                                                <rect key="frame" x="2.6666666666666856" y="28.333333333333314" width="43.666666666666664" height="20.333333333333329"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGu-Ro-85R">
+                                                <rect key="frame" x="19.333333333333343" y="49.666666666666686" width="10.333333333333336" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="1To-rV-gJZ" userLabel="Players 1 and 5">
-                                        <rect key="frame" x="0.0" y="191" width="388" height="48.666666666666657"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1To-rV-gJZ" userLabel="Players 1 and 5">
+                                        <rect key="frame" x="0.0" y="255" width="388" height="70"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="dbF-P3-M3u" userLabel="Player 1">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="48.666666666666664"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gX-V9-JxQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="M64-nO-Y6y">
-                                                        <rect key="frame" x="0.0" y="24.666666666666664" width="100" height="23"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="IP9-Pk-U40"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPw-Yp-HNm" userLabel="Player 1">
+                                                <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="qov-c8-jTq"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="bqJ-Py-bma"/>
+                                                    <constraint firstAttribute="height" constant="70" id="ic4-Jb-5Fa"/>
                                                 </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="0rb-XS-avI" userLabel="Player 5">
-                                                <rect key="frame" x="288" y="0.0" width="100" height="48.666666666666664"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PEe-tL-mfz">
-                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ldG-w9-9mh">
-                                                        <rect key="frame" x="0.0" y="24.666666666666664" width="100" height="23"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="a2O-V8-z5b"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XeM-pS-0Ug" userLabel="Player 5">
+                                                <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="C7A-NU-TdJ"/>
+                                                    <constraint firstAttribute="height" constant="70" id="7lE-2P-FGS"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="PIJ-bm-L5Q"/>
                                                 </constraints>
-                                            </stackView>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -997,16 +893,16 @@
                         <outlet property="statusLabel" destination="f2t-jS-MHq" id="GNU-U8-JNo"/>
                         <outlet property="timerLabel" destination="jGu-Ro-85R" id="mUU-Lf-u5o"/>
                         <outlet property="userLabel" destination="1b3-j2-l6e" id="Xdr-m9-0Cm"/>
-                        <outletCollection property="playersLabel" destination="DbX-5h-Asy" collectionClass="NSMutableArray" id="0BI-Rz-zzv"/>
                         <outletCollection property="cardsButton" destination="kUV-0q-PNJ" collectionClass="NSMutableArray" id="YSh-LH-mgP"/>
-                        <outletCollection property="playersLabel" destination="YZG-Rq-69k" collectionClass="NSMutableArray" id="aBz-Rr-qTD"/>
-                        <outletCollection property="playersLabel" destination="7Te-R9-YfH" collectionClass="NSMutableArray" id="9Dw-0d-ctA"/>
-                        <outletCollection property="playersLabel" destination="0gX-V9-JxQ" collectionClass="NSMutableArray" id="DL5-Xh-xiW"/>
-                        <outletCollection property="playersLabel" destination="PEe-tL-mfz" collectionClass="NSMutableArray" id="p9h-kv-ICw"/>
                         <outletCollection property="cardsButton" destination="yIL-Gp-1TC" collectionClass="NSMutableArray" id="bzX-Kp-p0Z"/>
                         <outletCollection property="cardsButton" destination="tt9-Cl-J7B" collectionClass="NSMutableArray" id="2gX-YD-K27"/>
                         <outletCollection property="cardsButton" destination="KGh-VA-CFW" collectionClass="NSMutableArray" id="zkG-5F-qYN"/>
                         <outletCollection property="cardsButton" destination="kE4-Ca-o9L" collectionClass="NSMutableArray" id="IdZ-kW-IXg"/>
+                        <outletCollection property="playersButton" destination="DPw-Yp-HNm" collectionClass="NSMutableArray" id="i3b-eK-EVQ"/>
+                        <outletCollection property="playersButton" destination="I6u-2n-MpO" collectionClass="NSMutableArray" id="g5I-oz-2mn"/>
+                        <outletCollection property="playersButton" destination="fX7-Zu-Lox" collectionClass="NSMutableArray" id="kMq-S9-FTR"/>
+                        <outletCollection property="playersButton" destination="Xt6-T0-WA9" collectionClass="NSMutableArray" id="aeB-zi-S4w"/>
+                        <outletCollection property="playersButton" destination="XeM-pS-0Ug" collectionClass="NSMutableArray" id="YHo-7p-ab3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDo-cB-GAD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

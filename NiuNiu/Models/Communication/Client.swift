@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-protocol ClientDelegate {
+protocol LobbyDelegate {
     
     func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
@@ -15,10 +15,17 @@ protocol ClientDelegate {
     
 }
 
+protocol ClientDelegate {
+    
+    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
+    
+}
+
 class Client: NSObject {
     
     var session: MCSession
-    var delegate: ClientDelegate?
+    var lobbyDelegate: LobbyDelegate?
+    var clientDelegate: ClientDelegate?
     
     init(session: MCSession) {
         self.session = session
@@ -49,19 +56,25 @@ extension Client: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("ClientManager connected: \(peerID.displayName)")
-            delegate?.didConnectWith(peerID: peerID)
+            lobbyDelegate?.didConnectWith(peerID: peerID)
         case MCSessionState.connecting:
             print("ClientManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ClientManager Not connected: \(peerID.displayName)")
-            delegate?.didDisconnectWith(peerID: peerID)
+            lobbyDelegate?.didDisconnectWith(peerID: peerID)
         @unknown default:
             print("ClientManager Unknown state: \(state)")
         }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        delegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+        let message = Message(data: data)
+        if message.type != .error {
+            if message.type != .closeConnection && message.type != .closeLobby {
+                clientDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+            }
+            lobbyDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+        }
     }
     
     // Not used

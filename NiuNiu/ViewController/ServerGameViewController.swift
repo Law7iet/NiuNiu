@@ -23,7 +23,7 @@ class ServerGameViewController: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     
-    @IBOutlet var playersLabel: [UILabel]!
+    @IBOutlet var playersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
     
     @IBOutlet weak var userLabel: UILabel!
@@ -89,14 +89,18 @@ extension ServerGameViewController: DealerDelegate {
         }
     }
     
-    func didStartMatch(players: Players) {
+    func didStartMatch(users: [User]) {
         // Comunica i dati degli altri giocatori
+        DispatchQueue.main.async {
+            for index in 0 ..< users.count {
+                self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+            }
+        }
     }
-    
     
     func didReceiveCards(cards: Cards) {
         self.himself.setCards(cards: cards)
-        for index in 0...4 {
+        for index in 0 ... 4 {
             DispatchQueue.main.async {
                 let image = UIImage(named: cards.elements[index].getName())
                 self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)

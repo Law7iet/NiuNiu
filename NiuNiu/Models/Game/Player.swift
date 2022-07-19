@@ -37,7 +37,7 @@ class Player: Comparable {
         self.cards = Cards(elements: cards)
     }
     
-    func setCards(cards: Cards) {
+    func setCards(cards: Cards?) {
         self.cards = cards
     }
     
