@@ -109,7 +109,7 @@ class Dealer {
         for player in self.lobbyPlayers.elements {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
-            self.comms.sendMessageTo([player.id], message: Message(.receiveCards, cards: player.cards!))
+            self.comms.sendMessageTo([player.id], message: Message(.resCards, cards: player.cards!))
         }
         let cards = self.deck.getCards()
         self.hostPlayer.setCards(cards: cards)

@@ -15,7 +15,7 @@ class ClientGameViewController: UIViewController {
     var himself: Player!
     
     var myPeerID: MCPeerID!
-    var serverPeerID: MCPeerID!
+    var hostPeerID: MCPeerID!
     
     var bidValue = 0
     var clickedButtons = [false, false, false, false, false]
@@ -65,6 +65,9 @@ class ClientGameViewController: UIViewController {
     
     }
     
+    @IBAction func showPlayerData(_ sender: UIButton) {
+        
+    }
 }
 
 // MARK: LobbyManagerDelegate implementation
@@ -92,10 +95,11 @@ extension ClientGameViewController: ClientDelegate {
                 DispatchQueue.main.async {
                     for index in 0 ..< users.count {
                         self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+                        self.playersButton[index].isEnabled = true
                     }
                 }
             }
-        case .receiveCards:
+        case .resCards:
             print("ReceiveCards")
             let cards = message.cards!
             self.himself.setCards(cards: cards)
@@ -125,6 +129,21 @@ extension ClientGameViewController: ClientDelegate {
             print("endMatch")
         case .endGame:
             print("endGame")
+        
+        case .resPlayer:
+            print("resPlayerData")
+            DispatchQueue.main.async {
+                let user = message.users![0]
+                let message = "Points: \(user.points)\nBid: \(user.bid)"
+                let alert = UIAlertController(
+                    title: user.name,
+                    message: message,
+                    preferredStyle: .actionSheet
+                )
+                self.present(alert, animated: true)
+            }
+            
+            
         // TODO: check if there're closeConnection or closeLobby
         default:
             print("???")

@@ -56,12 +56,12 @@ extension Client: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("ClientManager connected: \(peerID.displayName)")
-            lobbyDelegate?.didConnectWith(peerID: peerID)
+            self.lobbyDelegate?.didConnectWith(peerID: peerID)
         case MCSessionState.connecting:
             print("ClientManager Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("ClientManager Not connected: \(peerID.displayName)")
-            lobbyDelegate?.didDisconnectWith(peerID: peerID)
+            self.lobbyDelegate?.didDisconnectWith(peerID: peerID)
         @unknown default:
             print("ClientManager Unknown state: \(state)")
         }
@@ -70,10 +70,8 @@ extension Client: MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         let message = Message(data: data)
         if message.type != .error {
-            if message.type != .closeConnection && message.type != .closeLobby {
-                clientDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
-            }
-            lobbyDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+            self.clientDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+            self.lobbyDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
         }
     }
     

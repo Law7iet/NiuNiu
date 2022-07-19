@@ -40,7 +40,7 @@ class LobbyViewController: UIViewController {
         if let clientVC = segue.destination as? ClientGameViewController {
             clientVC.clientManager = self.lobbyManager
             clientVC.myPeerID = self.gameLobby.myPeerID
-            clientVC.serverPeerID = self.gameLobby.hostPeerID
+            clientVC.hostPeerID = self.gameLobby.hostPeerID
         }
     }
     
@@ -122,7 +122,7 @@ extension LobbyViewController: LobbyDelegate {
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
-        case .closeConnection:
+        case .closeSession:
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in

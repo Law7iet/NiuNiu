@@ -116,7 +116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B60-W0-L7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3997" y="474"/>
+            <point key="canvasLocation" x="4002" y="474"/>
         </scene>
         <!--Host-->
         <scene sceneID="Rmk-u6-yu6">
@@ -233,7 +233,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="XlU-Za-OJ6" userLabel="Player 3">
                                         <rect key="frame" x="161.33333333333334" y="0.0" width="65.333333333333343" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUV-q9-s89" userLabel="Player 3">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUV-q9-s89" userLabel="Player 3">
                                                 <rect key="frame" x="0.0" y="0.0" width="65.333333333333329" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Vse-hf-t6t"/>
@@ -247,7 +247,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mu0-L7-KTN" userLabel="Players 2 and 4">
                                         <rect key="frame" x="0.0" y="85" width="388" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G05-nD-gs4" userLabel="Player 2">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G05-nD-gs4" userLabel="Player 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="3a5-Jc-BKa"/>
@@ -256,7 +256,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5Q-sh-SLu" userLabel="Player 4">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5Q-sh-SLu" userLabel="Player 4">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="CTt-DQ-GBS"/>
@@ -287,7 +287,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Af8-mZ-XqR" userLabel="Players 1 and 5">
                                         <rect key="frame" x="0.0" y="255" width="388" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bPe-uq-6vG" userLabel="Player 1">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bPe-uq-6vG" userLabel="Player 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Iov-zp-GoD"/>
@@ -296,7 +296,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrj-c8-dNM" userLabel="Player 5">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrj-c8-dNM" userLabel="Player 5">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="9Gf-wm-rCb"/>
@@ -381,7 +381,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="eaj-4N-S6v">
                                         <rect key="frame" x="93.333333333333329" y="183.66666666666663" width="201.66666666666669" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYn-F1-Phk">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYn-F1-Phk">
                                                 <rect key="frame" x="0.0" y="0.0" width="93.333333333333329" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="31" id="mL6-up-A6b"/>
@@ -392,7 +392,7 @@
                                                     <action selector="pickCards:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="3vf-1T-leD"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eR3-Fu-WVw">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eR3-Fu-WVw">
                                                 <rect key="frame" x="108.33333333333334" y="0.0" width="93.333333333333343" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="31" id="ZiG-76-qsD"/>
@@ -440,7 +440,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-8S-MGJ">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6dC-8S-MGJ">
                                                 <rect key="frame" x="308" y="0.0" width="80" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="31" id="1aS-AR-6VJ"/>
@@ -457,7 +457,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="eNT-2r-ySQ" userLabel="User Stack View 3">
                                         <rect key="frame" x="0.0" y="61.333333333333371" width="388" height="38.666666666666657"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="deS-Uo-F2U">
+                                            <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="deS-Uo-F2U">
                                                 <rect key="frame" x="-2" y="4.3333333333332575" width="392" height="31"/>
                                                 <connections>
                                                     <action selector="sliderValueChanged:" destination="dgX-Kf-yyD" eventType="valueChanged" id="yLF-Oi-Jph"/>
@@ -629,7 +629,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qdf-59-wDh" userLabel="Player 3">
                                         <rect key="frame" x="161.33333333333334" y="0.0" width="65.333333333333343" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fX7-Zu-Lox" userLabel="Player 3">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fX7-Zu-Lox" userLabel="Player 3">
                                                 <rect key="frame" x="0.0" y="0.0" width="65.333333333333329" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Wjw-Cg-gmG"/>
@@ -637,13 +637,16 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="PGy-oe-ey1"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ViQ-2y-bZZ" userLabel="Players 2 and 4">
                                         <rect key="frame" x="0.0" y="85" width="388" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6u-2n-MpO" userLabel="Player 2">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6u-2n-MpO" userLabel="Player 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="4Sl-do-Oht"/>
@@ -651,8 +654,11 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="Qdj-y4-eqX"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xt6-T0-WA9" userLabel="Player 4">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xt6-T0-WA9" userLabel="Player 4">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="YLt-1u-XYF"/>
@@ -660,6 +666,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="nGz-Hg-YGd"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -683,7 +692,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1To-rV-gJZ" userLabel="Players 1 and 5">
                                         <rect key="frame" x="0.0" y="255" width="388" height="70"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPw-Yp-HNm" userLabel="Player 1">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPw-Yp-HNm" userLabel="Player 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="bqJ-Py-bma"/>
@@ -691,8 +700,11 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="VTz-d6-cjI"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XeM-pS-0Ug" userLabel="Player 5">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XeM-pS-0Ug" userLabel="Player 5">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="7lE-2P-FGS"/>
@@ -700,6 +712,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="h1A-ZG-Az4"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>

@@ -148,7 +148,7 @@ extension HostViewController: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: {(action: UIAlertAction) in
-                let msg = Message(.closeConnection)
+                let msg = Message(.closeSession)
                 self.hostManager.sendMessageTo([user], message: msg)
             }
         ))
