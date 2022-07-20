@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Main View Controller-->
+        <!--MainVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="MainVCID" id="BYZ-38-t0r" customClass="MainViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainVCID" id="BYZ-38-t0r" customClass="MainVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -55,7 +55,7 @@
         <!--Search-->
         <scene sceneID="2qi-MI-e10">
             <objects>
-                <viewController id="l9d-DM-1ku" customClass="SeacherViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="l9d-DM-1ku" customClass="ClientSeacherVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Orf-V2-7qo">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -121,7 +121,7 @@
         <!--Host-->
         <scene sceneID="Rmk-u6-yu6">
             <objects>
-                <viewController id="05W-vh-zCY" customClass="HostViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="05W-vh-zCY" customClass="ServerLobbyVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="44C-6f-4dI">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -139,7 +139,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-Q5-Xse">
-                                                <rect key="frame" x="126.33333333333331" y="184.33333333333331" width="20" height="20"/>
+                                                <rect key="frame" x="126.33333333333331" y="184" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="cA2-hK-euV"/>
                                                 </constraints>
@@ -538,7 +538,7 @@
         <!--Lobby-->
         <scene sceneID="3Js-cQ-x9a">
             <objects>
-                <viewController modalPresentationStyle="overCurrentContext" id="vmy-aI-Yh4" customClass="LobbyViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overCurrentContext" id="vmy-aI-Yh4" customClass="ClientLobbyVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kJ4-Dm-Lwk">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -556,7 +556,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="94y-65-wKW">
-                                                <rect key="frame" x="126.33333333333331" y="206.33333333333331" width="20" height="20"/>
+                                                <rect key="frame" x="126.33333333333331" y="206" width="20" height="20"/>
                                             </activityIndicatorView>
                                         </subviews>
                                     </stackView>

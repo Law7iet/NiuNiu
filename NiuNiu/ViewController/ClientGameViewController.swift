@@ -72,6 +72,11 @@ class ClientGameViewController: UIViewController {
 
 // MARK: LobbyManagerDelegate implementation
 extension ClientGameViewController: ClientDelegate {
+    
+    func didConnectWith(peerID: MCPeerID) {}
+    
+    func didDisconnectWith(peerID: MCPeerID) {}
+    
         
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         
@@ -91,24 +96,24 @@ extension ClientGameViewController: ClientDelegate {
             }
         case .startMatch:
             print("startMatch")
-            if let users = message.users {
-                DispatchQueue.main.async {
-                    for index in 0 ..< users.count {
-                        self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
-                        self.playersButton[index].isEnabled = true
-                    }
-                }
-            }
+//            if let users = message.users {
+//                DispatchQueue.main.async {
+//                    for index in 0 ..< users.count {
+//                        self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+//                        self.playersButton[index].isEnabled = true
+//                    }
+//                }
+//            }
         case .resCards:
             print("ReceiveCards")
-            let cards = message.cards!
-            self.himself.setCards(cards: cards)
-            for index in 0...4 {
-                DispatchQueue.main.async {
-                    let image = UIImage(named: cards.elements[index].getName())
-                    self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
-                }
-            }
+//            let cards = message.cards!
+//            self.himself.setCards(cards: cards)
+//            for index in 0...4 {
+//                DispatchQueue.main.async {
+//                    let image = UIImage(named: cards.elements[index].getName())
+//                    self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
+//                }
+//            }
         case .startBet:
             print("startBet")
         case .endBet:
@@ -117,9 +122,9 @@ extension ClientGameViewController: ClientDelegate {
             print("startFixBet")
         case .endFixBid:
             print("endFixBet")
-        case .startChooseCards:
+        case .startCards:
             print("startPickCards")
-        case .endChooseCards:
+        case .endCards:
             print("endPickCards")
         case .showCards:
             print("showCards")
@@ -133,7 +138,7 @@ extension ClientGameViewController: ClientDelegate {
         case .resPlayer:
             print("resPlayerData")
             DispatchQueue.main.async {
-                let user = message.users![0]
+                let user = message.user!
                 let message = "Points: \(user.points)\nBid: \(user.bid)"
                 let alert = UIAlertController(
                     title: user.name,

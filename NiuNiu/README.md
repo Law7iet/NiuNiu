@@ -42,3 +42,27 @@ Al termine dei turni fissati, vince chi ha più punti.
 - Esistenza di alcune modalità di gioco: standard (valori lineari) e fast (aumento proporzionale dei parametri)
 - Ogni giocatore può abbandonare la partita.
 - Ogni giocatore può chiedere di terminare la partita con una votazione; se la votazione è superiore al 50% dei partecipanti, la partita termina.
+
+## Implementazione
+
+### Comunicazione
+- Server
+- Client
+
+- Lobby
+
+Il server conosce la lista dei client
+Il client conosce il server
+
+La lobby conosce tutti gli utenti nella stanza
+
+Quando si crea una stanza, si definisce chi lo crea.
+
+Stanze:
+- server:
+    - host
+- searcher:
+    - è vuoto
+- client:
+    - host e se stesso
+    

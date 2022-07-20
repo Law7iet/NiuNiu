@@ -8,11 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class LobbyViewController: UIViewController {
+class ClientLobbyVC: UIViewController {
 
     // MARK: Properties
-    var lobbyManager: Client!
-    var gameLobby: Lobby!
+    var comms: Client!
+    var lobby: Lobby!
     
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
@@ -21,27 +21,27 @@ class LobbyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        lobbyManager.lobbyDelegate = self
+        self.comms.lobbyDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.gameLobby.clearPlayers()
+        self.lobby.clearUsers(withPeers: [comms.hostPeerID!, comms.himselfPeerID])
         self.playersTableView.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         if self.isMovingFromParent {
-            self.lobbyManager.disconnectSession()
+            self.comms.disconnect()
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-        if let clientVC = segue.destination as? ClientGameViewController {
-            clientVC.clientManager = self.lobbyManager
-            clientVC.myPeerID = self.gameLobby.myPeerID
-            clientVC.hostPeerID = self.gameLobby.hostPeerID
-        }
+//        if let clientVC = segue.destination as? ClientGameViewController {
+//            clientVC.clientManager = self.comms
+//            clientVC.myPeerID = self.lobby.myPeerID
+//            clientVC.hostPeerID = self.lobby.hostPeerID
+//        }
     }
     
     // MARK: Supporting functions
@@ -51,19 +51,19 @@ class LobbyViewController: UIViewController {
     
     func updateUI() {
         // Label
-        self.playersCounterLabel.text = "\(self.gameLobby.count) of 6 players found"
+        self.playersCounterLabel.text = "\(self.lobby.count) of 6 players found"
     }
     
     func addPlayerInTableView(peerID: MCPeerID) {
-        self.gameLobby.addUser(withPeerID: peerID)
-        let indexPath = IndexPath(row: self.gameLobby.count - 1, section: 0)
+        self.lobby.addUser(withPeerID: peerID)
+        let indexPath = IndexPath(row: self.lobby.count - 1, section: 0)
         self.playersTableView.insertRows(at: [indexPath], with: .automatic)
         self.updateUI()
     }
     
     func removePlayerInTableView(peerID: MCPeerID) {
-        if let index = self.gameLobby.getIndex(ofPlayer: peerID) {
-            self.gameLobby.removeUser(withIndex: index)
+        if let index = self.lobby.getIndex(ofUser: peerID) {
+            self.lobby.removeUser(withIndex: index)
             let indexPath = IndexPath(row: index, section: 0)
             self.playersTableView.deleteRows(at: [indexPath], with: .automatic)
             self.updateUI()
@@ -73,20 +73,20 @@ class LobbyViewController: UIViewController {
 }
 
 // MARK: UITableViewDataSource implementation
-extension LobbyViewController: UITableViewDataSource {
+extension ClientLobbyVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Players in the lobby"
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.gameLobby.count
+        return self.lobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = self.gameLobby.getUserNames()[indexPath.row]
+        content.text = self.lobby.getUserNames()[indexPath.row]
         cell.contentConfiguration = content
         
         return cell
@@ -94,23 +94,26 @@ extension LobbyViewController: UITableViewDataSource {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension LobbyViewController: LobbyDelegate {
+extension ClientLobbyVC: ClientLobbyDelegate {
     
     func didConnectWith(peerID: MCPeerID) {
-        DispatchQueue.main.async {
-            self.addPlayerInTableView(peerID: peerID)
+        if peerID != self.comms.hostPeerID {
+            DispatchQueue.main.async {
+                self.addPlayerInTableView(peerID: peerID)
+            }
         }
     }
     
     func didDisconnectWith(peerID: MCPeerID) {
-        if peerID == self.gameLobby.hostPeerID {
+        if peerID == self.comms.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
                     self.navigationController?.popViewController(animated: true)
                 }))
                 self.present(alert, animated: true)
-                self.lobbyManager.disconnectSession()
+                self.comms.hostPeerID = nil
+                self.comms.disconnect()
             }
         } else {
             DispatchQueue.main.async {
@@ -129,7 +132,7 @@ extension LobbyViewController: LobbyDelegate {
                     self.navigationController?.popViewController(animated: true)
                 }))
                 self.present(alert, animated: true)
-                self.lobbyManager.disconnectSession()
+                self.comms.disconnect()
             }
         case .startGame:
             DispatchQueue.main.async {

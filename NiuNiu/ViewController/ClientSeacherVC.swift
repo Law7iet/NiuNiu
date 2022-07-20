@@ -1,5 +1,5 @@
 //
-//  SeachViewController.swift
+//  ClientSeacherVC.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 01/07/22.
@@ -8,11 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class SeacherViewController: UIViewController {
+class ClientSeacherVC: UIViewController {
     
     // MARK: Properties
-    var searchManager: Search!
-    var searchLobby: Lobby!
+    var comms: Client!
+    var lobby: Lobby!
     
     @IBOutlet weak var hostsTableView: UITableView!
     
@@ -20,25 +20,25 @@ class SeacherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        self.searchManager.delegate = self
+        self.comms.searchDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.searchLobby.clearHosts()
+        self.lobby.clearUsers(withPeers: [MCPeerID]())
         self.hostsTableView.reloadData()
-        self.searchManager.startBrowsing()
+        self.comms.startBrowsing()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.searchManager.stopBrowsing()
+        self.comms.stopBrowsing()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let lobbyVC = segue.destination as! LobbyViewController
-        lobbyVC.lobbyManager = Client(session: self.searchManager.session)
-        lobbyVC.gameLobby = self.searchLobby
+        let lobbyVC = segue.destination as! ClientLobbyVC
+        lobbyVC.comms = self.comms
+        lobbyVC.lobby = self.lobby
     }
     
     // MARK: Supporting functions
@@ -48,14 +48,14 @@ class SeacherViewController: UIViewController {
     }
     
     func addHostInTableView(peerID: MCPeerID) {
-        self.searchLobby.addUser(withPeerID: peerID)
-        let indexPath = IndexPath(row: self.searchLobby.count - 1, section: 0)
+        self.lobby.addUser(withPeerID: peerID)
+        let indexPath = IndexPath(row: self.lobby.count - 1, section: 0)
         self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     func removeHostInTableView(peerID: MCPeerID) {
-        if let index = self.searchLobby.getIndex(ofPlayer: peerID) {
-            self.searchLobby.removeUser(withIndex: index)
+        if let index = self.lobby.getIndex(ofUser: peerID) {
+            self.lobby.removeUser(withIndex: index)
             let indexPath = IndexPath(row: index, section: 0)
             self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
         }        
@@ -63,28 +63,28 @@ class SeacherViewController: UIViewController {
 }
 
 // MARK: UITableViewDataSource implementation
-extension SeacherViewController: UITableViewDataSource {
+extension ClientSeacherVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.searchLobby.count
+        return self.lobby.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = self.searchLobby.getUserNames()[indexPath.row]
+        content.text = self.lobby.getUserNames()[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }
 }
 
 // MARK: UITableViewDelegate implementation
-extension SeacherViewController: UITableViewDelegate {
+extension ClientSeacherVC: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.searchLobby.usersPeerID[indexPath.row]
+        let user = self.lobby.users[indexPath.row]
         let alert = UIAlertController(
             title: "Join",
             message: "Do you want to join to \(user.displayName) lobby?",
@@ -95,10 +95,10 @@ extension SeacherViewController: UITableViewDelegate {
             style: .default,
             handler: { [self] (action: UIAlertAction) in
                 // Disconnect from the old connection if it's not disconnected yet
-                self.searchManager.disconnectSession()
+                self.comms.disconnect()
                 // Join lobby
-                self.searchManager.requestToJoin(where: user)
-                self.searchLobby.hostPeerID = user
+                self.comms.hostPeerID = user
+                self.comms.connect(to: user)
                 self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))
@@ -111,7 +111,7 @@ extension SeacherViewController: UITableViewDelegate {
 }
 
 // MARK: SearchManagerDelegate implementation
-extension SeacherViewController: SearchDelegate {
+extension ClientSeacherVC: ClientSearchDelegate {
 
     func didFindHostWith(peerID: MCPeerID) {
         self.addHostInTableView(peerID: peerID)

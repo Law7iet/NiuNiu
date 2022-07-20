@@ -51,8 +51,8 @@ class Dealer {
         self.comms = serverManager
         self.deck = Deck()
         
-        self.hostPlayer = Player(id: lobby.hostPeerID, points: points)
-        self.lobbyPlayers = Players(players: lobby.getSendablePeersID(), points: points)
+        self.hostPlayer = Player(id: comms.himselfPeerID, points: points)
+        self.lobbyPlayers = Players(players: comms.connectedPeerIDs, points: points)
         
         // Others
         self.maxBid = 0
@@ -70,16 +70,16 @@ class Dealer {
         var timerCounter = 0
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.comms.sendMessageTo(
-                self.lobbyPlayers.getAvailableMCPeerIDs(),
+            self.comms.sendMessage(
+                to: self.lobbyPlayers.getAvailableMCPeerIDs(),
                 message: Message(.timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
             if timerCounter == time {
                 // Timer ends
                 timer.invalidate()
-                self.comms.sendMessageTo(
-                    self.lobbyPlayers.getAvailableMCPeerIDs(),
+                self.comms.sendMessage(
+                    to: self.lobbyPlayers.getAvailableMCPeerIDs(),
                     message: Message(type)
                 )
             }
@@ -90,8 +90,8 @@ class Dealer {
     func playGame() {
         
         // Start the game
-        self.comms.sendMessageTo(
-            self.lobbyPlayers.getAvailableMCPeerIDs(),
+        self.comms.sendMessage(
+            to: self.lobbyPlayers.getAvailableMCPeerIDs(),
             message: Message(.startGame, amount: self.points)
         )
         self.delegate?.didStartGame(player: self.hostPlayer)
@@ -100,7 +100,7 @@ class Dealer {
         for receiver in self.lobbyPlayers.elements {
             var players = self.lobbyPlayers.getUsers(except: receiver)
             players.append(self.hostPlayer.convertToUser())
-            self.comms.sendMessageTo([receiver.id], message: Message(.startMatch, users: players))
+//            self.comms.sendMessage(to: [receiver.id], message: Message(.startMatch, users: players))
         }
         self.delegate?.didStartMatch(users: self.lobbyPlayers.getUsers(except: self.hostPlayer))
         
@@ -109,7 +109,7 @@ class Dealer {
         for player in self.lobbyPlayers.elements {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
-            self.comms.sendMessageTo([player.id], message: Message(.resCards, cards: player.cards!))
+//            self.comms.sendMessage(to: [player.id], message: Message(.resCards, cards: player.cards!))
         }
         let cards = self.deck.getCards()
         self.hostPlayer.setCards(cards: cards)
