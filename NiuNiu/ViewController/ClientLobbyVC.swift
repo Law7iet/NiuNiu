@@ -37,11 +37,9 @@ class ClientLobbyVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-//        if let clientVC = segue.destination as? ClientGameViewController {
-//            clientVC.clientManager = self.comms
-//            clientVC.myPeerID = self.lobby.myPeerID
-//            clientVC.hostPeerID = self.lobby.hostPeerID
-//        }
+        if let clientVC = segue.destination as? ClientGameVC {
+            clientVC.comms = self.comms
+        }
     }
     
     // MARK: Supporting functions

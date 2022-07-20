@@ -1,5 +1,5 @@
 //
-//  ServerGameViewController.swift
+//  ServerGameVC.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 05/07/22.
@@ -8,14 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class ServerGameViewController: UIViewController {
+class ServerGameVC: UIViewController {
     
     // MARK: Properties
     var dealer: Dealer!
     var himself: Player!
-    
-    var myPeerID: MCPeerID!
-    var serverPeerID: MCPeerID!
     
     var bidValue = 0
     var clickedButtons = [false, false, false, false, false]
@@ -75,7 +72,7 @@ class ServerGameViewController: UIViewController {
     }
 }
 
-extension ServerGameViewController: DealerDelegate {
+extension ServerGameVC: DealerDelegate {
     
     func didStartGame(player: Player) {
         self.himself = player
@@ -94,6 +91,7 @@ extension ServerGameViewController: DealerDelegate {
         DispatchQueue.main.async {
             for index in 0 ..< users.count {
                 self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+                self.playersButton[index].isEnabled = true
             }
         }
     }

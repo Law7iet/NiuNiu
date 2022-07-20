@@ -1,5 +1,5 @@
 //
-//  ClientGameViewController.swift
+//  ClientGameVC.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 05/07/22.
@@ -8,14 +8,11 @@
 import UIKit
 import MultipeerConnectivity
 
-class ClientGameViewController: UIViewController {
+class ClientGameVC: UIViewController {
 
     // MARK: Properties
-    var clientManager: Client!
+    var comms: Client!
     var himself: Player!
-    
-    var myPeerID: MCPeerID!
-    var hostPeerID: MCPeerID!
     
     var bidValue = 0
     var clickedButtons = [false, false, false, false, false]
@@ -34,7 +31,7 @@ class ClientGameViewController: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        clientManager.clientDelegate = self
+        comms.clientDelegate = self
     }
     
     // MARK: Actions
@@ -71,7 +68,7 @@ class ClientGameViewController: UIViewController {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension ClientGameViewController: ClientDelegate {
+extension ClientGameVC: ClientDelegate {
     
     func didConnectWith(peerID: MCPeerID) {}
     
@@ -85,7 +82,7 @@ extension ClientGameViewController: ClientDelegate {
         case .startGame:
             print("startGame")
             let points = message.amount!
-            self.himself = Player(id: self.myPeerID, points: points)
+            self.himself = Player(id: self.comms.himselfPeerID, points: points)
             DispatchQueue.main.async {
                 self.statusLabel.text = "Game started!"
                 self.userLabel.text = self.himself.id.displayName
@@ -96,24 +93,28 @@ extension ClientGameViewController: ClientDelegate {
             }
         case .startMatch:
             print("startMatch")
-//            if let users = message.users {
-//                DispatchQueue.main.async {
-//                    for index in 0 ..< users.count {
-//                        self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
-//                        self.playersButton[index].isEnabled = true
-//                    }
-//                }
-//            }
+            let user = message.user!
+            DispatchQueue.main.async {
+                for index in 0 ..< self.playersButton.count  {
+                    let button = self.playersButton[index]
+                    if button.isEnabled == false {
+                        button.isEnabled = true
+                        button.setTitle(user.name, for: UIControl.State.normal)
+                        break
+                    }
+                }
+            }
         case .resCards:
             print("ReceiveCards")
-//            let cards = message.cards!
-//            self.himself.setCards(cards: cards)
-//            for index in 0...4 {
-//                DispatchQueue.main.async {
-//                    let image = UIImage(named: cards.elements[index].getName())
-//                    self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
-//                }
-//            }
+            let user = message.user!
+            let cards = user.cards!
+            self.himself.setCards(cards: cards)
+            for index in 0 ..< self.cardsButton.count {
+                DispatchQueue.main.async {
+                    let image = UIImage(named: cards.elements[index].getName())
+                    self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
+                }
+            }
         case .startBet:
             print("startBet")
         case .endBet:

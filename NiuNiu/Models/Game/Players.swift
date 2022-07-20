@@ -34,15 +34,12 @@ class Players {
         return peerList
     }
     
-    /// Get an array of User of the players in the class except the player that matches with the parameter.
-    /// - Parameter excludedPlayer: The player that won't be in the returned array
+    /// Get an array of User of the players in the class.
     /// - Returns: The array of User..
-    func getUsers(except excludedPlayer: Player?) -> [User] {
+    func getUsers() -> [User] {
         var userList = [User]()
         for player in self.elements {
-            if player != excludedPlayer {
-                userList.append(player.convertToUser())
-            }
+            userList.append(player.convertToUser())
         }
         return userList
     }
@@ -64,6 +61,5 @@ class Players {
         }
         return nil
     }
-
 
 }

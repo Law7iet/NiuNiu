@@ -8,26 +8,23 @@
 import MultipeerConnectivity
 
 protocol DealerDelegate {
-    
     func didStartGame(player: Player)
     func didStartMatch(users: [User])
     func didReceiveCards(cards: Cards)
-    
 }
 
 class Dealer {
     
     // MARK: Properties
+    // Data structures
     /// The class that communicates with clients.
     var comms: Server
-    /// The cards
+    /// The cards.
     var deck: Deck
-
     /// The host player.
-    var hostPlayer: Player
+    var himself: Player
     /// The players in the lobby, excluded the host player.
-    var lobbyPlayers: Players
-
+    var players: Players
     
     // Game Settings
     var time: Int
@@ -42,17 +39,16 @@ class Dealer {
     var delegate: DealerDelegate?
     
     // MARK: Methods
-    init(serverManager: Server, lobby: Lobby, time: Int?, points: Int?) {
+    init(comms: Server, time: Int?, points: Int?) {
         // Game Settings
         self.time = time ?? 30
         self.points = points ?? 100
         
         // Data Structures
-        self.comms = serverManager
+        self.comms = comms
         self.deck = Deck()
-        
-        self.hostPlayer = Player(id: comms.himselfPeerID, points: points)
-        self.lobbyPlayers = Players(players: comms.connectedPeerIDs, points: points)
+        self.himself = Player(id: comms.himselfPeerID, points: points)
+        self.players = Players(players: comms.connectedPeerIDs, points: points)
         
         // Others
         self.maxBid = 0
@@ -71,7 +67,7 @@ class Dealer {
         // Start a timer
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.comms.sendMessage(
-                to: self.lobbyPlayers.getAvailableMCPeerIDs(),
+                to: self.players.getAvailableMCPeerIDs(),
                 message: Message(.timer, amount: time - timerCounter)
             )
             timerCounter = timerCounter + 1
@@ -79,7 +75,7 @@ class Dealer {
                 // Timer ends
                 timer.invalidate()
                 self.comms.sendMessage(
-                    to: self.lobbyPlayers.getAvailableMCPeerIDs(),
+                    to: self.players.getAvailableMCPeerIDs(),
                     message: Message(type)
                 )
             }
@@ -89,31 +85,38 @@ class Dealer {
     // MARK: Game
     func playGame() {
         
-        // Start the game
+        // Start the game: clients have to initialize theirselves
         self.comms.sendMessage(
-            to: self.lobbyPlayers.getAvailableMCPeerIDs(),
+            to: self.players.getAvailableMCPeerIDs(),
             message: Message(.startGame, amount: self.points)
         )
-        self.delegate?.didStartGame(player: self.hostPlayer)
+        self.delegate?.didStartGame(player: self.himself)
         
-        // Start the match
-        for receiver in self.lobbyPlayers.elements {
-            var players = self.lobbyPlayers.getUsers(except: receiver)
-            players.append(self.hostPlayer.convertToUser())
-//            self.comms.sendMessage(to: [receiver.id], message: Message(.startMatch, users: players))
+        // Start the match: send player's data
+        for receiver in self.players.elements {
+            for userToSend in self.players.elements + [self.himself] {
+                if receiver != userToSend {
+                    let user = userToSend.convertToUser()
+                    self.comms.sendMessage(
+                        to: [receiver.id],
+                        message: Message(.startMatch, user: user)
+                    )
+                }
+            }
         }
-        self.delegate?.didStartMatch(users: self.lobbyPlayers.getUsers(except: self.hostPlayer))
+        self.delegate?.didStartMatch(users: self.players.getUsers())
         
         // Prepare the cards and give 5 cards to each player
         self.makeDeck()
-        for player in self.lobbyPlayers.elements {
+        for player in self.players.elements {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
-//            self.comms.sendMessage(to: [player.id], message: Message(.resCards, cards: player.cards!))
+            let user = player.convertToUser()
+            self.comms.sendMessage(to: [player.id], message: Message(.resCards, user: user))
         }
         let cards = self.deck.getCards()
-        self.hostPlayer.setCards(cards: cards)
-        self.delegate?.didReceiveCards(cards: self.hostPlayer.cards!)
+        self.himself.setCards(cards: cards)
+        self.delegate?.didReceiveCards(cards: self.himself.cards!)
         
 //        // Bet
 //        self.serverManager.sendMessageTo(

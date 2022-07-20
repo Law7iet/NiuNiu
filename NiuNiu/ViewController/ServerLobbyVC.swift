@@ -46,11 +46,9 @@ class ServerLobbyVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Passing the manager
-//        if let serverGameVC = segue.destination as? ServerGameViewController {
-//            serverGameVC.dealer = Dealer(serverManager: self.serverManager, lobby: self.lobby, time: nil, points: nil)
-//            serverGameVC.myPeerID = self.lobby.myPeerID
-//            serverGameVC.serverPeerID = self.lobby.hostPeerID
-//        }
+        if let serverGameVC = segue.destination as? ServerGameVC {
+            serverGameVC.dealer = Dealer(comms: self.comms, time: nil, points: nil)
+        }
     }
     
     // MARK: Actions

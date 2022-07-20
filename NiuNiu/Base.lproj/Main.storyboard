@@ -219,10 +219,10 @@
             </objects>
             <point key="canvasLocation" x="4793" y="-209"/>
         </scene>
-        <!--Server Game View Controller-->
+        <!--Server GameVC-->
         <scene sceneID="nO1-w0-evX">
             <objects>
-                <viewController id="dgX-Kf-yyD" customClass="ServerGameViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dgX-Kf-yyD" customClass="ServerGameVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gFX-wr-Kur">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -615,10 +615,10 @@
             </objects>
             <point key="canvasLocation" x="4793" y="474"/>
         </scene>
-        <!--Client Game View Controller-->
+        <!--Client GameVC-->
         <scene sceneID="pPp-kd-Urf">
             <objects>
-                <viewController id="FAH-0o-gOG" customClass="ClientGameViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="FAH-0o-gOG" customClass="ClientGameVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nni-XU-dNF">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -766,7 +766,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGh-VA-CFW">
-                                                <rect key="frame" x="202.66666666666666" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
+                                                <rect key="frame" x="202.66666666666663" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="EXT-Tb-owp"/>
                                                     <constraint firstAttribute="width" secondItem="KGh-VA-CFW" secondAttribute="height" multiplier="64:89" id="YT9-Qm-N0x"/>

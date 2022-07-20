@@ -60,9 +60,7 @@ Quando si crea una stanza, si definisce chi lo crea.
 
 Stanze:
 - server:
-    - host
 - searcher:
-    - è vuoto
 - client:
-    - host e se stesso
-    
+
+ServerGameVC    
