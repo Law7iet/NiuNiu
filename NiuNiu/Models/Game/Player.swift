@@ -41,15 +41,6 @@ class Player: Comparable {
         self.cards = cards
     }
     
-    func bet(amount: Int) -> Bool {
-        if amount > self.points {
-            return false
-        } else {
-            self.bid = self.bid + amount
-            return true
-        }
-    }
-    
     // TODO: Which type in input?
     func pickCards() {
 //        let index = 0

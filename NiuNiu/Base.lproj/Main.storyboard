@@ -139,7 +139,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-Q5-Xse">
-                                                <rect key="frame" x="126.33333333333331" y="184" width="20" height="20"/>
+                                                <rect key="frame" x="126.33333333333331" y="184.33333333333331" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="cA2-hK-euV"/>
                                                 </constraints>
@@ -241,6 +241,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="clickPlayer:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="GC1-iS-v4f"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -255,6 +258,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="clickPlayer:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="imS-sA-DYa"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5Q-sh-SLu" userLabel="Player 4">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
@@ -264,6 +270,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="clickPlayer:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="fPQ-ws-uIt"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -295,6 +304,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="clickPlayer:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="CmY-uO-k9a"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrj-c8-dNM" userLabel="Player 5">
                                                 <rect key="frame" x="199" y="0.0" width="189" height="70"/>
@@ -304,6 +316,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
+                                                <connections>
+                                                    <action selector="clickPlayer:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="lZU-Bb-iYl"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -476,18 +491,29 @@
                                     <constraint firstItem="FbT-HI-inE" firstAttribute="trailing" secondItem="0l7-PA-bK5" secondAttribute="trailing" id="nbf-hb-U0q"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6pe-oP-mTt">
+                                <rect key="frame" x="28" y="44" width="51" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Quit"/>
+                                <connections>
+                                    <action selector="home:" destination="dgX-Kf-yyD" eventType="touchUpInside" id="var-Dr-q3Q"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="juB-Nt-TYJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="NPD-aB-NdC" firstAttribute="trailing" secondItem="juB-Nt-TYJ" secondAttribute="trailing" constant="-20" id="10r-EN-JV1"/>
                             <constraint firstItem="0l7-PA-bK5" firstAttribute="trailing" secondItem="juB-Nt-TYJ" secondAttribute="trailing" constant="-20" id="4UZ-wQ-Q0Y"/>
+                            <constraint firstItem="juB-Nt-TYJ" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6pe-oP-mTt" secondAttribute="trailing" symbolic="YES" id="8M4-Xx-kUj"/>
+                            <constraint firstItem="6pe-oP-mTt" firstAttribute="leading" secondItem="juB-Nt-TYJ" secondAttribute="leading" constant="28" id="HCU-MY-iPg"/>
                             <constraint firstItem="0l7-PA-bK5" firstAttribute="bottom" secondItem="juB-Nt-TYJ" secondAttribute="bottom" constant="-20" id="KEt-dL-Krf"/>
                             <constraint firstItem="531-2d-U4l" firstAttribute="trailing" secondItem="juB-Nt-TYJ" secondAttribute="trailing" constant="-20" id="Uth-yQ-Ez3"/>
                             <constraint firstItem="531-2d-U4l" firstAttribute="leading" secondItem="juB-Nt-TYJ" secondAttribute="leading" constant="20" id="hCg-bu-nvN"/>
                             <constraint firstItem="NPD-aB-NdC" firstAttribute="top" secondItem="juB-Nt-TYJ" secondAttribute="top" constant="20" id="hY1-X9-uKJ"/>
                             <constraint firstItem="0l7-PA-bK5" firstAttribute="leading" secondItem="juB-Nt-TYJ" secondAttribute="leading" constant="20" id="j4J-Xd-fXe"/>
                             <constraint firstItem="NPD-aB-NdC" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="531-2d-U4l" secondAttribute="top" constant="-50" id="jBI-IW-oD4"/>
+                            <constraint firstItem="6pe-oP-mTt" firstAttribute="top" secondItem="juB-Nt-TYJ" secondAttribute="top" id="lms-vb-2MQ"/>
                             <constraint firstItem="0l7-PA-bK5" firstAttribute="top" secondItem="531-2d-U4l" secondAttribute="bottom" constant="20" id="oO9-P1-wTx"/>
                             <constraint firstItem="NPD-aB-NdC" firstAttribute="leading" secondItem="juB-Nt-TYJ" secondAttribute="leading" constant="20" id="xRH-84-VFt"/>
                         </constraints>
@@ -495,6 +521,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="betButton" destination="6dC-8S-MGJ" id="H73-gw-5gR"/>
                         <outlet property="bidLabel" destination="fwK-e0-TD8" id="bcE-FD-PVW"/>
                         <outlet property="bidSlider" destination="deS-Uo-F2U" id="JCT-Tp-R62"/>
                         <outlet property="pointsLabel" destination="6Cf-sR-5wK" id="Wtq-EK-aN4"/>
@@ -511,9 +538,11 @@
                         <outletCollection property="playersButton" destination="ZUV-q9-s89" collectionClass="NSMutableArray" id="T3e-pg-uRf"/>
                         <outletCollection property="playersButton" destination="u5Q-sh-SLu" collectionClass="NSMutableArray" id="Y6k-re-82b"/>
                         <outletCollection property="playersButton" destination="lrj-c8-dNM" collectionClass="NSMutableArray" id="kwe-ev-zza"/>
+                        <segue destination="yiz-mR-2bY" kind="unwind" identifier="unwindToMainVC" unwindAction="prepareForUnwindWithSegue:" id="Qy3-hw-Z0R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRg-QQ-pAc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="yiz-mR-2bY" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="5769" y="-209"/>
         </scene>
@@ -556,7 +585,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="94y-65-wKW">
-                                                <rect key="frame" x="126.33333333333331" y="206" width="20" height="20"/>
+                                                <rect key="frame" x="126.33333333333331" y="206.33333333333331" width="20" height="20"/>
                                             </activityIndicatorView>
                                         </subviews>
                                     </stackView>
@@ -638,7 +667,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                                 <connections>
-                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="PGy-oe-ey1"/>
+                                                    <action selector="clickPlayer:" destination="FAH-0o-gOG" eventType="touchUpInside" id="WHq-JL-whc"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -655,7 +684,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                                 <connections>
-                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="Qdj-y4-eqX"/>
+                                                    <action selector="clickPlayer:" destination="FAH-0o-gOG" eventType="touchUpInside" id="8EJ-SK-c9n"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xt6-T0-WA9" userLabel="Player 4">
@@ -667,7 +696,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                                 <connections>
-                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="nGz-Hg-YGd"/>
+                                                    <action selector="clickPlayer:" destination="FAH-0o-gOG" eventType="touchUpInside" id="9jo-nI-qeE"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -701,7 +730,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                                 <connections>
-                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="VTz-d6-cjI"/>
+                                                    <action selector="clickPlayer:" destination="FAH-0o-gOG" eventType="touchUpInside" id="VLf-rO-KPV"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XeM-pS-0Ug" userLabel="Player 5">
@@ -713,7 +742,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" imagePlacement="bottom" title="Empty" imagePadding="5" titleAlignment="center"/>
                                                 <connections>
-                                                    <action selector="showPlayerData:" destination="FAH-0o-gOG" eventType="touchUpInside" id="h1A-ZG-Az4"/>
+                                                    <action selector="clickPlayer:" destination="FAH-0o-gOG" eventType="touchUpInside" id="tYG-Qx-DbX"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -766,7 +795,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGh-VA-CFW">
-                                                <rect key="frame" x="202.66666666666663" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
+                                                <rect key="frame" x="202.66666666666666" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="EXT-Tb-owp"/>
                                                     <constraint firstAttribute="width" secondItem="KGh-VA-CFW" secondAttribute="height" multiplier="64:89" id="YT9-Qm-N0x"/>
@@ -869,6 +898,9 @@
                                         <subviews>
                                             <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="rfG-aG-bKp">
                                                 <rect key="frame" x="-2" y="4.3333333333332575" width="392" height="31"/>
+                                                <connections>
+                                                    <action selector="sliderValueChanged:" destination="FAH-0o-gOG" eventType="valueChanged" id="Ono-Vf-nSd"/>
+                                                </connections>
                                             </slider>
                                         </subviews>
                                     </stackView>
@@ -883,6 +915,14 @@
                                     <constraint firstItem="Mlb-t9-LCN" firstAttribute="leading" secondItem="YeY-Z3-2Qh" secondAttribute="leading" id="yiB-uT-Fq6"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRf-di-MRj">
+                                <rect key="frame" x="28" y="44" width="51" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Quit"/>
+                                <connections>
+                                    <action selector="home:" destination="FAH-0o-gOG" eventType="touchUpInside" id="jlM-2d-CiQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="brx-h5-cRR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -891,17 +931,21 @@
                             <constraint firstItem="YeY-Z3-2Qh" firstAttribute="trailing" secondItem="brx-h5-cRR" secondAttribute="trailing" constant="-20" id="ACO-Kq-Lr6"/>
                             <constraint firstItem="CMK-0H-R1u" firstAttribute="leading" secondItem="brx-h5-cRR" secondAttribute="leading" constant="20" id="DvY-dM-8c4"/>
                             <constraint firstItem="YeY-Z3-2Qh" firstAttribute="bottom" secondItem="brx-h5-cRR" secondAttribute="bottom" constant="-20" id="FQs-wS-rSX"/>
+                            <constraint firstItem="kRf-di-MRj" firstAttribute="top" secondItem="brx-h5-cRR" secondAttribute="top" id="KdS-tB-PV7"/>
                             <constraint firstItem="YeY-Z3-2Qh" firstAttribute="top" secondItem="CMK-0H-R1u" secondAttribute="bottom" constant="15" id="OGD-is-pN7"/>
                             <constraint firstItem="Q6t-DQ-SGZ" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="CMK-0H-R1u" secondAttribute="top" constant="-50" id="OP5-hh-uqG"/>
                             <constraint firstItem="Q6t-DQ-SGZ" firstAttribute="trailing" secondItem="brx-h5-cRR" secondAttribute="trailing" constant="-20" id="ZPQ-zg-QLm"/>
+                            <constraint firstItem="kRf-di-MRj" firstAttribute="leading" secondItem="brx-h5-cRR" secondAttribute="leading" constant="28" id="dbS-xo-Ebm"/>
                             <constraint firstItem="YeY-Z3-2Qh" firstAttribute="leading" secondItem="brx-h5-cRR" secondAttribute="leading" constant="20" id="fHf-rR-dej"/>
                             <constraint firstItem="CMK-0H-R1u" firstAttribute="trailing" secondItem="brx-h5-cRR" secondAttribute="trailing" constant="-20" id="iZ0-87-A4G"/>
+                            <constraint firstItem="brx-h5-cRR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kRf-di-MRj" secondAttribute="trailing" symbolic="YES" id="isH-N8-Is6"/>
                             <constraint firstItem="Q6t-DQ-SGZ" firstAttribute="top" secondItem="brx-h5-cRR" secondAttribute="top" constant="20" id="mTH-vN-clW"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="betButton" destination="JdW-7W-25s" id="dS6-yd-faJ"/>
                         <outlet property="bidLabel" destination="hnu-Cw-fEE" id="4v2-od-BV9"/>
                         <outlet property="bidSlider" destination="rfG-aG-bKp" id="lMJ-Bn-egF"/>
                         <outlet property="pointsLabel" destination="a4g-mG-hWS" id="Abk-TK-ZYE"/>
@@ -918,9 +962,11 @@
                         <outletCollection property="playersButton" destination="fX7-Zu-Lox" collectionClass="NSMutableArray" id="kMq-S9-FTR"/>
                         <outletCollection property="playersButton" destination="Xt6-T0-WA9" collectionClass="NSMutableArray" id="aeB-zi-S4w"/>
                         <outletCollection property="playersButton" destination="XeM-pS-0Ug" collectionClass="NSMutableArray" id="YHo-7p-ab3"/>
+                        <segue destination="CdN-Zl-Y1W" kind="unwind" identifier="unwindToMainVC" unwindAction="prepareForUnwindWithSegue:" id="h8g-O1-8pe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDo-cB-GAD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="CdN-Zl-Y1W" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="5769" y="474"/>
         </scene>

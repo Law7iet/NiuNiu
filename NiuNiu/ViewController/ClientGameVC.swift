@@ -22,6 +22,7 @@ class ClientGameVC: UIViewController {
     
     @IBOutlet var playersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
+    @IBOutlet weak var betButton: UIButton!
     
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
@@ -35,8 +36,38 @@ class ClientGameVC: UIViewController {
     }
     
     // MARK: Actions
-    @IBAction func bet(_ sender: Any) {
+    @IBAction func home(_ sender: Any) {
+        let alert = UIAlertController(
+            title: "Quit the game",
+            message: "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(
+            title: "No", style: .default)
+        )
+        alert.addAction(UIAlertAction(
+            title: "Yes",
+            style: .destructive,
+            handler: { action in
+                self.comms.sendMessageToServer(message: Message(.closeSession))
+                self.performSegue(withIdentifier: "unwindToMainVC", sender: self)
+            })
+        )
+        self.present(alert, animated: true)
+    }
     
+//    @IBAction func clickPlayer(_ sender: UIButton) {
+//        let user = User(name: sender.currentTitle!)
+//        self.comms.sendMessageToServer(message: Message(.reqPlayer, user: user))
+//    }
+    @IBAction func clickPlayer(_ sender: UIButton) {
+        let user = User(name: sender.currentTitle!)
+        self.comms.sendMessageToServer(message: Message(.reqPlayer, user: user))
+    }
+    
+    @IBAction func bet(_ sender: Any) {
+        self.himself.bid = self.bidValue
+        self.comms.sendMessageToServer(message: Message(.bet, user: self.himself.convertToUser()))
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -62,9 +93,12 @@ class ClientGameVC: UIViewController {
     
     }
     
-    @IBAction func showPlayerData(_ sender: UIButton) {
-        
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
+        let currentValue = Int(sender.value)
+        self.bidValue = currentValue
+        self.bidLabel.text = "Your bid: \(currentValue) points"
     }
+
 }
 
 // MARK: LobbyManagerDelegate implementation
@@ -72,11 +106,18 @@ extension ClientGameVC: ClientDelegate {
     
     func didConnectWith(peerID: MCPeerID) {}
     
-    func didDisconnectWith(peerID: MCPeerID) {}
+    func didDisconnectWith(peerID: MCPeerID) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Exit from game", message: "The game has been closed", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+                self.performSegue(withIdentifier: "unwindToMainVC", sender: self)
+            }))
+            self.comms.disconnect()
+            self.present(alert, animated: true)
+        }
+    }
     
-        
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
-        
         let message = Message(data: messageData)
         switch message.type {
         case .startGame:
@@ -117,8 +158,16 @@ extension ClientGameVC: ClientDelegate {
             }
         case .startBet:
             print("startBet")
+            DispatchQueue.main.async {
+                self.betButton.isEnabled = true
+                self.bidSlider.isEnabled = true
+            }
         case .endBet:
             print("endBet")
+            DispatchQueue.main.async {
+                self.betButton.isEnabled = false
+                self.bidSlider.isEnabled = false
+            }
         case .startFixBid:
             print("startFixBet")
         case .endFixBid:
@@ -135,7 +184,6 @@ extension ClientGameVC: ClientDelegate {
             print("endMatch")
         case .endGame:
             print("endGame")
-        
         case .resPlayer:
             print("resPlayerData")
             DispatchQueue.main.async {
@@ -146,10 +194,9 @@ extension ClientGameVC: ClientDelegate {
                     message: message,
                     preferredStyle: .actionSheet
                 )
+                alert.addAction(UIAlertAction(title: "Close", style: .default))
                 self.present(alert, animated: true)
             }
-            
-            
         // TODO: check if there're closeConnection or closeLobby
         default:
             print("???")

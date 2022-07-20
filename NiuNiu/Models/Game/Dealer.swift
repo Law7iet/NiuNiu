@@ -11,6 +11,8 @@ protocol DealerDelegate {
     func didStartGame(player: Player)
     func didStartMatch(users: [User])
     func didReceiveCards(cards: Cards)
+    func didStartBet()
+    func didStopBet()
 }
 
 class Dealer {
@@ -54,6 +56,8 @@ class Dealer {
         self.maxBid = 0
         self.totalBid = 0
         self.timerCounter = 0
+        
+        self.comms.serverDelegate = self
     }
     
     // MARK: Supporting functions
@@ -78,8 +82,18 @@ class Dealer {
                     to: self.players.getAvailableMCPeerIDs(),
                     message: Message(type)
                 )
+                self.delegate?.didStopBet()
             }
         }
+    }
+    
+    func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
+        for player in players {
+            if player.id.displayName == playerName {
+                return player
+            }
+        }
+        return nil
     }
     
     // MARK: Game
@@ -118,13 +132,14 @@ class Dealer {
         self.himself.setCards(cards: cards)
         self.delegate?.didReceiveCards(cards: self.himself.cards!)
         
-//        // Bet
-//        self.serverManager.sendMessageTo(
-//            receivers: self.activePlayers.getMCPeersID(),
-//            message: Message(type: .startBet)
-//        )
-//        self.startTimerWithEndMessage(type: .endBet, time: self.time)
-//
+        // Bet
+        self.comms.sendMessage(
+            to: self.players.getAvailableMCPeerIDs(),
+            message: Message(.startBet)
+        )
+        self.delegate?.didStartBet()
+        self.startTimerWithEndMessage(type: .endBet, time: self.time)
+
 //        // Change status to the players whose didn't bet
 //        for player in self.players.list {
 //            if player.bid == 0 {
@@ -194,12 +209,13 @@ class Dealer {
 // MARK: HostManagerDelegate implementation
 extension Dealer: ServerDelegate {
     
-    func didConnectWith(peerID: MCPeerID) {}
-    func didDisconnectWith(peerID: MCPeerID) {}
+    func didDisconnectWith(peerID: MCPeerID) {
+        // TODO: Remove from players the disconnected player
+    }
     
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
-//        let message = Message(data: messageData)
-//        switch message.type {
+        let message = Message(data: messageData)
+        switch message.type {
 //        case .bet:
 //            // Add the bid of the player with peerID
 //            print("bet")
@@ -229,7 +245,7 @@ extension Dealer: ServerDelegate {
 //            } else {
 //                print("Message .fixBet has nil amount")
 //            }
-//        case .chooseCards:
+//        case .cards:
 //            // Change the picked cards of the player with peerID
 //            print("pickCards")
 //            if let cards = message.cards {
@@ -238,10 +254,17 @@ extension Dealer: ServerDelegate {
 //            } else {
 //                print("Message .pickCards has nil cards")
 //            }
-//            
-//        default:
-//            print("MessageType \(message.type) not allowed")
-//        }
+            
+        case .reqPlayer:
+            print("reqPlayer")
+            var user = message.user!
+            let player = self.findPlayer(byName: user.name, from: self.players.elements + [self.himself])!
+            user = player.convertToUser()
+            self.comms.sendMessage(to: [peerID], message: Message(.resPlayer, user: user))
+            
+        default:
+            print("MessageType \(message.type) not allowed")
+        }
     }
     
 }

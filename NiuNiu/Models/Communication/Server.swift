@@ -14,8 +14,6 @@ protocol ServerLobbyDelegate {
 }
 
 protocol ServerDelegate {
-    // TODO: Need those 2 functions?
-    func didConnectWith(peerID: MCPeerID)
     func didDisconnectWith(peerID: MCPeerID)
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
 }

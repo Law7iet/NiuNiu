@@ -109,9 +109,8 @@ extension ClientLobbyVC: ClientLobbyDelegate {
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
                     self.navigationController?.popViewController(animated: true)
                 }))
-                self.present(alert, animated: true)
-                self.comms.hostPeerID = nil
                 self.comms.disconnect()
+                self.present(alert, animated: true)
             }
         } else {
             DispatchQueue.main.async {

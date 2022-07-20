@@ -152,6 +152,10 @@ extension Client: MCSessionDelegate {
         case MCSessionState.notConnected:
             print("Client Not connected: \(peerID.displayName)")
             self.lobbyDelegate?.didDisconnectWith(peerID: peerID)
+            self.clientDelegate?.didDisconnectWith(peerID: peerID)
+            if self.hostPeerID == peerID {
+                self.hostPeerID = nil
+            }
         @unknown default:
             print("Client Unknown state: \(state)")
         }

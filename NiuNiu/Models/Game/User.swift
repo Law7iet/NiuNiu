@@ -36,6 +36,13 @@ class User: Codable {
         self.bid = player.bid
     }
     
+    init(name: String) {
+        self.name = name
+        self.status = .none
+        self.points = 0
+        self.bid = 0
+    }
+    
     func convertToPlayer(withPeerID peerID: MCPeerID) -> Player {
         let player = Player(id: peerID, points: self.points)
         player.setCards(cards: self.cards)
