@@ -13,11 +13,11 @@ enum MessageEnum: Codable {
     case startMatch
     case resCards
     case startBet
-    case endBet
+    case stopBet
     case startFixBid
-    case endFixBid
+    case stopFixBid
     case startCards
-    case endCards
+    case stopCards
     case showCards
     case winner
     case endMatch
@@ -26,8 +26,6 @@ enum MessageEnum: Codable {
     // Game utility
     case timer
     case resPlayer
-
-    // Player status
     case fold
     
     // Connections

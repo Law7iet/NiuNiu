@@ -13,6 +13,10 @@ protocol DealerDelegate {
     func didReceiveCards(cards: Cards)
     func didStartBet()
     func didStopBet()
+    func didStartFixBid(maxBid: Int)
+    func didStopFixBid()
+    
+    func didReceiveTimer(timer: Int)
 }
 
 class Dealer {
@@ -67,24 +71,7 @@ class Dealer {
     }
         
     func startTimerWithEndMessage(type: MessageEnum, time: Int) {
-        var timerCounter = 0
-        // Start a timer
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.comms.sendMessage(
-                to: self.players.getAvailableMCPeerIDs(),
-                message: Message(.timer, amount: time - timerCounter)
-            )
-            timerCounter = timerCounter + 1
-            if timerCounter == time {
-                // Timer ends
-                timer.invalidate()
-                self.comms.sendMessage(
-                    to: self.players.getAvailableMCPeerIDs(),
-                    message: Message(type)
-                )
-                self.delegate?.didStopBet()
-            }
-        }
+        
     }
     
     func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
@@ -96,17 +83,8 @@ class Dealer {
         return nil
     }
     
-    // MARK: Game
-    func playGame() {
-        
-        // Start the game: clients have to initialize theirselves
-        self.comms.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.startGame, amount: self.points)
-        )
-        self.delegate?.didStartGame(player: self.himself)
-        
-        // Start the match: send player's data
+    func playMatch() {
+        // Set Players
         for receiver in self.players.elements {
             for userToSend in self.players.elements + [self.himself] {
                 if receiver != userToSend {
@@ -119,8 +97,7 @@ class Dealer {
             }
         }
         self.delegate?.didStartMatch(users: self.players.getUsers())
-        
-        // Prepare the cards and give 5 cards to each player
+        // Set players' card
         self.makeDeck()
         for player in self.players.elements {
             let cards = self.deck.getCards()
@@ -131,30 +108,80 @@ class Dealer {
         let cards = self.deck.getCards()
         self.himself.setCards(cards: cards)
         self.delegate?.didReceiveCards(cards: self.himself.cards!)
-        
         // Bet
         self.comms.sendMessage(
             to: self.players.getAvailableMCPeerIDs(),
             message: Message(.startBet)
         )
         self.delegate?.didStartBet()
-        self.startTimerWithEndMessage(type: .endBet, time: self.time)
+        
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.comms.sendMessage(
+                to: self.players.getAvailableMCPeerIDs(),
+                message: Message(.timer, amount: self.time - timerCounter)
+            )
+            self.delegate?.didReceiveTimer(timer: self.time - timerCounter)
+            timerCounter = timerCounter + 1
+            if timerCounter == self.time {
+                // Timer ends
+                timer.invalidate()
+                self.comms.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.stopBet)
+                )
+                self.delegate?.didStopBet()
+                
+                // Change status to the players whose didn't bet
+                for player in self.players.elements {
+                    if player.bid == 0 {
+                        player.status = .fold
+                    }
+                }
+                if self.himself.bid == 0 {
+                    self.himself.status = .fold
+                }
+                
+                // FixBid
+                self.comms.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.startFixBid)
+                )
+                self.delegate?.didStartFixBid(maxBid: self.maxBid)
+                timerCounter = 0
+                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                    self.comms.sendMessage(
+                        to: self.players.getAvailableMCPeerIDs(),
+                        message: Message(.timer, amount: self.time - timerCounter)
+                    )
+                    self.delegate?.didReceiveTimer(timer: self.time - timerCounter)
+                    timerCounter = timerCounter + 1
+                    if timerCounter == self.time {
+                        // Timer ends
+                        timer.invalidate()
+                        self.comms.sendMessage(
+                            to: self.players.getAvailableMCPeerIDs(),
+                            message: Message(.stopFixBid)
+                        )
+                        self.delegate?.didStopFixBid()
 
-//        // Change status to the players whose didn't bet
-//        for player in self.players.list {
-//            if player.bid == 0 {
-//                player.status = .fold
-//            }
-//        }
-//        self.activePlayers.findActivePlayers()
-//
-//        // Fix bet
-//        self.serverManager.sendMessageTo(
-//            receivers: self.activePlayers.getMCPeersID(),
-//            message: Message(type: .startFixBid)
-//        )
-//        self.startTimerWithEndMessage(type: .endFixBid, time: self.time)
-//
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: Game
+    func playGame() {
+        self.comms.sendMessage(
+            to: self.players.getAvailableMCPeerIDs(),
+            message: Message(.startGame, amount: self.points)
+        )
+        self.delegate?.didStartGame(player: self.himself)
+        
+        self.playMatch()
+
+
 //        // Change status to the players whose didn't fixbet
 //        for player in self.players.list {
 //            if player.bid == self.maxBid {
@@ -216,22 +243,14 @@ extension Dealer: ServerDelegate {
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
-//        case .bet:
-//            // Add the bid of the player with peerID
-//            print("bet")
-//            if let bid = message.amount {
-//                let player = self.activePlayers.findPlayerWith(peerID: peerID)
-//                if player?.bet(amount: bid) == true {
-//                    self.totalBid = self.totalBid + message.amount!
-//                    if bid > self.maxBid {
-//                        self.maxBid = bid
-//                    }
-//                } else {
-//                    print("Error server shouldn't receive this message: player has not enough points for his bid")
-//                }
-//            } else {
-//                print("Message .bet has nil amount")
-//            }
+        case .bet:
+            // Add the bid of the player with peerID
+            print("bet")
+            let bid = message.user!.bid
+            self.totalBid = self.totalBid + bid
+            if bid > self.maxBid {
+                self.maxBid = bid
+            }
 //        case .fixBid:
 //            // Change the bid of the player with peerID
 //            print("fixBet")

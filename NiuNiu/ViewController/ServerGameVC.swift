@@ -14,20 +14,22 @@ class ServerGameVC: UIViewController {
     var dealer: Dealer!
     var himself: Player!
     
-    var bidValue = 0
+    var maxBid = 0
+    
     var clickedButtons = [false, false, false, false, false]
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     
-    @IBOutlet var playersButton: [UIButton]!
-    @IBOutlet var cardsButton: [UIButton]!
-    @IBOutlet weak var betButton: UIButton!
-    
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var bidLabel: UILabel!
     @IBOutlet weak var bidSlider: UISlider!
+    
+    @IBOutlet var playersButton: [UIButton]!
+    @IBOutlet var cardsButton: [UIButton]!
+    @IBOutlet weak var betButton: UIButton!
+    @IBOutlet weak var foldButton: UIButton!
     
     // MARK: Methods
     override func viewDidLoad() {
@@ -77,7 +79,19 @@ class ServerGameVC: UIViewController {
     }
     
     @IBAction func bet(_ sender: Any) {
-        self.himself.bid = self.bidValue
+        if self.betButton.title(for: UIControl.State.normal) == "Bet" {
+            let bid = Int(self.bidSlider.value)
+            self.himself.bid = bid
+            self.pointsLabel.text = "Points: \(String(self.himself.points - bid)) (\(bid)"
+        } else {
+            self.betButton.isEnabled = false
+            if self.betButton.title(for: UIControl.State.normal) == "Check" {
+                self.pointsLabel.text = "Points: \(String(self.himself.points - maxBid)) (\(maxBid)"
+            }
+            if self.betButton.title(for: UIControl.State.normal) == "All in!" {
+                self.pointsLabel.text = "Points: 0"
+            }
+        }
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -100,30 +114,27 @@ class ServerGameVC: UIViewController {
     }
     
     @IBAction func fold(_ sender: Any) {
-        
+        self.himself.status = .fold
     }
-    
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        let currentValue = Int(sender.value)
-        self.bidValue = currentValue
-        self.bidLabel.text = "Your bid: \(currentValue) points"
-    }
+
 }
 
 extension ServerGameVC: DealerDelegate {
     
     func didStartGame(player: Player) {
-        self.himself = player
         self.statusLabel.text = "Game started!"
+        // Initialize himself
+        self.himself = player
         self.userLabel.text = self.himself.id.displayName
         self.pointsLabel.text = "Points: \(self.himself.points)"
-        self.bidLabel.text = "Your bid: \(self.bidValue) points"
-        self.bidSlider.minimumValue = Float(self.bidValue)
+        self.bidLabel.text = "Bid: \(self.himself.bid) points"
+        self.bidSlider.minimumValue = 0.0
         self.bidSlider.maximumValue = Float(self.himself.points)
     }
     
     func didStartMatch(users: [User]) {
-        // Comunica i dati degli altri giocatori
+        self.statusLabel.text = "Match started!"
+        // Setup the other players
         for index in 0 ..< users.count {
             self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
             self.playersButton[index].isEnabled = true
@@ -131,6 +142,8 @@ extension ServerGameVC: DealerDelegate {
     }
     
     func didReceiveCards(cards: Cards) {
+        self.statusLabel.text = "Cards received!"
+        // Setup cards
         self.himself.setCards(cards: cards)
         for index in 0 ... 4 {
             let image = UIImage(named: cards.elements[index].getName())
@@ -139,13 +152,58 @@ extension ServerGameVC: DealerDelegate {
     }
     
     func didStartBet() {
+        self.statusLabel.text = "Start Bet!"
+        // Enable buttons
         self.bidSlider.isEnabled = true
         self.betButton.isEnabled = true
+        self.foldButton.isEnabled = true
     }
     
     func didStopBet() {
+        self.statusLabel.text = "Stop Bet!"
+        // Block buttons
         self.bidSlider.isEnabled = false
         self.betButton.isEnabled = false
+        self.foldButton.isEnabled = false
+        // Set points
+        self.himself.points = self.himself.points - self.himself.bid
+        self.pointsLabel.text = String(self.himself.points)
+    }
+    
+    func didStartFixBid(maxBid: Int) {
+        self.statusLabel.text = "Start Fix Bid!"
+        // Check if the player is the lead
+        self.maxBid = maxBid
+        if self.himself.bid != maxBid {
+            let diff = maxBid - self.himself.bid
+            if diff > 0 {
+                // Setup bet button and labels
+                self.betButton.setTitle("Check", for: UIControl.State.normal)
+                self.betButton.isEnabled = true
+                self.foldButton.isEnabled = true
+                self.bidLabel.text = self.bidLabel.text! + " (+\(diff)"
+            } else {
+                // The user doens't have enough points
+                // He can "all-in" or "fold"
+                self.betButton.setTitle("All in!", for: UIControl.State.normal)
+                self.betButton.isEnabled = true
+                self.foldButton.isEnabled = true
+            }
+        }
+    }
+    
+    func didStopFixBid() {
+        self.statusLabel.text = "Stop Fix Bid!"
+        // Block buttons
+        self.betButton.isEnabled = false
+        self.foldButton.isEnabled = false
+        // Set points
+        self.himself.points = self.himself.points - self.himself.bid
+        self.pointsLabel.text = String(self.himself.points)
+    }
+    
+    func didReceiveTimer(timer: Int) {
+        self.timerLabel.text = String(timer)
     }
 }
 

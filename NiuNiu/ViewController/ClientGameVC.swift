@@ -56,10 +56,6 @@ class ClientGameVC: UIViewController {
         self.present(alert, animated: true)
     }
     
-//    @IBAction func clickPlayer(_ sender: UIButton) {
-//        let user = User(name: sender.currentTitle!)
-//        self.comms.sendMessageToServer(message: Message(.reqPlayer, user: user))
-//    }
     @IBAction func clickPlayer(_ sender: UIButton) {
         let user = User(name: sender.currentTitle!)
         self.comms.sendMessageToServer(message: Message(.reqPlayer, user: user))
@@ -136,6 +132,7 @@ extension ClientGameVC: ClientDelegate {
             print("startMatch")
             let user = message.user!
             DispatchQueue.main.async {
+                self.statusLabel.text = "Match started!"
                 for index in 0 ..< self.playersButton.count  {
                     let button = self.playersButton[index]
                     if button.isEnabled == false {
@@ -150,8 +147,9 @@ extension ClientGameVC: ClientDelegate {
             let user = message.user!
             let cards = user.cards!
             self.himself.setCards(cards: cards)
-            for index in 0 ..< self.cardsButton.count {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                self.statusLabel.text = "Cards received!"
+                for index in 0 ..< self.cardsButton.count {
                     let image = UIImage(named: cards.elements[index].getName())
                     self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
                 }
@@ -159,22 +157,25 @@ extension ClientGameVC: ClientDelegate {
         case .startBet:
             print("startBet")
             DispatchQueue.main.async {
+                self.statusLabel.text = "Start Bet!"
                 self.betButton.isEnabled = true
                 self.bidSlider.isEnabled = true
             }
-        case .endBet:
+        case .stopBet:
             print("endBet")
             DispatchQueue.main.async {
+                self.statusLabel.text = "Stop Bet!"
                 self.betButton.isEnabled = false
                 self.bidSlider.isEnabled = false
             }
+            
         case .startFixBid:
             print("startFixBet")
-        case .endFixBid:
+        case .stopFixBid:
             print("endFixBet")
         case .startCards:
             print("startPickCards")
-        case .endCards:
+        case .stopCards:
             print("endPickCards")
         case .showCards:
             print("showCards")
@@ -185,7 +186,7 @@ extension ClientGameVC: ClientDelegate {
         case .endGame:
             print("endGame")
         case .resPlayer:
-            print("resPlayerData")
+            print("resPlayer")
             DispatchQueue.main.async {
                 let user = message.user!
                 let message = "Points: \(user.points)\nBid: \(user.bid)"
@@ -197,9 +198,16 @@ extension ClientGameVC: ClientDelegate {
                 alert.addAction(UIAlertAction(title: "Close", style: .default))
                 self.present(alert, animated: true)
             }
+            
+        case .timer:
+            print("timer")
+            DispatchQueue.main.async {
+                let time = message.amount!
+                self.timerLabel.text = String(time)
+            }
         // TODO: check if there're closeConnection or closeLobby
         default:
-            print("???")
+            print("ClientGameVC.didReceiveMessageFrom - message.type == \(message.type)")
         }
     }
     
