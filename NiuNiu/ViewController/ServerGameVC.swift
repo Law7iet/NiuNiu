@@ -51,6 +51,20 @@ class ServerGameVC: UIViewController {
         }
     }
     
+    // MARK: Supporting functions
+    func setTimer(time: Int) {
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.timerLabel.text = String(time - timerCounter)
+            if timerCounter == time {
+                timer.invalidate()
+            } else {
+                timerCounter += 1
+            }
+        }
+        
+    }
+    
     // MARK: Actions
     @IBAction func home(_ sender: Any) {
         let alert = UIAlertController(
@@ -83,9 +97,7 @@ class ServerGameVC: UIViewController {
             preferredStyle: UIAlertController.Style.actionSheet
         )
         alert.addAction(UIAlertAction(title: "Close", style: .default))
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
-        }
+        self.present(alert, animated: true)
     }
     
     @IBAction func bet(_ sender: Any) {
@@ -98,7 +110,8 @@ class ServerGameVC: UIViewController {
             if self.betButton.title(for: UIControl.State.normal) == "Check" {
                 self.pointsLabel.text = "Points: \(String(self.himself.points - maxBid)) (\(maxBid)"
             }
-            if self.betButton.title(for: UIControl.State.normal) == "All in!" {
+            if self.betButton.title(for: UIControl.State.normal) == "All-in" {
+                self.himself.status = .allIn
                 self.pointsLabel.text = "Points: 0"
             }
         }
@@ -130,66 +143,43 @@ class ServerGameVC: UIViewController {
 }
 
 extension ServerGameVC: DealerDelegate {
-
-    func didStartCheck(maxBid: Int) {
-        <#code#>
-    }
-    
-    func didStopCheck() {
-        <#code#>
-    }
-    
-    func didStartCards() {
-        <#code#>
-    }
-    
-    func didStopCards() {
-        <#code#>
-    }
-    
-    func didEndMatch(users: [User]) {
-        <#code#>
-    }
-    
-    
-    func didStartGame(player: Player) {
-        self.statusLabel.text = "Game started!"
-        // Initialize himself
-        self.himself = player
-        self.userLabel.text = self.himself.id.displayName
-        self.pointsLabel.text = "Points: \(self.himself.points)"
-        self.bidLabel.text = "Bid: \(self.himself.bid) points"
-        self.bidSlider.minimumValue = 0.0
-        self.bidSlider.maximumValue = Float(self.himself.points)
-    }
     
     func didStartMatch(users: [User]) {
         self.statusLabel.text = "Match started!"
-        // Setup the other players
-        if
-        for index in 0 ..< users.count {
-            if
-            self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
-            self.playersButton[index].isEnabled = true
+        self.himself = self.dealer.himself
+        var index = 0
+        for user in users {
+            if user.name == self.himself.id.displayName {
+                // Setup himself cards
+                self.himself.cards = user.cards
+                for cardIndex in 0 ... 4 {
+                    let image = UIImage(named: self.himself.cards!.elements[cardIndex].getName())
+                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
+                }
+                // Setup himself labels
+                self.userLabel.text = self.himself.id.displayName
+                self.pointsLabel.text = "Points: \(self.himself.points)"
+                self.bidLabel.text = "Bid: \(self.himself.bid) points"
+                self.bidSlider.minimumValue = 0.0
+                self.bidSlider.maximumValue = Float(self.himself.points)
+            } else {
+                // Setup the other players
+                self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+                self.playersButton[index].isEnabled = true
+                index += 1
+            }
         }
+        
     }
-    
-    func didReceiveCards(cards: Cards) {
-        self.statusLabel.text = "Cards received!"
-        // Setup cards
-        self.himself.setCards(cards: cards)
-        for index in 0 ... 4 {
-            let image = UIImage(named: cards.elements[index].getName())
-            self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
-        }
-    }
-    
+        
     func didStartBet() {
         self.statusLabel.text = "Start Bet!"
         // Enable buttons
         self.bidSlider.isEnabled = true
         self.betButton.isEnabled = true
         self.foldButton.isEnabled = true
+        
+        self.setTimer(time: 30)
     }
     
     func didStopBet() {
@@ -203,7 +193,7 @@ extension ServerGameVC: DealerDelegate {
         self.pointsLabel.text = String(self.himself.points)
     }
     
-    func didStartFixBid(maxBid: Int) {
+    func didStartCheck(maxBid: Int) {
         self.statusLabel.text = "Start Fix Bid!"
         // Check if the player is the lead
         self.maxBid = maxBid
@@ -218,26 +208,41 @@ extension ServerGameVC: DealerDelegate {
             } else {
                 // The user doens't have enough points
                 // He can "all-in" or "fold"
-                self.betButton.setTitle("All in!", for: UIControl.State.normal)
+                self.betButton.setTitle("All-in", for: UIControl.State.normal)
                 self.betButton.isEnabled = true
                 self.foldButton.isEnabled = true
             }
         }
+        
+        self.setTimer(time: 30)
     }
     
-    func didStopFixBid() {
+    func didStopCheck() {
         self.statusLabel.text = "Stop Fix Bid!"
         // Block buttons
         self.betButton.isEnabled = false
         self.foldButton.isEnabled = false
+        if self.betButton.title(for: UIControl.State.normal) == "All-in" {
+            self.himself.status = .allIn
+        }
         // Set points
         self.himself.points = self.himself.points - self.himself.bid
         self.pointsLabel.text = String(self.himself.points)
     }
     
-    func didReceiveTimer(timer: Int) {
-        self.timerLabel.text = String(timer)
+    func didStartCards() {
+        
     }
+    
+    func didStopCards() {
+        
+    }
+    
+    func didEndMatch(users: [User]) {
+        
+    }
+    
+    
 }
 
 

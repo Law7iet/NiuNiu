@@ -101,7 +101,7 @@ class Dealer {
             to: self.players.getAvailableMCPeerIDs(),
             message: Message(.stopCheck)
         )
-        self.delegate?.didStopBet()
+        self.delegate?.didStopCheck()
         
         // Change status to the players whose didn't check
         for player in self.players.elements + [self.himself] {
@@ -120,9 +120,9 @@ class Dealer {
     func stopCards() {
         self.comms.sendMessage(
             to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.stopCheck)
+            message: Message(.stopCards)
         )
-        self.delegate?.didStopBet()
+        self.delegate?.didStopCards()
         
         // Change status to the players whose didn't choose their cards
         for player in self.players.elements + [self.himself] {

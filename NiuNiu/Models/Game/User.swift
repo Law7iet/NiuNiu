@@ -13,7 +13,7 @@ class User: Codable {
     
     // MARK: Properties
     var name: String
-    var status: MessageEnum
+    var status: PlayerEnum
     var points: Int
     var cards: Cards?
     var bid: Int

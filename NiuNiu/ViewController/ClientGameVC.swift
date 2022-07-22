@@ -13,8 +13,10 @@ class ClientGameVC: UIViewController {
     // MARK: Properties
     var comms: Client!
     var himself: Player!
+    var users: [User] = [User]()
     
     var bidValue = 0
+    var maxBid: Int!
     var clickedButtons = [false, false, false, false, false]
     
     @IBOutlet weak var statusLabel: UILabel!
@@ -23,6 +25,7 @@ class ClientGameVC: UIViewController {
     @IBOutlet var playersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
     @IBOutlet weak var betButton: UIButton!
+    @IBOutlet weak var foldButton: UIButton!
     
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
@@ -35,6 +38,29 @@ class ClientGameVC: UIViewController {
         comms.clientDelegate = self
     }
     
+    // MARK: Supporting functions
+    func setTimer(time: Int) {
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.timerLabel.text = String(time - timerCounter)
+            if timerCounter == time {
+                timer.invalidate()
+            } else {
+                timerCounter += 1
+            }
+        }
+        
+    }
+    
+    func findUser(byName name: String) -> User? {
+        for user in self.users {
+            if user.name == name {
+                return user
+            }
+        }
+        return nil
+    }
+
     // MARK: Actions
     @IBAction func home(_ sender: Any) {
         let alert = UIAlertController(
@@ -57,13 +83,38 @@ class ClientGameVC: UIViewController {
     }
     
     @IBAction func clickPlayer(_ sender: UIButton) {
-        let user = User(name: sender.currentTitle!)
-        self.comms.sendMessageToServer(message: Message(.reqPlayer, user: user))
+        // Find the correct user given the 
+        let user = self.findUser(byName: sender.title(for: UIControl.State.normal)!)!
+        let message = "Points: \(user.points)"
+        let alert = UIAlertController(
+            title: user.name,
+            message: message,
+            preferredStyle: .actionSheet
+        )
+        alert.addAction(UIAlertAction(title: "Close", style: .default))
+        self.present(alert, animated: true)
     }
     
     @IBAction func bet(_ sender: Any) {
-        self.himself.bid = self.bidValue
-        self.comms.sendMessageToServer(message: Message(.bet, user: self.himself.convertToUser()))
+        if self.betButton.title(for: UIControl.State.normal) == "Bet" {
+            let bid = Int(self.bidSlider.value)
+            self.pointsLabel.text = "Points: \(String(self.himself.points - bid)) (\(bid)"
+            self.himself.bid = bid
+            self.comms.sendMessageToServer(message: Message(.bet, users: [self.himself.convertToUser()]))
+        } else {
+            self.betButton.isEnabled = false
+            if self.betButton.title(for: UIControl.State.normal) == "Check" {
+                self.pointsLabel.text = "Points: \(String(self.himself.points - self.maxBid)) (\(self.maxBid!))"
+                self.himself.bid = self.maxBid
+                self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
+            }
+            if self.betButton.title(for: UIControl.State.normal) == "All-in" {
+                self.pointsLabel.text = "Points: 0"
+                self.himself.bid = self.himself.points
+                self.himself.status = .allIn
+                self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
+            }
+        }
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -115,95 +166,90 @@ extension ClientGameVC: ClientDelegate {
     func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
-        case .startGame:
-            print("startGame")
-            let points = message.amount!
-            self.himself = Player(id: self.comms.himselfPeerID, points: points)
-            DispatchQueue.main.async {
-                self.statusLabel.text = "Game started!"
-                self.userLabel.text = self.himself.id.displayName
-                self.pointsLabel.text = "Points: \(self.himself.points)"
-                self.bidLabel.text = "Your bid: \(self.bidValue) points"
-                self.bidSlider.minimumValue = Float(self.bidValue)
-                self.bidSlider.maximumValue = Float(self.himself.points)
-            }
         case .startMatch:
-            print("startMatch")
-            let user = message.user!
             DispatchQueue.main.async {
                 self.statusLabel.text = "Match started!"
-                for index in 0 ..< self.playersButton.count  {
-                    let button = self.playersButton[index]
-                    if button.isEnabled == false {
-                        button.isEnabled = true
-                        button.setTitle(user.name, for: UIControl.State.normal)
-                        break
+                let users = message.users!
+                var index = 0
+                for user in users {
+                    if user.name == self.comms.himselfPeerID.displayName {
+                        // Setup himself cards
+                        self.himself = user.convertToPlayer(withPeerID: self.comms.himselfPeerID)
+                        for cardIndex in 0 ... 4 {
+                            let image = UIImage(named: self.himself.cards!.elements[cardIndex].getName())
+                            self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
+                        }
+                        // Setup himself labels
+                        self.userLabel.text = self.himself.id.displayName
+                        self.pointsLabel.text = "Points: \(self.himself.points)"
+                        self.bidLabel.text = "Bid: \(self.himself.bid) points"
+                        self.bidSlider.minimumValue = 0.0
+                        self.bidSlider.maximumValue = Float(self.himself.points)
+                    } else {
+                        // Setup the other players
+                        self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+                        self.playersButton[index].isEnabled = true
+                        index += 1
                     }
                 }
             }
-        case .resCards:
-            print("ReceiveCards")
-            let user = message.user!
-            let cards = user.cards!
-            self.himself.setCards(cards: cards)
-            DispatchQueue.main.async {
-                self.statusLabel.text = "Cards received!"
-                for index in 0 ..< self.cardsButton.count {
-                    let image = UIImage(named: cards.elements[index].getName())
-                    self.cardsButton[index].setBackgroundImage(image, for: UIControl.State.normal)
-                }
-            }
         case .startBet:
-            print("startBet")
             DispatchQueue.main.async {
                 self.statusLabel.text = "Start Bet!"
-                self.betButton.isEnabled = true
                 self.bidSlider.isEnabled = true
+                self.betButton.isEnabled = true
+                self.foldButton.isEnabled = true
+                self.setTimer(time: 30)
             }
         case .stopBet:
-            print("endBet")
             DispatchQueue.main.async {
                 self.statusLabel.text = "Stop Bet!"
-                self.betButton.isEnabled = false
                 self.bidSlider.isEnabled = false
+                self.betButton.isEnabled = false
+                self.foldButton.isEnabled = false
+                // Set points
+                self.himself.points = self.himself.points - self.himself.bid
+                self.pointsLabel.text = String(self.himself.points)
             }
             
         case .startCheck:
-            print("startFixBet")
+            DispatchQueue.main.async {
+                self.maxBid = message.amount!
+                if self.himself.bid != self.maxBid {
+                    let diff = self.maxBid - self.himself.bid
+                    if diff > 0 {
+                        // Setup bet button and labels
+                        self.betButton.setTitle("Check", for: UIControl.State.normal)
+                        self.betButton.isEnabled = true
+                        self.foldButton.isEnabled = true
+                        self.bidLabel.text = self.bidLabel.text! + " (+\(diff)"
+                    } else {
+                        // The user doens't have enough points
+                        // He can "all-in" or "fold"
+                        self.betButton.setTitle("All-in", for: UIControl.State.normal)
+                        self.betButton.isEnabled = true
+                        self.foldButton.isEnabled = true
+                    }
+                }
+                self.setTimer(time: 30)
+            }
         case .stopCheck:
-            print("endFixBet")
+            self.betButton.isEnabled = false
+            self.foldButton.isEnabled = false
+            
+            // Set points
+            self.himself.points = self.himself.points - self.himself.bid
+            self.pointsLabel.text = String(self.himself.points)
+
         case .startCards:
-            print("startPickCards")
+            print("startCards")
         case .stopCards:
-            print("endPickCards")
-        case .showCards:
-            print("showCards")
-        case .winner:
-            print("declareWinner")
+            print("endCards")
         case .endMatch:
             print("endMatch")
         case .endGame:
             print("endGame")
-        case .resPlayer:
-            print("resPlayer")
-            DispatchQueue.main.async {
-                let user = message.user!
-                let message = "Points: \(user.points)\nBid: \(user.bid)"
-                let alert = UIAlertController(
-                    title: user.name,
-                    message: message,
-                    preferredStyle: .actionSheet
-                )
-                alert.addAction(UIAlertAction(title: "Close", style: .default))
-                self.present(alert, animated: true)
-            }
-            
-        case .timer:
-            print("timer")
-            DispatchQueue.main.async {
-                let time = message.amount!
-                self.timerLabel.text = String(time)
-            }
+        
         // TODO: check if there're closeConnection or closeLobby
         default:
             print("ClientGameVC.didReceiveMessageFrom - message.type == \(message.type)")
