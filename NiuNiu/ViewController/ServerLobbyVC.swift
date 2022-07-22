@@ -23,6 +23,8 @@ class ServerLobbyVC: UIViewController {
         super.viewDidLoad()
         self.setupTableView()
         self.comms.lobbyDelegate = self
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

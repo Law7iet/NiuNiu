@@ -29,6 +29,7 @@
 		6A64740928797F1B000D6EC0 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A64740828797F1B000D6EC0 /* Server.swift */; };
 		6A64740B28797F23000D6EC0 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A64740A28797F23000D6EC0 /* Client.swift */; };
 		6A6AE91D286DEC460067EE2D /* ServerLobbyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6AE91C286DEC460067EE2D /* ServerLobbyVC.swift */; };
+		6A6EAE37288B012700A89421 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6EAE36288B012700A89421 /* Utils.swift */; };
 		6A9E2DEC2874862600A0CD0F /* ServerGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E2DEB2874862600A0CD0F /* ServerGameVC.swift */; };
 		6A9E2DEE2874876200A0CD0F /* ClientGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E2DED2874876200A0CD0F /* ClientGameVC.swift */; };
 		6AA2360A2876AB450000F47E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA236092876AB450000F47E /* Message.swift */; };
@@ -85,6 +86,7 @@
 		6A64740828797F1B000D6EC0 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		6A64740A28797F23000D6EC0 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		6A6AE91C286DEC460067EE2D /* ServerLobbyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLobbyVC.swift; sourceTree = "<group>"; };
+		6A6EAE36288B012700A89421 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		6A9E2DEB2874862600A0CD0F /* ServerGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerGameVC.swift; sourceTree = "<group>"; };
 		6A9E2DED2874876200A0CD0F /* ClientGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientGameVC.swift; sourceTree = "<group>"; };
 		6AA236092876AB450000F47E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				6A305901284E2FB100913DBD /* AppDelegate.swift */,
 				6A305903284E2FB100913DBD /* SceneDelegate.swift */,
+				6A6EAE36288B012700A89421 /* Utils.swift */,
 				6A9E2DE8287475A200A0CD0F /* Models */,
 				6A3B3B2E286F150400E43530 /* ViewController */,
 				6A305907284E2FB100913DBD /* Main.storyboard */,
@@ -362,6 +365,7 @@
 				6A4D024A287DC94E003B2D7B /* Dealer.swift in Sources */,
 				6A6AE91D286DEC460067EE2D /* ServerLobbyVC.swift in Sources */,
 				6A305906284E2FB100913DBD /* MainVC.swift in Sources */,
+				6A6EAE37288B012700A89421 /* Utils.swift in Sources */,
 				6A364733288A92A4001EF1D5 /* PlayerEnum.swift in Sources */,
 				6A305902284E2FB100913DBD /* AppDelegate.swift in Sources */,
 				6A3B3B2D286F14F900E43530 /* ClientSeacherVC.swift in Sources */,

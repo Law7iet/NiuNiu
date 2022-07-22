@@ -46,8 +46,8 @@ class Dealer {
     // MARK: Methods
     init(comms: Server, time: Int?, points: Int?) {
         // Game Settings
-        self.time = time ?? 30
-        self.points = points ?? 100
+        self.time = time ?? Utils.timer30
+        self.points = points ?? Utils.points100
         
         // Data Structures
         self.comms = comms

@@ -5,7 +5,6 @@
 //  Created by Han Chu on 05/07/22.
 //
 
-import UIKit
 import MultipeerConnectivity
 
 class ClientGameVC: UIViewController {
@@ -16,27 +15,19 @@ class ClientGameVC: UIViewController {
     var users: [User] = [User]()
     
     var bidValue = 0
-    var maxBid: Int!
+    var maxBid = 0
     var clickedButtons = [false, false, false, false, false]
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
+    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var pointsLabel: UILabel!
     
     @IBOutlet var playersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
-    @IBOutlet weak var betButton: UIButton!
     @IBOutlet weak var foldButton: UIButton!
-    
-    @IBOutlet weak var userLabel: UILabel!
-    @IBOutlet weak var pointsLabel: UILabel!
-    @IBOutlet weak var bidLabel: UILabel!
-    @IBOutlet weak var bidSlider: UISlider!
-    
-    // MARK: Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        comms.clientDelegate = self
-    }
+    @IBOutlet weak var betButton: UIButton!
+    @IBOutlet weak var betSlider: UISlider!
     
     // MARK: Supporting functions
     func setTimer(time: Int) {
@@ -59,6 +50,15 @@ class ClientGameVC: UIViewController {
             }
         }
         return nil
+    }
+    
+    // MARK: Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        comms.clientDelegate = self
+        
+        self.statusLabel.text = "The game will start soon"
+        self.setTimer(time: Utils.timer5)
     }
 
     // MARK: Actions
@@ -96,15 +96,15 @@ class ClientGameVC: UIViewController {
     }
     
     @IBAction func bet(_ sender: Any) {
-        if self.betButton.title(for: UIControl.State.normal) == "Bet" {
-            let bid = Int(self.bidSlider.value)
-            self.pointsLabel.text = "Points: \(String(self.himself.points - bid)) (\(bid)"
+        if self.betButton.title(for: UIControl.State.normal)!.hasPrefix("Bet") {
+            let bid = Int(self.betSlider.value)
+            self.pointsLabel.text = "Points: \(String(self.himself.points - bid)) (\(bid))"
             self.himself.bid = bid
             self.comms.sendMessageToServer(message: Message(.bet, users: [self.himself.convertToUser()]))
         } else {
             self.betButton.isEnabled = false
             if self.betButton.title(for: UIControl.State.normal) == "Check" {
-                self.pointsLabel.text = "Points: \(String(self.himself.points - self.maxBid)) (\(self.maxBid!))"
+                self.pointsLabel.text = "Points: \(String(self.himself.points - self.maxBid)) (\(self.maxBid))"
                 self.himself.bid = self.maxBid
                 self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
             }
@@ -122,8 +122,8 @@ class ClientGameVC: UIViewController {
         if let index = self.cardsButton.firstIndex(of: sender) {
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
-                sender.layer.cornerRadius = 5
-                sender.layer.borderWidth = 3
+                sender.layer.cornerRadius = Utils.cornerRadius
+                sender.layer.borderWidth = Utils.borderWidth
                 sender.layer.borderColor = UIColor.red.cgColor
             } else {
                 self.clickedButtons[index] = false
@@ -143,8 +143,12 @@ class ClientGameVC: UIViewController {
     @IBAction func changeSliderValue(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         self.bidValue = currentValue
-        self.bidLabel.text = "Your bid: \(currentValue) points"
+        let buttonTitle = self.betButton.title(for: UIControl.State.normal)
+        if buttonTitle != "Check" || buttonTitle != "All-in" {
+            self.betButton.setTitle("Bet (\(currentValue))", for: UIControl.State.normal)
+        }
     }
+    
 }
 
 // MARK: LobbyManagerDelegate implementation
@@ -169,9 +173,9 @@ extension ClientGameVC: ClientDelegate {
         case .startMatch:
             DispatchQueue.main.async {
                 self.statusLabel.text = "Match started!"
-                let users = message.users!
+                self.users = message.users!
                 var index = 0
-                for user in users {
+                for user in self.users {
                     if user.name == self.comms.himselfPeerID.displayName {
                         // Setup himself cards
                         self.himself = user.convertToPlayer(withPeerID: self.comms.himselfPeerID)
@@ -182,12 +186,11 @@ extension ClientGameVC: ClientDelegate {
                         // Setup himself labels
                         self.userLabel.text = self.himself.id.displayName
                         self.pointsLabel.text = "Points: \(self.himself.points)"
-                        self.bidLabel.text = "Bid: \(self.himself.bid) points"
-                        self.bidSlider.minimumValue = 0.0
-                        self.bidSlider.maximumValue = Float(self.himself.points)
+                        self.betSlider.minimumValue = 0.0
+                        self.betSlider.maximumValue = Float(self.himself.points)
                     } else {
                         // Setup the other players
-                        self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
+                        self.playersButton[index].setTitle(self.users[index].name, for: UIControl.State.normal)
                         self.playersButton[index].isEnabled = true
                         index += 1
                     }
@@ -196,7 +199,7 @@ extension ClientGameVC: ClientDelegate {
         case .startBet:
             DispatchQueue.main.async {
                 self.statusLabel.text = "Start Bet!"
-                self.bidSlider.isEnabled = true
+                self.betSlider.isEnabled = true
                 self.betButton.isEnabled = true
                 self.foldButton.isEnabled = true
                 self.setTimer(time: 30)
@@ -204,7 +207,7 @@ extension ClientGameVC: ClientDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.statusLabel.text = "Stop Bet!"
-                self.bidSlider.isEnabled = false
+                self.betSlider.isEnabled = false
                 self.betButton.isEnabled = false
                 self.foldButton.isEnabled = false
                 // Set points
@@ -214,15 +217,15 @@ extension ClientGameVC: ClientDelegate {
             
         case .startCheck:
             DispatchQueue.main.async {
+                self.statusLabel.text = "Start Check!"
                 self.maxBid = message.amount!
                 if self.himself.bid != self.maxBid {
                     let diff = self.maxBid - self.himself.bid
                     if diff > 0 {
                         // Setup bet button and labels
-                        self.betButton.setTitle("Check", for: UIControl.State.normal)
+                        self.betButton.setTitle("Check (+\(diff))", for: UIControl.State.normal)
                         self.betButton.isEnabled = true
                         self.foldButton.isEnabled = true
-                        self.bidLabel.text = self.bidLabel.text! + " (+\(diff)"
                     } else {
                         // The user doens't have enough points
                         // He can "all-in" or "fold"
