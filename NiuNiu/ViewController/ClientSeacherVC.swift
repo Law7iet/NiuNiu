@@ -99,6 +99,7 @@ extension ClientSeacherVC: UITableViewDelegate {
                 // Join lobby
                 self.comms.hostPeerID = user
                 self.comms.connect(to: user)
+                self.comms.stopBrowsing()
                 self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))

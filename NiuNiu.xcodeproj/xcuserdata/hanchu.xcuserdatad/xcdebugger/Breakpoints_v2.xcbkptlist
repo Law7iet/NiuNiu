@@ -14,8 +14,8 @@
             filePath = "NiuNiu/ViewController/ClientGameVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
             landmarkName = "didReceiveMessageFrom(sender:messageData:)"
             landmarkType = "7">
          </BreakpointContent>

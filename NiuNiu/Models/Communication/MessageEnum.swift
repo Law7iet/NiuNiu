@@ -11,22 +11,17 @@ enum MessageEnum: Codable {
     // Game status
     case startGame
     case startMatch
-    case resCards
     case startBet
     case stopBet
-    case startFixBid
-    case stopFixBid
+    case startCheck
+    case stopCheck
     case startCards
     case stopCards
-    case showCards
-    case winner
     case endMatch
     case endGame
-    
+
     // Game utility
     case timer
-    case resPlayer
-    case fold
     
     // Connections
     case closeLobby
@@ -35,9 +30,9 @@ enum MessageEnum: Codable {
     // MARK: Send from client
     // Game actions
     case bet
-    case fixBid
+    case check
     case cards
-    case reqPlayer
+    case fold
     
     // MARK: Other
     case none

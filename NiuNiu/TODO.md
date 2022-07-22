@@ -9,3 +9,8 @@ DONE    - L'host notifica al guest se viene kickato
 
 TODO    - Il rank delle carte J, Q, K devono avere valore 10
 TODO    - Gestione del player che è anche host
+
+
+MessageEnum:
+
+startGame, player initial points

@@ -15,7 +15,7 @@ protocol ServerLobbyDelegate {
 
 protocol ServerDelegate {
     func didDisconnectWith(peerID: MCPeerID)
-    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
+    func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 
 
@@ -107,7 +107,7 @@ extension Server: MCSessionDelegate {
     
     // Receive data
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        self.serverDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+        self.serverDelegate?.didReceiveMessage(from: peerID, messageData: data)
     }
     
     // Not used

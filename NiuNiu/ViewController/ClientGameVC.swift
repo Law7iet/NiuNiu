@@ -88,13 +88,12 @@ class ClientGameVC: UIViewController {
     @IBAction func fold(_ sender: Any) {
     
     }
-    
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
+
+    @IBAction func changeSliderValue(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         self.bidValue = currentValue
         self.bidLabel.text = "Your bid: \(currentValue) points"
     }
-
 }
 
 // MARK: LobbyManagerDelegate implementation
@@ -169,9 +168,9 @@ extension ClientGameVC: ClientDelegate {
                 self.bidSlider.isEnabled = false
             }
             
-        case .startFixBid:
+        case .startCheck:
             print("startFixBet")
-        case .stopFixBid:
+        case .stopCheck:
             print("endFixBet")
         case .startCards:
             print("startPickCards")

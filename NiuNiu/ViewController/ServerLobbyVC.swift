@@ -54,7 +54,7 @@ class ServerLobbyVC: UIViewController {
     // MARK: Actions
     @IBAction func playGame(_ segue: UIStoryboardSegue) {
         // Notify the guests
-        self.comms.sendMessage(to: self.comms.connectedPeerIDs, message: Message(.startGame))
+        self.comms.sendMessage(to: self.comms.connectedPeerIDs, message: Message(.startGame, amount: 100))
         // Close adversiting
         self.comms.stopAdvertising()
         // Start the game

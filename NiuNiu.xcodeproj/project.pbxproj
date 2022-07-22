@@ -22,6 +22,7 @@
 		6A305919284E2FB400913DBD /* NiuNiuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305918284E2FB400913DBD /* NiuNiuTests.swift */; };
 		6A305923284E2FB400913DBD /* NiuNiuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305922284E2FB400913DBD /* NiuNiuUITests.swift */; };
 		6A305925284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305924284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift */; };
+		6A364733288A92A4001EF1D5 /* PlayerEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A364732288A92A4001EF1D5 /* PlayerEnum.swift */; };
 		6A3B3B2D286F14F900E43530 /* ClientSeacherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3B3B2C286F14F900E43530 /* ClientSeacherVC.swift */; };
 		6A4D0240287D6E14003B2D7B /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4D023F287D6E14003B2D7B /* Deck.swift */; };
 		6A4D024A287DC94E003B2D7B /* Dealer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4D0249287DC94E003B2D7B /* Dealer.swift */; };
@@ -77,6 +78,7 @@
 		6A305922284E2FB400913DBD /* NiuNiuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiuNiuUITests.swift; sourceTree = "<group>"; };
 		6A305924284E2FB400913DBD /* NiuNiuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiuNiuUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6A305931284E2FE500913DBD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6A364732288A92A4001EF1D5 /* PlayerEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerEnum.swift; sourceTree = "<group>"; };
 		6A3B3B2C286F14F900E43530 /* ClientSeacherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSeacherVC.swift; sourceTree = "<group>"; };
 		6A4D023F287D6E14003B2D7B /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		6A4D0249287DC94E003B2D7B /* Dealer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dealer.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				6AA2360F2876ABF10000F47E /* SuitEnum.swift */,
 				6AA2360B2876ABC80000F47E /* Card.swift */,
 				6A1953492883256E00BF2A31 /* Cards.swift */,
+				6A364732288A92A4001EF1D5 /* PlayerEnum.swift */,
 				6A1953032882A1B100BF2A31 /* Player.swift */,
 				6A19534728831CCA00BF2A31 /* Players.swift */,
 				6ABCA88928853D09004D5BF5 /* User.swift */,
@@ -359,6 +362,7 @@
 				6A4D024A287DC94E003B2D7B /* Dealer.swift in Sources */,
 				6A6AE91D286DEC460067EE2D /* ServerLobbyVC.swift in Sources */,
 				6A305906284E2FB100913DBD /* MainVC.swift in Sources */,
+				6A364733288A92A4001EF1D5 /* PlayerEnum.swift in Sources */,
 				6A305902284E2FB100913DBD /* AppDelegate.swift in Sources */,
 				6A3B3B2D286F14F900E43530 /* ClientSeacherVC.swift in Sources */,
 				6AA2360E2876ABE10000F47E /* RankEnum.swift in Sources */,

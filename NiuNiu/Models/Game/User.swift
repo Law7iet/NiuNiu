@@ -26,6 +26,7 @@ class User: Codable {
             }
         }
     }
+    var isWinner: Bool
     
     // MARK: Methods
     init(player: Player) {
@@ -34,6 +35,7 @@ class User: Codable {
         self.cards = player.cards
         self.points = player.points
         self.bid = player.bid
+        self.isWinner = player.isWinner
     }
     
     init(name: String) {
@@ -41,6 +43,7 @@ class User: Codable {
         self.status = .none
         self.points = 0
         self.bid = 0
+        self.isWinner = false
     }
     
     func convertToPlayer(withPeerID peerID: MCPeerID) -> Player {
@@ -48,6 +51,7 @@ class User: Codable {
         player.setCards(cards: self.cards)
         player.bid = self.bid
         player.status = self.status
+        player.isWinner = self.isWinner
         return player
     }
     

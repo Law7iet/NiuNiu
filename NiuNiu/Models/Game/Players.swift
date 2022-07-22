@@ -44,14 +44,14 @@ class Players {
         return userList
     }
     
-    func findPlayer(byMCPeerID peerID: MCPeerID) -> Player? {
-        for player in self.elements {
-            if player.id == peerID {
-                return player
-            }
-        }
-        return nil
-    }
+//    func findPlayer(byMCPeerID peerID: MCPeerID) -> Player? {
+//        for player in self.elements {
+//            if player.id == peerID {
+//                return player
+//            }
+//        }
+//        return nil
+//    }
     
     func findPlayer(byName playerName: String) -> Player? {
         for player in self.elements {

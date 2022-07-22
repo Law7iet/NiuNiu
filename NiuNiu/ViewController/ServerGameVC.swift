@@ -38,7 +38,17 @@ class ServerGameVC: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.dealer.playGame()
+        self.statusLabel.text = "The game will start soon"
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            if timerCounter == 10 {
+                // Timer ends
+                timer.invalidate()
+                self.dealer.play()
+            }
+            self.timerLabel.text = String(10 - timerCounter)
+            timerCounter = timerCounter + 1
+        }
     }
     
     // MARK: Actions
@@ -120,6 +130,27 @@ class ServerGameVC: UIViewController {
 }
 
 extension ServerGameVC: DealerDelegate {
+
+    func didStartCheck(maxBid: Int) {
+        <#code#>
+    }
+    
+    func didStopCheck() {
+        <#code#>
+    }
+    
+    func didStartCards() {
+        <#code#>
+    }
+    
+    func didStopCards() {
+        <#code#>
+    }
+    
+    func didEndMatch(users: [User]) {
+        <#code#>
+    }
+    
     
     func didStartGame(player: Player) {
         self.statusLabel.text = "Game started!"
@@ -135,7 +166,9 @@ extension ServerGameVC: DealerDelegate {
     func didStartMatch(users: [User]) {
         self.statusLabel.text = "Match started!"
         // Setup the other players
+        if
         for index in 0 ..< users.count {
+            if
             self.playersButton[index].setTitle(users[index].name, for: UIControl.State.normal)
             self.playersButton[index].isEnabled = true
         }

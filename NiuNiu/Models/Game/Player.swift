@@ -11,7 +11,7 @@ class Player: Comparable {
     
     // MARK: Properties
     var id: MCPeerID!
-    var status: MessageEnum
+    var status: PlayerEnum
     var points: Int
     var cards: Cards?
     var bid: Int
@@ -24,6 +24,7 @@ class Player: Comparable {
             }
         }
     }
+    var isWinner: Bool
     
     // MARK: Methods
     init(id: MCPeerID, points: Int?) {
@@ -31,6 +32,7 @@ class Player: Comparable {
         self.status = .none
         self.bid = 0
         self.points = points ?? 100
+        self.isWinner = false
     }
     
     func setCards(cards: [Card]) {

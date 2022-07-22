@@ -123,11 +123,11 @@ extension ClientLobbyVC: ClientLobbyDelegate {
         let message = Message(data: messageData)
         switch message.type {
         case .closeSession:
+            let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+                self.navigationController?.popViewController(animated: true)
+            }))
             DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
-                    self.navigationController?.popViewController(animated: true)
-                }))
                 self.present(alert, animated: true)
                 self.comms.disconnect()
             }
