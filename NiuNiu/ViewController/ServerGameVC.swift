@@ -96,19 +96,19 @@ class ServerGameVC: UIViewController {
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
-        if let index = self.cardsButton.firstIndex(of: sender) {
-            self.himself.cards!.pickCardAt(index: index)
-            if self.clickedButtons[index] == false {
-                self.clickedButtons[index] = true
-                sender.layer.cornerRadius = 5
-                sender.layer.borderWidth = 3
-                sender.layer.borderColor = UIColor.red.cgColor
-            } else {
-                self.clickedButtons[index] = false
-                sender.layer.borderWidth = 0
-            }
-        }
         if self.himself.status == .cards {
+            if let index = self.cardsButton.firstIndex(of: sender) {
+                self.himself.cards!.pickCardAt(index: index)
+                if self.clickedButtons[index] == false {
+                    self.clickedButtons[index] = true
+                    sender.layer.cornerRadius = 5
+                    sender.layer.borderWidth = 3
+                    sender.layer.borderColor = UIColor.red.cgColor
+                } else {
+                    self.clickedButtons[index] = false
+                    sender.layer.borderWidth = 0
+                }
+            }
             if self.himself.cards!.numberOfPickedCards == 1 || self.himself.cards!.numberOfPickedCards == 3 {
                 self.pickButton.isEnabled = true
             } else {
@@ -123,6 +123,14 @@ class ServerGameVC: UIViewController {
     }
 
     @IBAction func fold(_ sender: Any) {
+        self.foldButton.isEnabled = false
+        self.betButton.isEnabled = false
+        self.betSlider.isEnabled = false
+        // TODO: Turnoff pickCards button
+        for btn in self.cardsButton {
+            btn.isEnabled = false
+        }
+        self.statusLabel.text = "Fold"
         self.himself.status = .fold
     }
 
@@ -136,11 +144,12 @@ class ServerGameVC: UIViewController {
         case .check:
             let diff = self.maxBid - self.himself.bid
             self.pointsLabel.text = "Points: \(String(self.himself.points - diff)) (\(self.maxBid))"
-            self.himself.bid = self.maxBid
+            self.himself.bid = diff
             self.himself.points = self.himself.points - diff
         case .allIn:
+            let diff = self.maxBid - self.himself.points
             self.pointsLabel.text = "Points: 0"
-            self.himself.bid = self.himself.points
+            self.himself.bid = diff
             self.himself.points = 0
         default:
             return
@@ -190,63 +199,73 @@ extension ServerGameVC: DealerDelegate {
     }
         
     func didStartBet() {
-        self.himself.status = .bet
-        self.statusLabel.text = "Start Bet!"
-        self.betSlider.isEnabled = true
-        self.betButton.isEnabled = true
-        self.foldButton.isEnabled = true
-        self.setTimer(time: Utils.timerLong)
+        if self.himself.status != .fold {
+            self.himself.status = .bet
+            self.statusLabel.text = "Start Bet!"
+            self.betSlider.isEnabled = true
+            self.betButton.isEnabled = true
+            self.foldButton.isEnabled = true
+            self.setTimer(time: Utils.timerLong)
+        }
     }
     
     func didStopBet() {
-        self.himself.status = .none
-        self.statusLabel.text = "Stop Bet!"
-        self.betSlider.isEnabled = false
-        self.betButton.isEnabled = false
-        self.foldButton.isEnabled = false
+        if self.himself.status != .fold {
+            self.himself.status = .none
+            self.statusLabel.text = "Stop Bet!"
+            self.betSlider.isEnabled = false
+            self.betButton.isEnabled = false
+            self.foldButton.isEnabled = false
+        }
     }
     
     func didStartCheck(maxBid: Int) {
-        self.statusLabel.text = "Start Check!"
-        self.maxBid = maxBid
-        if self.himself.bid != maxBid {
-            let diff = maxBid - self.himself.bid
-            if diff > 0 {
-                // Setup bet button and labels
-                self.himself.status = .check
-                self.betButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
-                self.betButton.isEnabled = true
-                self.foldButton.isEnabled = true
-            } else if diff < 0 {
-                // The user doens't have enough points
-                self.himself.status = .allIn
-                self.betButton.setTitle("All-in", for: UIControl.State.normal)
-                self.betButton.isEnabled = true
-                self.foldButton.isEnabled = true
+        if self.himself.status != .fold {
+            self.statusLabel.text = "Start Check!"
+            self.maxBid = maxBid
+            if self.himself.bid != maxBid {
+                let diff = maxBid - self.himself.bid
+                if diff > 0 {
+                    // Setup bet button and labels
+                    self.himself.status = .check
+                    self.betButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
+                    self.betButton.isEnabled = true
+                    self.foldButton.isEnabled = true
+                } else if diff < 0 {
+                    // The user doens't have enough points
+                    self.himself.status = .allIn
+                    self.betButton.setTitle("All-in", for: UIControl.State.normal)
+                    self.betButton.isEnabled = true
+                    self.foldButton.isEnabled = true
+                }
             }
+            self.setTimer(time: Utils.timerLong)
         }
-        self.setTimer(time: Utils.timerLong)
     }
     
     func didStopCheck() {
-        self.himself.status = .none
-        self.statusLabel.text = "Stop Check!"
-        self.betButton.isEnabled = false
-        self.foldButton.isEnabled = false
+        if self.himself.status != .fold {
+            self.himself.status = .none
+            self.statusLabel.text = "Stop Check!"
+            self.betButton.isEnabled = false
+            self.foldButton.isEnabled = false
+        }
     }
     
     func didStartCards() {
-        self.statusLabel.text = "Start pick cards!"
-        self.himself.status = .cards
-        self.setTimer(time: Utils.timerLong)
+        if self.himself.status != .fold {
+            self.statusLabel.text = "Start pick cards!"
+            self.himself.status = .cards
+            self.setTimer(time: Utils.timerLong)
+        }
     }
     
     func didStopCards() {
-        
+        self.statusLabel.text = "Stop cards!"
     }
     
-    func didEndMatch(users: [User]) {
-        
+    func didEndMatch(amount: Int, users: [User]) {
+        self.statusLabel.text = "\(users[0].name) win \(amount) points!"
     }
     
     

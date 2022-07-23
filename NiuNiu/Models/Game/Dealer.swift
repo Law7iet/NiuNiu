@@ -15,7 +15,7 @@ protocol DealerDelegate {
     func didStopCheck()
     func didStartCards()
     func didStopCards()
-    func didEndMatch(users: [User])
+    func didEndMatch(amount: Int, users: [User])
 }
 
 class Dealer {
@@ -98,6 +98,7 @@ class Dealer {
                 self.totalBid += player.bid
             }
         }
+        print("totalBid: \(self.totalBid)")
     }
     
     func stopCheck() {
@@ -109,16 +110,18 @@ class Dealer {
         
         // Change status to the players whose didn't check
         for player in self.players.elements + [self.himself] {
-            if player.bid != maxBid {
-                if player.status != .allIn {
-                    player.status = .fold
+            if player.bid != self.maxBid {
+                if player.bid == 0 {
+                    if player.status != .allIn{
+                        player.status = .fold
+                    }
                 } else {
                     self.totalBid += player.bid
                 }
-            } else {
-                self.totalBid += player.bid
             }
         }
+        
+        print("totalBid: \(self.totalBid)")
     }
     
     func stopCards() {
@@ -154,16 +157,16 @@ class Dealer {
         }
         winner!.isWinner = true
         winner!.points = points + self.totalBid
-        // Check if in self.players.elements there's a winner
+
         var users = [User]()
         for player in self.players.elements + [self.himself] {
             users.append(player.convertToUser())
         }
         self.comms.sendMessage(
             to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.endMatch, users: users)
+            message: Message(.endMatch, amount: self.totalBid, users: users)
         )
-        self.delegate?.didEndMatch(users: users)
+        self.delegate?.didEndMatch(amount: self.totalBid, users: users)
     }
     
     func play() {
@@ -219,6 +222,13 @@ class Dealer {
                         timer.invalidate()
                         self.stopCheck()
                         
+//                        // Change players' status to .check
+//                        for player in self.players.elements + [self.himself] {
+//                            if player.status != .fold {
+//                                player.status = .cards
+//                            }
+//                        }
+                        
                         // Cards
                         self.comms.sendMessage(
                             to: self.players.getAvailableMCPeerIDs(),
@@ -260,12 +270,13 @@ extension Dealer: ServerDelegate {
         if let player = findPlayer(byMCPeerID: peerID, from: [self.himself] + self.players.elements) {
             switch message.type {
             case .bet:
-                print("\(peerID.displayName) bet: \(message.users![0].bid)")
-                let bid = message.users![0].bid
-                player.bid = bid
+                print("\(peerID.displayName) bet")
+                player.bid = message.users![0].bid
+                player.points = message.users![0].points
             case .check:
                 print("\(peerID.displayName) check")
-                player.bid = message.users![0].bid
+                player.bid = player.bid + message.users![0].bid
+                player.points = message.users![0].points
             case .cards:
                 print("\(peerID.displayName) cards")
                 let cards = message.users![0].cards!
