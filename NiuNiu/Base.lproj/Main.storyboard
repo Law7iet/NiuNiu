@@ -508,6 +508,7 @@
                         <outlet property="betButton" destination="6dC-8S-MGJ" id="H73-gw-5gR"/>
                         <outlet property="betSlider" destination="deS-Uo-F2U" id="moe-hu-auR"/>
                         <outlet property="foldButton" destination="eR3-Fu-WVw" id="0ei-Te-JUH"/>
+                        <outlet property="pickButton" destination="xYn-F1-Phk" id="C4o-ed-wvO"/>
                         <outlet property="pointsLabel" destination="6Cf-sR-5wK" id="Wtq-EK-aN4"/>
                         <outlet property="statusLabel" destination="biM-cY-Qzo" id="wXB-A0-tLa"/>
                         <outlet property="timerLabel" destination="krM-am-ier" id="suz-8r-Wxd"/>
@@ -918,6 +919,7 @@
                         <outlet property="betButton" destination="4D8-bR-2nn" id="voo-RD-rMj"/>
                         <outlet property="betSlider" destination="Z0N-MS-1MX" id="3eT-fE-Ebr"/>
                         <outlet property="foldButton" destination="hmm-7R-JhO" id="MLp-x0-tEb"/>
+                        <outlet property="pickButton" destination="7Mo-Qo-R8K" id="2eQ-lX-Xcj"/>
                         <outlet property="pointsLabel" destination="a4g-mG-hWS" id="Abk-TK-ZYE"/>
                         <outlet property="statusLabel" destination="f2t-jS-MHq" id="GNU-U8-JNo"/>
                         <outlet property="timerLabel" destination="jGu-Ro-85R" id="mUU-Lf-u5o"/>

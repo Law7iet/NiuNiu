@@ -33,33 +33,5 @@ class Players {
         }
         return peerList
     }
-    
-    /// Get an array of User of the players in the class.
-    /// - Returns: The array of User..
-    func getUsers() -> [User] {
-        var userList = [User]()
-        for player in self.elements {
-            userList.append(player.convertToUser())
-        }
-        return userList
-    }
-    
-//    func findPlayer(byMCPeerID peerID: MCPeerID) -> Player? {
-//        for player in self.elements {
-//            if player.id == peerID {
-//                return player
-//            }
-//        }
-//        return nil
-//    }
-    
-    func findPlayer(byName playerName: String) -> Player? {
-        for player in self.elements {
-            if player.id.displayName == playerName {
-                return player
-            }
-        }
-        return nil
-    }
 
 }

@@ -165,15 +165,15 @@ extension ServerLobbyVC: UITableViewDelegate {
 // MARK: HostManagerDelegate implementation
 extension ServerLobbyVC: ServerLobbyDelegate {
     
-    func didConnectWith(peerID: MCPeerID) {
+    func didConnect(with: MCPeerID) {
         DispatchQueue.main.async {
-            self.addPlayerInTableView(peerID: peerID)
+            self.addPlayerInTableView(peerID: with)
         }
     }
     
-    func didDisconnectWith(peerID: MCPeerID) {
+    func didDisconnect(with: MCPeerID) {
         DispatchQueue.main.async {
-            self.removePlayerInTableView(peerID: peerID)
+            self.removePlayerInTableView(peerID: with)
         }
     }
     

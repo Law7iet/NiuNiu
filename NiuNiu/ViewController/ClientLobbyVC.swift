@@ -94,7 +94,7 @@ extension ClientLobbyVC: UITableViewDataSource {
 // MARK: LobbyManagerDelegate implementation
 extension ClientLobbyVC: ClientLobbyDelegate {
     
-    func didConnectWith(peerID: MCPeerID) {
+    func didConnect(with peerID: MCPeerID) {
         if peerID != self.comms.hostPeerID {
             DispatchQueue.main.async {
                 self.addPlayerInTableView(peerID: peerID)
@@ -102,7 +102,7 @@ extension ClientLobbyVC: ClientLobbyDelegate {
         }
     }
     
-    func didDisconnectWith(peerID: MCPeerID) {
+    func didDisconnect(with peerID: MCPeerID) {
         if peerID == self.comms.hostPeerID {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
@@ -119,7 +119,7 @@ extension ClientLobbyVC: ClientLobbyDelegate {
         }
     }
     
-    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
+    func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
         case .closeSession:
@@ -136,7 +136,7 @@ extension ClientLobbyVC: ClientLobbyDelegate {
                 self.performSegue(withIdentifier: "showClientGameSegue", sender: nil)
             }
         default:
-            print("Errore")
+            print("ClientLobbyVC.didReceiveMessage - unexpected message.type: \(message.type))")
         }
     }
     

@@ -114,12 +114,12 @@ extension ClientSeacherVC: UITableViewDelegate {
 // MARK: SearchManagerDelegate implementation
 extension ClientSeacherVC: ClientSearchDelegate {
 
-    func didFindHostWith(peerID: MCPeerID) {
-        self.addHostInTableView(peerID: peerID)
+    func didFindHost(with: MCPeerID) {
+        self.addHostInTableView(peerID: with)
     }
     
-    func didLoseHostWith(peerID: MCPeerID) {
-        self.removeHostInTableView(peerID: peerID)
+    func didLoseHost(with: MCPeerID) {
+        self.removeHostInTableView(peerID: with)
     }
 
 }

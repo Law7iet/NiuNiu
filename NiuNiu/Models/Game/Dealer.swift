@@ -46,8 +46,8 @@ class Dealer {
     // MARK: Methods
     init(comms: Server, time: Int?, points: Int?) {
         // Game Settings
-        self.time = time ?? Utils.timer30
-        self.points = points ?? Utils.points100
+        self.time = time ?? Utils.timerLong
+        self.points = points ?? Utils.points
         
         // Data Structures
         self.comms = comms
@@ -86,11 +86,15 @@ class Dealer {
         )
         self.delegate?.didStopBet()
         
+        // Compute the highest bid and the total bid
         // Change status to the players whose didn't bet
         for player in self.players.elements + [self.himself] {
             if player.bid == 0 {
                 player.status = .fold
             } else {
+                if player.bid > self.maxBid {
+                    self.maxBid = player.bid
+                }
                 self.totalBid += player.bid
             }
         }
@@ -170,6 +174,7 @@ class Dealer {
         for player in self.players.elements + [self.himself] {
             let cards = self.deck.getCards()
             player.setCards(cards: cards)
+            player.status = .bet
             users.append(player.convertToUser())
         }
         self.comms.sendMessage(
@@ -192,12 +197,20 @@ class Dealer {
                 timer.invalidate()
                 self.stopBet()
                 
+                // Change players' status to .check
+                for player in self.players.elements + [self.himself] {
+                    if player.status != .fold {
+                        player.status = .check
+                    }
+                }
                 // Check
                 self.comms.sendMessage(
                     to: self.players.getAvailableMCPeerIDs(),
                     message: Message(.startCheck, amount: self.maxBid)
                 )
-                self.delegate?.didStartCheck(maxBid: self.maxBid)
+                if self.himself.status != .fold {
+                    self.delegate?.didStartCheck(maxBid: self.maxBid)
+                }
                 // Check timer starts
                 timerCounter = 0
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
@@ -215,7 +228,7 @@ class Dealer {
                         // Cards timer starts
                         timerCounter = 0
                         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                            if timerCounter == self.time / 2 {
+                            if timerCounter == self.time {
                                 // Cards timer ends
                                 timer.invalidate()
                                 self.stopCards()
@@ -238,7 +251,7 @@ class Dealer {
 // MARK: HostManagerDelegate implementation
 extension Dealer: ServerDelegate {
     
-    func didDisconnectWith(peerID: MCPeerID) {
+    func didDisconnect(with: MCPeerID) {
         // TODO: Remove from players the disconnected player
     }
     
@@ -250,9 +263,6 @@ extension Dealer: ServerDelegate {
                 print("\(peerID.displayName) bet: \(message.users![0].bid)")
                 let bid = message.users![0].bid
                 player.bid = bid
-                if bid > self.maxBid {
-                    self.maxBid = bid
-                }
             case .check:
                 print("\(peerID.displayName) check")
                 player.bid = message.users![0].bid

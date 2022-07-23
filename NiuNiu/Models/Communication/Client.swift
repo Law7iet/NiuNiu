@@ -9,22 +9,19 @@ import MultipeerConnectivity
 
 // MARK: Client's protocols
 protocol ClientSearchDelegate {
-    func didFindHostWith(peerID: MCPeerID)
-    func didLoseHostWith(peerID: MCPeerID)
+    func didFindHost(with peerID: MCPeerID)
+    func didLoseHost(with peerID: MCPeerID)
 }
 
 protocol ClientLobbyDelegate {
-    func didConnectWith(peerID: MCPeerID)
-    func didDisconnectWith(peerID: MCPeerID)
-    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
+    func didConnect(with peerID: MCPeerID)
+    func didDisconnect(with peerID: MCPeerID)
+    func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 
-protocol ClientDelegate {
-    // TODO: Need those 2 functions?
-    func didConnectWith(peerID: MCPeerID)
-    func didDisconnectWith(peerID: MCPeerID)
-    
-    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data)
+protocol ClientGameDelegate {
+    func didDisconnect(with peerID: MCPeerID)
+    func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 
 class Client: NSObject {
@@ -37,7 +34,7 @@ class Client: NSObject {
     // Delegates
     var searchDelegate: ClientSearchDelegate?
     var lobbyDelegate: ClientLobbyDelegate?
-    var clientDelegate: ClientDelegate?
+    var clientDelegate: ClientGameDelegate?
     
     // MARK: Methods
     init(peerID: MCPeerID) {
@@ -129,12 +126,12 @@ extension Client: MCNearbyServiceBrowserDelegate {
     
     // A host is found
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        self.searchDelegate?.didFindHostWith(peerID: peerID)
+        self.searchDelegate?.didFindHost(with: peerID)
     }
     
     // A host is disappeared
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        self.searchDelegate?.didLoseHostWith(peerID: peerID)
+        self.searchDelegate?.didLoseHost(with: peerID)
     }
     
 }
@@ -146,13 +143,13 @@ extension Client: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("Client connected: \(peerID.displayName)")
-            self.lobbyDelegate?.didConnectWith(peerID: peerID)
+            self.lobbyDelegate?.didConnect(with: peerID)
         case MCSessionState.connecting:
             print("Client Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
             print("Client Not connected: \(peerID.displayName)")
-            self.lobbyDelegate?.didDisconnectWith(peerID: peerID)
-            self.clientDelegate?.didDisconnectWith(peerID: peerID)
+            self.lobbyDelegate?.didDisconnect(with: peerID)
+            self.clientDelegate?.didDisconnect(with: peerID)
             if self.hostPeerID == peerID {
                 self.hostPeerID = nil
             }
@@ -165,8 +162,8 @@ extension Client: MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         let message = Message(data: data)
         if message.type != .error {
-            self.clientDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
-            self.lobbyDelegate?.didReceiveMessageFrom(sender: peerID, messageData: data)
+            self.clientDelegate?.didReceiveMessage(from: peerID, messageData: data)
+            self.lobbyDelegate?.didReceiveMessage(from: peerID, messageData: data)
         } else {
             print("Client.session - message.type == .error from \(peerID.displayName)")
         }

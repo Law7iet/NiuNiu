@@ -25,6 +25,7 @@ class ClientGameVC: UIViewController {
     
     @IBOutlet var playersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
+    @IBOutlet weak var pickButton: UIButton!
     @IBOutlet weak var foldButton: UIButton!
     @IBOutlet weak var betButton: UIButton!
     @IBOutlet weak var betSlider: UISlider!
@@ -43,22 +44,13 @@ class ClientGameVC: UIViewController {
         
     }
     
-    func findUser(byName name: String) -> User? {
-        for user in self.users {
-            if user.name == name {
-                return user
-            }
-        }
-        return nil
-    }
-    
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         comms.clientDelegate = self
         
         self.statusLabel.text = "The game will start soon"
-        self.setTimer(time: Utils.timer5)
+        self.setTimer(time: Utils.timerShort)
     }
 
     // MARK: Actions
@@ -84,7 +76,7 @@ class ClientGameVC: UIViewController {
     
     @IBAction func clickPlayer(_ sender: UIButton) {
         // Find the correct user given the 
-        let user = self.findUser(byName: sender.title(for: UIControl.State.normal)!)!
+        let user = Utils.findUser(byName: sender.title(for: UIControl.State.normal)!, from: self.users)!
         let message = "Points: \(user.points)"
         let alert = UIAlertController(
             title: user.name,
@@ -96,30 +88,34 @@ class ClientGameVC: UIViewController {
     }
     
     @IBAction func bet(_ sender: Any) {
-        if self.betButton.title(for: UIControl.State.normal)!.hasPrefix("Bet") {
+        switch self.himself.status {
+        case .bet:
             let bid = Int(self.betSlider.value)
             self.pointsLabel.text = "Points: \(String(self.himself.points - bid)) (\(bid))"
             self.himself.bid = bid
+            self.himself.points = self.himself.points - bid
             self.comms.sendMessageToServer(message: Message(.bet, users: [self.himself.convertToUser()]))
-        } else {
-            self.betButton.isEnabled = false
-            if self.betButton.title(for: UIControl.State.normal) == "Check" {
-                self.pointsLabel.text = "Points: \(String(self.himself.points - self.maxBid)) (\(self.maxBid))"
-                self.himself.bid = self.maxBid
-                self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
-            }
-            if self.betButton.title(for: UIControl.State.normal) == "All-in" {
-                self.pointsLabel.text = "Points: 0"
-                self.himself.bid = self.himself.points
-                self.himself.status = .allIn
-                self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
-            }
+        case .check:
+            let diff = self.maxBid - self.himself.bid
+            self.pointsLabel.text = "Points: \(String(self.himself.points - diff)) (\(self.maxBid))"
+            self.himself.bid = self.maxBid
+            self.himself.points = self.himself.points - diff
+            self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
+        case .allIn:
+            self.pointsLabel.text = "Points: 0"
+            self.himself.bid = self.himself.points
+            self.himself.points = 0
+            self.comms.sendMessageToServer(message: Message(.check, users: [self.himself.convertToUser()]))
+        default:
+            return
         }
+        self.betButton.isEnabled = false
+        self.foldButton.isEnabled = false
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
-        // UI
         if let index = self.cardsButton.firstIndex(of: sender) {
+            self.himself.cards!.pickCardAt(index: index)
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
                 sender.layer.cornerRadius = Utils.cornerRadius
@@ -129,15 +125,32 @@ class ClientGameVC: UIViewController {
                 self.clickedButtons[index] = false
                 sender.layer.borderWidth = 0
             }
+            if self.himself.status == .cards {
+                if self.himself.cards!.numberOfPickedCards == 1 || self.himself.cards!.numberOfPickedCards == 3 {
+                    self.pickButton.isEnabled = true
+                } else {
+                    self.pickButton.isEnabled = false
+                }
+            }
         }
     }
 
     @IBAction func pickCards(_ sender: Any) {
-        
+        self.comms.sendMessageToServer(message: Message(.cards, users: [self.himself.convertToUser()]))
+        self.pickButton.isEnabled = false
+        self.foldButton.isEnabled = false
     }
     
     @IBAction func fold(_ sender: Any) {
-    
+        self.foldButton.isEnabled = false
+        self.betButton.isEnabled = false
+        self.betSlider.isEnabled = false
+        // TODO: Turnoff pickCards button
+        for btn in self.cardsButton {
+            btn.isEnabled = false
+        }
+        
+        // TODO: Need to change value?
     }
 
     @IBAction func changeSliderValue(_ sender: UISlider) {
@@ -152,11 +165,11 @@ class ClientGameVC: UIViewController {
 }
 
 // MARK: LobbyManagerDelegate implementation
-extension ClientGameVC: ClientDelegate {
+extension ClientGameVC: ClientGameDelegate {
     
-    func didConnectWith(peerID: MCPeerID) {}
+    func didConnect(with peerID: MCPeerID) {}
     
-    func didDisconnectWith(peerID: MCPeerID) {
+    func didDisconnect(with peerID: MCPeerID) {
         DispatchQueue.main.async {
             let alert = UIAlertController(title: "Exit from game", message: "The game has been closed", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
@@ -167,7 +180,7 @@ extension ClientGameVC: ClientDelegate {
         }
     }
     
-    func didReceiveMessageFrom(sender peerID: MCPeerID, messageData: Data) {
+    func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
         switch message.type {
         case .startMatch:
@@ -198,23 +211,21 @@ extension ClientGameVC: ClientDelegate {
             }
         case .startBet:
             DispatchQueue.main.async {
+                self.himself.status = .bet
                 self.statusLabel.text = "Start Bet!"
                 self.betSlider.isEnabled = true
                 self.betButton.isEnabled = true
                 self.foldButton.isEnabled = true
-                self.setTimer(time: 30)
+                self.setTimer(time: Utils.timerLong)
             }
         case .stopBet:
             DispatchQueue.main.async {
+                self.himself.status = .none
                 self.statusLabel.text = "Stop Bet!"
                 self.betSlider.isEnabled = false
                 self.betButton.isEnabled = false
                 self.foldButton.isEnabled = false
-                // Set points
-                self.himself.points = self.himself.points - self.himself.bid
-                self.pointsLabel.text = String(self.himself.points)
             }
-            
         case .startCheck:
             DispatchQueue.main.async {
                 self.statusLabel.text = "Start Check!"
@@ -223,29 +234,33 @@ extension ClientGameVC: ClientDelegate {
                     let diff = self.maxBid - self.himself.bid
                     if diff > 0 {
                         // Setup bet button and labels
-                        self.betButton.setTitle("Check (+\(diff))", for: UIControl.State.normal)
+                        self.himself.status = .check
+                        self.betButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
                         self.betButton.isEnabled = true
                         self.foldButton.isEnabled = true
-                    } else {
+                    } else if diff < 0 {
                         // The user doens't have enough points
-                        // He can "all-in" or "fold"
+                        self.himself.status = .allIn
                         self.betButton.setTitle("All-in", for: UIControl.State.normal)
                         self.betButton.isEnabled = true
                         self.foldButton.isEnabled = true
                     }
                 }
-                self.setTimer(time: 30)
+                self.setTimer(time: Utils.timerLong)
             }
         case .stopCheck:
-            self.betButton.isEnabled = false
-            self.foldButton.isEnabled = false
-            
-            // Set points
-            self.himself.points = self.himself.points - self.himself.bid
-            self.pointsLabel.text = String(self.himself.points)
-
+            DispatchQueue.main.async {
+                self.himself.status = .none
+                self.statusLabel.text = "Stop Check!"
+                self.betButton.isEnabled = false
+                self.foldButton.isEnabled = false
+            }
         case .startCards:
-            print("startCards")
+            DispatchQueue.main.async {
+                self.statusLabel.text = "Start pick cards!"
+                self.himself.status = .cards
+                self.setTimer(time: Utils.timerLong)
+            }
         case .stopCards:
             print("endCards")
         case .endMatch:

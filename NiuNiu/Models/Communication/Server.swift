@@ -9,12 +9,12 @@ import MultipeerConnectivity
 
 // MARK: Server's protocols
 protocol ServerLobbyDelegate {
-    func didConnectWith(peerID: MCPeerID)
-    func didDisconnectWith(peerID: MCPeerID)
+    func didConnect(with: MCPeerID)
+    func didDisconnect(with: MCPeerID)
 }
 
 protocol ServerDelegate {
-    func didDisconnectWith(peerID: MCPeerID)
+    func didDisconnect(with: MCPeerID)
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 
@@ -89,7 +89,7 @@ extension Server: MCSessionDelegate {
         case MCSessionState.connected:
             print("Server connected: \(peerID.displayName)")
             self.connectedPeerIDs.append(peerID)
-            self.lobbyDelegate?.didConnectWith(peerID: peerID)
+            self.lobbyDelegate?.didConnect(with: peerID)
         case MCSessionState.connecting:
             print("Server Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
@@ -99,7 +99,7 @@ extension Server: MCSessionDelegate {
             } else {
                 print("Server.session - disconnected peerID wasn't in self.connectedPeerIDs")
             }
-            self.lobbyDelegate?.didDisconnectWith(peerID: peerID)
+            self.lobbyDelegate?.didDisconnect(with: peerID)
         @unknown default:
             print("Server Unknown state: \(state)")
         }

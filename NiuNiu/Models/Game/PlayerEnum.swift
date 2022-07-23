@@ -7,12 +7,12 @@
 
 enum PlayerEnum: Codable {
 
-    // The player is out
-    case fold
-    // The player bet all his points
+    // Players' status
+    case bet
+    case check
     case allIn
-    // The player choose his cards
     case cards
-    
+    case fold
+
     case none
 }
