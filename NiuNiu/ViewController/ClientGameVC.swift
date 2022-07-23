@@ -279,7 +279,7 @@ extension ClientGameVC: ClientGameDelegate {
             }
         case .endMatch:
             DispatchQueue.main.async {
-                self.statusLabel.text = "\(message.users![0].name) win \(message.amount!) points!"
+                self.performSegue(withIdentifier: "showEndMatchSegue", sender: nil)
             }
         case .endGame:
             print("endGame")

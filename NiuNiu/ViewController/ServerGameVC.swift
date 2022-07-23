@@ -265,7 +265,7 @@ extension ServerGameVC: DealerDelegate {
     }
     
     func didEndMatch(amount: Int, users: [User]) {
-        self.statusLabel.text = "\(users[0].name) win \(amount) points!"
+        self.performSegue(withIdentifier: "showEndMatchSegue", sender: nil)
     }
     
     
