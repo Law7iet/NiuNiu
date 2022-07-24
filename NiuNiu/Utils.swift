@@ -12,8 +12,11 @@ class Utils {
     static let timerLong = 20
     static let points = 100
     
-    static let borderWidth = CGFloat(5.0)
-    static let cornerRadius = CGFloat(3.0)
+    static let cornerRadius = CGFloat(5.0)
+    // borderWitdh it's equal to: 0.0185% of the card's height
+    static func borderWidth(withHeight height: CGFloat) -> CGFloat {
+        return height * 0.0185 / 100
+    }
     
     static func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
         for player in players {

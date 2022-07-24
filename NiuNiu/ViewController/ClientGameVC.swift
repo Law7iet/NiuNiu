@@ -16,6 +16,7 @@ class ClientGameVC: UIViewController {
     
     var bidValue = 0
     var maxBid = 0
+    var totalBid = 0
     var clickedButtons = [false, false, false, false, false]
     
     @IBOutlet weak var statusLabel: UILabel!
@@ -51,6 +52,15 @@ class ClientGameVC: UIViewController {
         
         self.statusLabel.text = "The game will start soon"
         self.setTimer(time: Utils.timerShort)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let endVC = segue.destination as? EndViewController {
+            endVC.client = self.comms
+            endVC.himself = self.himself
+            endVC.users = self.users
+            endVC.prize = self.totalBid
+        }
     }
 
     // MARK: Actions
@@ -94,7 +104,7 @@ class ClientGameVC: UIViewController {
                 if self.clickedButtons[index] == false {
                     self.clickedButtons[index] = true
                     sender.layer.cornerRadius = Utils.cornerRadius
-                    sender.layer.borderWidth = Utils.borderWidth
+                    sender.layer.borderWidth = Utils.borderWidth(withHeight: self.cardsButton[0].frame.height)
                     sender.layer.borderColor = UIColor.red.cgColor
                 } else {
                     self.clickedButtons[index] = false
@@ -279,6 +289,7 @@ extension ClientGameVC: ClientGameDelegate {
             }
         case .endMatch:
             DispatchQueue.main.async {
+                self.totalBid = message.amount!
                 self.performSegue(withIdentifier: "showEndMatchSegue", sender: nil)
             }
         case .endGame:

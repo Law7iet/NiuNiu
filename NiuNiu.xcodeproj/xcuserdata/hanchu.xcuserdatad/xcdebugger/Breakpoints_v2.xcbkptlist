@@ -14,8 +14,8 @@
             filePath = "NiuNiu/ViewController/ServerGameVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
             landmarkName = "didStartCheck(maxBid:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "NiuNiu/ViewController/ClientGameVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "didReceiveMessage(from:messageData:)"
             landmarkType = "7">
          </BreakpointContent>

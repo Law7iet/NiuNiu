@@ -15,6 +15,7 @@ class ServerGameVC: UIViewController {
     var himself: Player!
     
     var maxBid = 0
+    var totalBid = 0
     var clickedButtons = [false, false, false, false, false]
     
     @IBOutlet weak var statusLabel: UILabel!
@@ -60,6 +61,14 @@ class ServerGameVC: UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let endVC = segue.destination as? EndViewController {
+            endVC.server = self.dealer
+            endVC.himself = self.himself
+            endVC.prize = self.dealer.totalBid
+        }
+    }
+    
     // MARK: Actions
     @IBAction func home(_ sender: Any) {
         let alert = UIAlertController(
@@ -101,8 +110,8 @@ class ServerGameVC: UIViewController {
                 self.himself.cards!.pickCardAt(index: index)
                 if self.clickedButtons[index] == false {
                     self.clickedButtons[index] = true
-                    sender.layer.cornerRadius = 5
-                    sender.layer.borderWidth = 3
+                    sender.layer.cornerRadius = Utils.cornerRadius
+                    sender.layer.borderWidth = Utils.borderWidth(withHeight: self.cardsButton[0].frame.height)
                     sender.layer.borderColor = UIColor.red.cgColor
                 } else {
                     self.clickedButtons[index] = false
@@ -265,6 +274,7 @@ extension ServerGameVC: DealerDelegate {
     }
     
     func didEndMatch(amount: Int, users: [User]) {
+        self.totalBid = amount
         self.performSegue(withIdentifier: "showEndMatchSegue", sender: nil)
     }
     

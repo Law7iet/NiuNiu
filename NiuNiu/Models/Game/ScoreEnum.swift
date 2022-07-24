@@ -35,5 +35,31 @@ enum ScoreEnum: Int, Codable, Comparable {
         return lhs.rawValue < rhs.rawValue
     }
     
+    var description: String {
+        switch self {
+        case .none: return "None"
+        case .one: return "One"
+        case .two: return "Two"
+        case .three: return "Three"
+        case .four: return "Four"
+        case .five: return "Five"
+        case .six: return "Six"
+        case .seven: return "Seven"
+        case .eight: return "Eight"
+        case .nine: return "Nine"
+        case .ten: return "Ten"
+        case .niuOne: return "NiuOne"
+        case .niuTwo: return "NiuTwo"
+        case .niuThree: return "NiuThree"
+        case .niuFour: return "NiuFour"
+        case .niuFive: return "NiuFive"
+        case .niuSix: return "NiuSix"
+        case .niuSeven: return "NiuSeven"
+        case .niuEight: return "NiuEight"
+        case .niuNine: return "NiuNine"
+        case .niuNiu: return "NiuNiu"
+        }
+    }
+    
 }
 

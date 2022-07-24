@@ -146,11 +146,13 @@ class Dealer {
             if winner == nil {
                 winner = player
             } else {
-                if player.score > winner!.score {
-                    winner = player
-                } else if player.score == winner!.score {
-                    if player.cards!.tieBreakerCard! > winner!.cards!.tieBreakerCard! {
+                if player.score != .none {
+                    if player.score > winner!.score {
                         winner = player
+                    } else if player.score == winner!.score {
+                        if player.cards!.tieBreakerCard! > winner!.cards!.tieBreakerCard! {
+                            winner = player
+                        }
                     }
                 }
             }
@@ -200,12 +202,12 @@ class Dealer {
                 timer.invalidate()
                 self.stopBet()
                 
-                // Change players' status to .check
-                for player in self.players.elements + [self.himself] {
-                    if player.status != .fold {
-                        player.status = .check
-                    }
-                }
+//                // Change players' status to .check
+//                for player in self.players.elements + [self.himself] {
+//                    if player.status != .fold {
+//                        player.status = .check
+//                    }
+//                }
                 // Check
                 self.comms.sendMessage(
                     to: self.players.getAvailableMCPeerIDs(),
@@ -221,13 +223,6 @@ class Dealer {
                         // Check Timer ends
                         timer.invalidate()
                         self.stopCheck()
-                        
-//                        // Change players' status to .check
-//                        for player in self.players.elements + [self.himself] {
-//                            if player.status != .fold {
-//                                player.status = .cards
-//                            }
-//                        }
                         
                         // Cards
                         self.comms.sendMessage(
@@ -270,15 +265,12 @@ extension Dealer: ServerDelegate {
         if let player = findPlayer(byMCPeerID: peerID, from: [self.himself] + self.players.elements) {
             switch message.type {
             case .bet:
-                print("\(peerID.displayName) bet")
                 player.bid = message.users![0].bid
                 player.points = message.users![0].points
             case .check:
-                print("\(peerID.displayName) check")
                 player.bid = player.bid + message.users![0].bid
                 player.points = message.users![0].points
             case .cards:
-                print("\(peerID.displayName) cards")
                 let cards = message.users![0].cards!
                 player.cards = cards
             default:

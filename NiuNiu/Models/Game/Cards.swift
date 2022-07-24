@@ -20,6 +20,10 @@ class Cards: Codable {
         self.score = .none
     }
     
+    subscript(index: Int) -> Card {
+        return self.elements[index]
+    }
+    
     func pickCardAt(index: Int) {
         // Card
         if self.chosenCards[index] == false {
