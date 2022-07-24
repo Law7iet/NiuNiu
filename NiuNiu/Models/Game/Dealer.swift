@@ -52,8 +52,8 @@ class Dealer {
         // Data Structures
         self.comms = comms
         self.deck = Deck()
-        self.himself = Player(id: comms.himselfPeerID, points: points)
-        self.players = Players(players: comms.connectedPeerIDs, points: points)
+        self.himself = Player(id: comms.peerID, points: points)
+        self.players = Players(players: comms.clients, points: points)
         
         // Others
         self.maxBid = 0

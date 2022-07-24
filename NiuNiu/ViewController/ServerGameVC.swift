@@ -84,7 +84,7 @@ class ServerGameVC: UIViewController {
             style: .destructive,
             handler: { action in
                 self.dealer.comms.sendMessage(
-                    to: self.dealer.comms.connectedPeerIDs,
+                    to: self.dealer.comms.clients,
                     message: Message(.closeSession)
                 )
                 self.performSegue(withIdentifier: "unwindToMainVC", sender: self)

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MultipeerConnectivity
 
 class Utils {
     static let timerShort = 5
@@ -36,4 +37,11 @@ class Utils {
         return nil
     }
     
+    static func getNames(fromPeerIDs peerIDs: [MCPeerID]) -> [String] {
+        var array = [String]()
+        for peerID in peerIDs {
+            array.append(peerID.displayName)
+        }
+        return array
+    }
 }

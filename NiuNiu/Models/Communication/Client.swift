@@ -29,8 +29,8 @@ class Client: NSObject {
     // MARK: Properties
     var session: MCSession
     var browser: MCNearbyServiceBrowser
-    var himselfPeerID: MCPeerID
-    var hostPeerID: MCPeerID?
+    var peerID: MCPeerID
+    var server: MCPeerID?
     // Delegates
     var searchDelegate: ClientSearchDelegate?
     var lobbyDelegate: ClientLobbyDelegate?
@@ -47,7 +47,7 @@ class Client: NSObject {
             peer: peerID,
             serviceType: "niu-niu-game"
         )
-        self.himselfPeerID = peerID
+        self.peerID = peerID
         super.init()
         self.browser.delegate = self
         self.session.delegate = self
@@ -80,12 +80,12 @@ class Client: NSObject {
     /// The server MCPeerID is saved in the client object when the client connects to the server.
     /// - Parameter msg: The message to send.
     func sendMessageToServer(message msg: Message) {
-        if self.hostPeerID != nil {
+        if self.server != nil {
             if let data = msg.convertToData() {
                 do {
                     try self.session.send(
                         data,
-                        toPeers: [self.hostPeerID!],
+                        toPeers: [self.server!],
                         with: .reliable
                     )
                 } catch {
@@ -98,28 +98,7 @@ class Client: NSObject {
             print("Client.sendMessageToServer - self.hostPeerID == nil")
         }
     }
-    
-    
-    /// Send a message to the user with MCPeerID passed by parameter.
-    /// - Parameters:
-    ///   - user: The receiver's MCPeerID.
-    ///   - msg: The message.
-    func sendMessage(to user: MCPeerID, message msg: Message) {
-        if let data = msg.convertToData() {
-            do {
-                try self.session.send(
-                    data,
-                    toPeers: [user],
-                    with: .reliable
-                )
-            } catch {
-                print("Client.sendMessage - self.session.send error")
-            }
-        } else {
-            print("Client.sendMessage - data == nil")
-        }
-    }
-    
+        
 }
 
 extension Client: MCNearbyServiceBrowserDelegate {
@@ -142,18 +121,14 @@ extension Client: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
-            print("Client connected: \(peerID.displayName)")
             self.lobbyDelegate?.didConnect(with: peerID)
-        case MCSessionState.connecting:
-            print("Client Connecting: \(peerID.displayName)")
         case MCSessionState.notConnected:
-            print("Client Not connected: \(peerID.displayName)")
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.clientDelegate?.didDisconnect(with: peerID)
-            if self.hostPeerID == peerID {
-                self.hostPeerID = nil
+            if self.server == peerID {
+                self.server = nil
             }
-        @unknown default:
+        default:
             print("Client Unknown state: \(state)")
         }
     }

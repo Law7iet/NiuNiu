@@ -15,21 +15,18 @@ class MainVC: UIViewController {
         super.viewDidLoad()
     }
     
-    func getRandomID(length: Int) -> String {
+    func getRandomID() -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return String((0 ..< length).map{ _ in letters.randomElement()! })
+        return String((0 ..< 4).map{ _ in letters.randomElement()! })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let peerID = MCPeerID(displayName: "\(UIDevice.current.name) #\(self.getRandomID(length: 4))")
-        if let serverLobbyVC = segue.destination as? ServerLobbyVC {
-            let lobby = Lobby(user: peerID)
-            serverLobbyVC.comms = Server(peerID: peerID)
-            serverLobbyVC.lobby = lobby
-        } else if let searchVC = segue.destination as? ClientSeacherVC {
-            let lobby = Lobby(user: peerID)
-            searchVC.comms = Client(peerID: peerID)
-            searchVC.lobby = lobby
+        let name = UIDevice.current.name + " #" + getRandomID()
+        if let lobbyVC = segue.destination as? LobbyVC {
+            lobbyVC.server = Server(peerID: MCPeerID(displayName: name))
+            lobbyVC.client = Client(peerID: MCPeerID(displayName: name))
+        } else if let searchVC = segue.destination as? SeacherVC {
+            searchVC.client = Client(peerID: MCPeerID(displayName: name))
         }
     }
     

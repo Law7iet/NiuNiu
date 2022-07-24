@@ -201,9 +201,9 @@ extension ClientGameVC: ClientGameDelegate {
                 self.users = message.users!
                 var index = 0
                 for user in self.users {
-                    if user.name == self.comms.himselfPeerID.displayName {
+                    if user.name == self.comms.peerID.displayName {
                         // Setup himself cards
-                        self.himself = user.convertToPlayer(withPeerID: self.comms.himselfPeerID)
+                        self.himself = user.convertToPlayer(withPeerID: self.comms.peerID)
                         for cardIndex in 0 ... 4 {
                             let image = UIImage(named: self.himself.cards!.elements[cardIndex].getName())
                             self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
