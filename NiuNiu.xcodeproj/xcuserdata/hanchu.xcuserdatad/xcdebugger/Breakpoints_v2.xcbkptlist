@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7CAB41D3-79B2-4A78-850B-23A8FE727932"
+            uuid = "AE0E4BD4-07E9-453A-884F-A0853B3958AC"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NiuNiu/ViewController/LobbyVC.swift"
+            filePath = "NiuNiu/Models/Game/Dealer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "viewWillDisappear(_:)"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "stopBet()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FFE144B9-04BE-40E4-90A1-82513EAED348"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NiuNiu/Models/Game/Dealer.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
+            landmarkName = "didReceiveMessage(from:messageData:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

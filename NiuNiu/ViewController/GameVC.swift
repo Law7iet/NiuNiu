@@ -10,7 +10,7 @@ import MultipeerConnectivity
 class GameVC: UIViewController {
 
     // MARK: Properties
-    var dealer: Dealer?
+    var dealer: Dealer!
     
     var client: Client!
     var player: Player!
@@ -62,7 +62,6 @@ class GameVC: UIViewController {
         }
         let menu = UIMenu(title: "Menu", options: .displayInline, children: [quitAction])
         menuButton.menu = menu
-        menuButton.showsMenuAsPrimaryAction = true
     }
     
     func setTimer(time: Int) {
@@ -82,10 +81,6 @@ class GameVC: UIViewController {
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         self.statusLabel.text = "The game will start soon"
         var timerCounter = 0
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
@@ -93,11 +88,18 @@ class GameVC: UIViewController {
             if timerCounter == Utils.timerShort {
                 timer.invalidate()
                 // Start the game
-                self.dealer?.play()
+                if self.dealer != nil {
+                    self.dealer!.play()
+                }
             } else {
                 timerCounter += 1
             }
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
     }
     
     // MARK: Actions
@@ -144,6 +146,7 @@ class GameVC: UIViewController {
             let bid = Int(self.betSlider.value)
             self.player.bid = bid
             self.player.points = self.player.points - bid
+            self.player.status = .bet
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
             self.client.sendMessageToServer(
                 message: Message(.bet, users: [self.player.convertToUser()])
@@ -152,14 +155,15 @@ class GameVC: UIViewController {
             let diff = self.maxBid - self.player.bid
             self.player.bid = diff
             self.player.points = self.player.points - diff
+            self.player.status = .check
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
             self.client.sendMessageToServer(
                 message: Message(.check, users: [self.player.convertToUser()])
             )
         case .allIn:
-            let diff = self.maxBid - self.player.points
-            self.player.bid = diff
+            self.player.bid = self.player.points
             self.player.points = 0
+            self.player.status = .allIn
             self.pointsLabel.text = "Points: 0"
             self.client.sendMessageToServer(
                 message: Message(.check, users: [self.player.convertToUser()])
@@ -238,6 +242,7 @@ extension GameVC: ClientGameDelegate {
                     self.player.status = .bet
                     self.statusLabel.text = "Start Bet!"
 
+                    self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
                     self.actionButton.isEnabled = true
                     self.foldButton.isEnabled = true
                     self.betSlider.isEnabled = true

@@ -465,7 +465,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Action"/>
                                                 <connections>
-                                                    <action selector="pickCards:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="2EF-f8-h5T"/>
+                                                    <action selector="clickAction:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="Bix-Dr-1ue"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nxR-N1-O2Y">
@@ -540,9 +540,11 @@
                         <outletCollection property="cardsButton" destination="epA-Eo-AcY" collectionClass="NSMutableArray" id="6WD-z9-LUo"/>
                         <outletCollection property="cardsButton" destination="FTE-fl-q5K" collectionClass="NSMutableArray" id="XSV-UB-KzB"/>
                         <outletCollection property="cardsButton" destination="tFk-Gq-9De" collectionClass="NSMutableArray" id="Xix-6p-p81"/>
+                        <segue destination="7xU-sw-sAn" kind="unwind" identifier="unwindToMainVC" unwindAction="prepareForUnwindWithSegue:" id="4wC-fP-H7c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afo-So-4E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="7xU-sw-sAn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4835" y="467"/>
         </scene>
@@ -1183,7 +1185,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="s22-Bn-U35"/>
+        <segue reference="TuB-gZ-Juj"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>

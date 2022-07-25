@@ -9,7 +9,7 @@ import UIKit
 import MultipeerConnectivity
 
 class Utils {
-    static let timerShort = 5
+    static let timerShort = 3
     static let timerLong = 20
     static let points = 100
     

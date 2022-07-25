@@ -37,6 +37,9 @@ class LobbyVC: UIViewController {
     func setupClient() {
         self.client.lobbyDelegate = self
         self.client.searchDelegate = self
+        if self.server != nil {
+            self.client.serversPeerID = self.server!.peerID
+        }
     }
     
     func update() {
@@ -132,8 +135,9 @@ class LobbyVC: UIViewController {
             to: self.server!.clientsPeerIDs,
             message: Message(.startGame, amount: Utils.points)
         )
-        // Close adversiting
-//        self.server?.stopAdvertising()
+        // Close browsing or advertising tasks
+        self.server?.stopAdvertising()
+        self.client.stopBrowsing()
         // Start the game
         self.performSegue(withIdentifier: "showGameSegue", sender: nil)
     }
@@ -211,7 +215,7 @@ extension LobbyVC: ClientSearchDelegate {
 extension LobbyVC: ClientLobbyDelegate {
     
     func didConnect(with peerID: MCPeerID) {
-        if peerID != self.client.serversPeerID {
+        if (self.server == nil && peerID != self.client.serversPeerID) || self.server != nil {
             DispatchQueue.main.async {
                 self.addPlayerInTableView(peerID: peerID)
             }

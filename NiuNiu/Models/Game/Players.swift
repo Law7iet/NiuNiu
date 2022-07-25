@@ -21,6 +21,10 @@ class Players {
         }
     }
     
+    subscript(index: Int) -> Player {
+        return self.elements[index]
+    }
+    
     /// Get an array of MCPeerID of the players in the class with .fold status.
     /// This is the list of the players that the Server has to send a message.
     /// - Returns: The array of MCPeerID

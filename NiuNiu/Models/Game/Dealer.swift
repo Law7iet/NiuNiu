@@ -70,11 +70,12 @@ class Dealer {
         )
         
         // Compute the highest bid and the total bid
-        // Change status to the players whose didn't bet
+        // Change the status to the players who didn't bet
         for player in self.players.elements {
-            if player.bid == 0 {
+            if player.bid == 0 || player.status != .bet {
                 player.status = .fold
             } else {
+                player.status = .check
                 if player.bid > self.maxBid {
                     self.maxBid = player.bid
                 }
@@ -90,11 +91,21 @@ class Dealer {
             message: Message(.stopCheck)
         )
         
-        // Change status to the players whose didn't check
+        // Compute the total bid
+        // Change the status to the players who didn't check
         for player in self.players.elements {
+            if player.status == .check {
+                player.status = .cards
+                
+            } else if player.status == .allIn {
+                player.status = .cards
+            } else {
+                player.status = .fold
+            }
+
             if player.bid != self.maxBid {
                 if player.bid == 0 {
-                    if player.status != .allIn{
+                    if player.status != .allIn {
                         player.status = .fold
                     }
                 } else {
@@ -102,6 +113,7 @@ class Dealer {
                 }
             }
         }
+        // Change the players' status to .cards if they checked or played allin
         
         print("totalBid: \(self.totalBid)")
     }
@@ -173,47 +185,48 @@ class Dealer {
             message: Message(.startBet)
         )
 
-        // Bet timer starts
+        // Bet - Timer starts
         timerCounter = 0
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if timerCounter == self.time {
-                // Bet timer ends
+                // Bet - Timer ends
                 timer.invalidate()
                 self.stopBet()
                 
-//                // Change players' status to .check
-//                for player in self.players.elements + [self.himself] {
-//                    if player.status != .fold {
-//                        player.status = .check
-//                    }
-//                }
                 // Check
                 self.server.sendMessage(
                     to: self.players.getAvailableMCPeerIDs(),
                     message: Message(.startCheck, amount: self.maxBid)
                 )
-                
-                // Check timer starts
+
+                // Check - Timer starts
                 timerCounter = 0
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                     if timerCounter == self.time {
-                        // Check Timer ends
+                        // Check - Timer ends
                         timer.invalidate()
                         self.stopCheck()
-                        
+
                         // Cards
                         self.server.sendMessage(
                             to: self.players.getAvailableMCPeerIDs(),
                             message: Message(.startCards)
                         )
-                
-                        // Cards timer starts
+
+                        // Cards - Timer starts
                         timerCounter = 0
                         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                             if timerCounter == self.time {
-                                // Cards timer ends
+                                // Cards - Timer ends
                                 timer.invalidate()
                                 self.stopCards()
+
+                                // Change players status to fold if they didn't choose properly their cards
+                                for player in self.players.elements {
+                                    if player.score == .none {
+                                        player.status = .fold
+                                    }
+                                }
                                 
                                 // End Match
                                 self.endMatch()
@@ -233,30 +246,50 @@ class Dealer {
 // MARK: HostManagerDelegate implementation
 extension Dealer: ServerGameDelegate {
     
-    func didDisconnect(with: MCPeerID) {
+    func didDisconnect(with peerID: MCPeerID) {
         // TODO: Remove from players the disconnected player
     }
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
-        if let player = findPlayer(byMCPeerID: peerID, from: self.players.elements) {
-            switch message.type {
-            case .bet:
-                player.bid = message.users![0].bid
-                player.points = message.users![0].points
-            case .check:
-                player.bid = player.bid + message.users![0].bid
-                player.points = message.users![0].points
-            case .cards:
-                let cards = message.users![0].cards!
-                player.cards = cards
-            default:
-                print("Delaer.didReceiveMessage - Unexpected message type: \(message.type)")
+//        if let player = findPlayer(byMCPeerID: peerID, from: self.players.elements) {
+        var index = 0
+        for _ in self.players.elements {
+            if self.players[index].id == peerID {
+                break
+            } else {
+                index += 1
             }
-        } else {
-            print("\(peerID) not found in the players")
-            return
         }
+        switch message.type {
+        case .bet:
+            self.players[index].bet(amount: message.users![0].bid)
+
+
+            
+//            let user = message.users![0]
+//            self.players[index].bid = user.bid
+//            self.players[index].points = user.points
+//            self.players[index].status = user.status
+//            print("\(user.name) - Bet: \(user.bid)")
+        case .check:
+            let user = message.users![0]
+            self.players[index].bid = self.players[index].bid + user.bid
+            self.players[index].points = user.points
+            self.players[index].status = user.status
+            print("\(user.name) - Check: +\(user.bid)")
+        case .cards:
+            let user = message.users![0]
+            let cards = user.cards!
+            self.players[index].cards = cards
+            print("\(user.name) - Cards")
+        default:
+            print("Delaer.didReceiveMessage - Unexpected message type: \(message.type)")
+        }
+//        } else {
+//            print("\(peerID) not found in the players")
+//            return
+//        }
     }
     
 }

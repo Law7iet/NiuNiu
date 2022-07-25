@@ -61,4 +61,9 @@ class Player: Comparable {
         return lhs.id.displayName == rhs.id.displayName
     }
     
+    func bet(amount: Int) {
+        self.bid = amount
+        self.points -= amount
+        self.status = .bet
+    }
 }
