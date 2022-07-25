@@ -1,36 +1,59 @@
 //
-//  ClientSeacherVC.swift
+//  SeacherVC.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 01/07/22.
 //
 
-import UIKit
 import MultipeerConnectivity
 
 class SeacherVC: UIViewController {
     
     // MARK: Properties
     var client: Client!
-    var lobby: [MCPeerID] = [MCPeerID]()
+    var hosts: [MCPeerID]!
     
     @IBOutlet weak var hostsTableView: UITableView!
+    
+    // MARK: Supporting functions
+    func setupTableView() {
+        self.hostsTableView.dataSource = self
+        self.hostsTableView.delegate = self
+    }
+    
+    func setupClient() {
+        self.client.searchDelegate = self
+    }
+    
+    func resetHosts() {
+        self.hosts = [MCPeerID]()
+        self.hostsTableView.reloadData()
+    }
+    
+    func addHostInTableView(peerID: MCPeerID) {
+        self.hosts.append(peerID)
+        let indexPath = IndexPath(row: self.hosts.count - 1, section: 0)
+        self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    func removeHostInTableView(peerID: MCPeerID) {
+        if let index = self.hosts.firstIndex(of: peerID) {
+            self.hosts.remove(at: index)
+            let indexPath = IndexPath(row: index, section: 0)
+            self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
     
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupDelegates()
+        self.setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.lobby = [MCPeerID]()
-        self.hostsTableView.reloadData()
-        self.client.startBrowsing()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        self.resetHosts()
+        self.setupClient()
         self.client.startBrowsing()
     }
     
@@ -40,57 +63,38 @@ class SeacherVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let lobbyVC = segue.destination as? LobbyVC {
-            lobbyVC.client = self.client
-            lobbyVC.lobby = [self.client.peerID]
-        }
+        let lobbyVC = segue.destination as! LobbyVC
+        lobbyVC.client = self.client
     }
     
-    // MARK: Supporting functions
-    func setupDelegates() {
-        self.client.searchDelegate = self
-        self.hostsTableView.dataSource = self
-        self.hostsTableView.delegate = self
-    }
-    
-    func addHostInTableView(peerID: MCPeerID) {
-        self.lobby.append(peerID)
-        let indexPath = IndexPath(row: self.lobby.count - 1, section: 0)
-        self.hostsTableView.insertRows(at: [indexPath], with: .automatic)
-    }
-    
-    func removeHostInTableView(peerID: MCPeerID) {
-        if let index = self.lobby.firstIndex(of: peerID) {
-            self.lobby.remove(at: index)
-            let indexPath = IndexPath(row: index, section: 0)
-            self.hostsTableView.deleteRows(at: [indexPath], with: .automatic)
-        }        
-    }
 }
 
 // MARK: UITableViewDataSource implementation
 extension SeacherVC: UITableViewDataSource {
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.lobby.count
+        return self.hosts.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.getNames(fromPeerIDs: self.lobby)[indexPath.row]
+        content.text = Utils.getNames(fromPeerIDs: self.hosts)[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }
+    
 }
 
 // MARK: UITableViewDelegate implementation
 extension SeacherVC: UITableViewDelegate {
+    
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Available hosts"
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.lobby[indexPath.row]
+        let user = self.hosts[indexPath.row]
         let alert = UIAlertController(
             title: "Join",
             message: "Do you want to join to \(user.displayName) lobby?",
@@ -112,6 +116,7 @@ extension SeacherVC: UITableViewDelegate {
         ))
         present(alert, animated: true, completion: nil)
     }
+    
 }
 
 // MARK: SearchManagerDelegate implementation

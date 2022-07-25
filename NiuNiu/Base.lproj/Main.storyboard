@@ -26,7 +26,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Host game" buttonSize="large"/>
                                         <connections>
-                                            <segue destination="05W-vh-zCY" kind="show" identifier="" id="Qca-Ly-WeK"/>
+                                            <segue destination="05W-vh-zCY" kind="show" id="TuB-gZ-Juj"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
@@ -34,7 +34,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Join game" buttonSize="large"/>
                                         <connections>
-                                            <segue destination="l9d-DM-1ku" kind="show" id="BR6-34-OcS"/>
+                                            <segue destination="l9d-DM-1ku" kind="show" id="TMY-t1-OOY"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -112,12 +112,12 @@
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="hostsTableView" destination="DL7-Df-tRq" id="jZB-vG-09f"/>
-                        <segue destination="05W-vh-zCY" kind="show" identifier="showLobbySegue" id="AMH-Pm-aBV"/>
+                        <segue destination="05W-vh-zCY" kind="show" identifier="showLobbySegue" id="s22-Bn-U35"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B60-W0-L7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3875" y="469"/>
+            <point key="canvasLocation" x="3069" y="800"/>
         </scene>
         <!--Lobby-->
         <scene sceneID="Rmk-u6-yu6">
@@ -218,7 +218,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fl6-TB-WyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4670" y="94"/>
+            <point key="canvasLocation" x="3936" y="467"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6hv-UB-kQt">
@@ -493,7 +493,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afo-So-4E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5660.7476635514013" y="93.952483801295898"/>
+            <point key="canvasLocation" x="4835" y="467"/>
         </scene>
         <!--End View Controller-->
         <scene sceneID="bnI-ME-eq5">
@@ -1128,11 +1128,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2i-yk-wLJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6520" y="94"/>
+            <point key="canvasLocation" x="5693" y="467"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Qca-Ly-WeK"/>
+        <segue reference="s22-Bn-U35"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>
