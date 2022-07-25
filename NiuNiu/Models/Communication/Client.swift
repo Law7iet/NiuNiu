@@ -30,11 +30,11 @@ class Client: NSObject {
     var session: MCSession
     var browser: MCNearbyServiceBrowser
     var peerID: MCPeerID
-    var server: MCPeerID?
+    var serversPeerID: MCPeerID?
     // Delegates
     var searchDelegate: ClientSearchDelegate?
     var lobbyDelegate: ClientLobbyDelegate?
-    var clientDelegate: ClientGameDelegate?
+    var gameDelegate: ClientGameDelegate?
     
     // MARK: Methods
     init(peerID: MCPeerID) {
@@ -80,12 +80,12 @@ class Client: NSObject {
     /// The server MCPeerID is saved in the client object when the client connects to the server.
     /// - Parameter msg: The message to send.
     func sendMessageToServer(message msg: Message) {
-        if self.server != nil {
+        if self.serversPeerID != nil {
             if let data = msg.convertToData() {
                 do {
                     try self.session.send(
                         data,
-                        toPeers: [self.server!],
+                        toPeers: [self.serversPeerID!],
                         with: .reliable
                     )
                 } catch {
@@ -124,12 +124,12 @@ extension Client: MCSessionDelegate {
             self.lobbyDelegate?.didConnect(with: peerID)
         case MCSessionState.notConnected:
             self.lobbyDelegate?.didDisconnect(with: peerID)
-            self.clientDelegate?.didDisconnect(with: peerID)
-            if self.server == peerID {
-                self.server = nil
+            self.gameDelegate?.didDisconnect(with: peerID)
+            if self.serversPeerID == peerID {
+                self.serversPeerID = nil
             }
         default:
-            print("Client Unknown state: \(state)")
+            break
         }
     }
     
@@ -137,7 +137,7 @@ extension Client: MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         let message = Message(data: data)
         if message.type != .error {
-            self.clientDelegate?.didReceiveMessage(from: peerID, messageData: data)
+            self.gameDelegate?.didReceiveMessage(from: peerID, messageData: data)
             self.lobbyDelegate?.didReceiveMessage(from: peerID, messageData: data)
         } else {
             print("Client.session - message.type == .error from \(peerID.displayName)")

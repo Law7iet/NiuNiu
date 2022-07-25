@@ -28,6 +28,7 @@ class LobbyVC: UIViewController {
     func setupLobby() {
         if self.server == nil {
             self.lobby = [client.peerID]
+            self.playButton.isHidden = true
         } else {
             self.lobby = [MCPeerID]()
         }
@@ -69,6 +70,14 @@ class LobbyVC: UIViewController {
             self.update()
         }
     }
+    
+    func getExitAlert(withText text: String) -> UIAlertController {
+        let alert = UIAlertController(title: "Exit from lobby", message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+            self.navigationController?.popViewController(animated: true)
+        }))
+        return alert
+    }
 
     // MARK: Methods
     override func viewDidLoad() {
@@ -94,6 +103,10 @@ class LobbyVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.server?.sendMessage(
+            to: self.server!.clientsPeerIDs,
+            message: Message(.closeLobby)
+        )
         self.client.disconnect()
     }
     
@@ -105,8 +118,27 @@ class LobbyVC: UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let gameVC = segue.destination as! GameVC
+        if self.server != nil {
+            gameVC.dealer = Dealer(server: self.server!, time: Utils.timerLong, points: Utils.points)
+        }
+        gameVC.client = self.client
+    }
+    
+    // MARK: Actions
+    @IBAction func play(_ sender: Any) {
+        self.server?.sendMessage(
+            to: self.server!.clientsPeerIDs,
+            message: Message(.startGame, amount: Utils.points)
+        )
+        // Close adversiting
+//        self.server?.stopAdvertising()
+        // Start the game
+        self.performSegue(withIdentifier: "showGameSegue", sender: nil)
+    }
+    
 }
-
 
 // MARK: UITableViewDataSource implementation
 extension LobbyVC: UITableViewDataSource {
@@ -179,7 +211,7 @@ extension LobbyVC: ClientSearchDelegate {
 extension LobbyVC: ClientLobbyDelegate {
     
     func didConnect(with peerID: MCPeerID) {
-        if peerID != self.client.server {
+        if peerID != self.client.serversPeerID {
             DispatchQueue.main.async {
                 self.addPlayerInTableView(peerID: peerID)
             }
@@ -187,41 +219,35 @@ extension LobbyVC: ClientLobbyDelegate {
     }
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID != self.client.server {
+        if peerID != self.client.serversPeerID {
             DispatchQueue.main.async {
                 self.removePlayerInTableView(peerID: peerID)
             }
-        } else {
-//            let alert = UIAlertController(title: "Exit from lobby", message: "The lobby has been closed", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
-//                self.navigationController?.popViewController(animated: true)
-//            }))
-//            DispatchQueue.main.async {
-//                self.present(alert, animated: true)
-//            }
         }
     }
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
-//        let message = Message(data: messageData)
-//        switch message.type {
-//        case .closeSession:
-//            // Disconnect from the other peers
-//            self.client.disconnect()
-//            let alert = UIAlertController(title: "Exit from lobby", message: "The host removed you from the lobby", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
-//                self.navigationController?.popViewController(animated: true)
-//            }))
-//            DispatchQueue.main.async {
-//                self.present(alert, animated: true)
-//            }
-//        case .startGame:
-//            DispatchQueue.main.async {
-//                self.performSegue(withIdentifier: "showGameSegue", sender: nil)
-//            }
-//        default:
-//            print("ClientLobbyVC.didReceiveMessage - unexpected message.type: \(message.type))")
-//        }
+        let message = Message(data: messageData)
+        switch message.type {
+        case .startGame:
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "showGameSegue", sender: nil)
+            }
+        case .closeSession:
+            // Disconnect from the other peers
+            self.client.disconnect()
+            let alert = self.getExitAlert(withText: "The host removed you from the lobby")
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
+        case .closeLobby:
+            let alert = self.getExitAlert(withText: "The lobby has been closed")
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
+        default:
+            print("ClientLobbyVC.didReceiveMessage - unexpected message.type: \(message.type))")
+        }
     }
 
 }

@@ -36,7 +36,7 @@ class EndViewController: UIViewController {
         // Setup users
         if self.server != nil {
             self.users = [User]()
-            for player in [self.server!.himself] + self.server!.players.elements {
+            for player in self.server!.players.elements {
                 self.users?.append(player.convertToUser())
             }
         }

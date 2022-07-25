@@ -7,17 +7,10 @@
 
 import MultipeerConnectivity
 
-// MARK: Server's protocols
-protocol ServerLobbyDelegate {
-    func didServerConnect(with: MCPeerID)
-    func didServerDisconnect(with: MCPeerID)
-}
-
-protocol ServerDelegate {
+protocol ServerGameDelegate {
     func didDisconnect(with: MCPeerID)
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
-
 
 class Server: NSObject {
     
@@ -25,10 +18,9 @@ class Server: NSObject {
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
     var peerID: MCPeerID
-    var clients: [MCPeerID]
+    var clientsPeerIDs: [MCPeerID]
     // Delegates
-    var lobbyDelegate: ServerLobbyDelegate?
-    var serverDelegate: ServerDelegate?
+    var gameDelegate: ServerGameDelegate?
     
     // MARK: Methods
     init(peerID: MCPeerID) {
@@ -43,7 +35,7 @@ class Server: NSObject {
             serviceType: "niu-niu-game"
         )
         self.peerID = peerID
-        self.clients = [MCPeerID]()
+        self.clientsPeerIDs = [MCPeerID]()
         super.init()
         self.session.delegate = self
         self.advertiser.delegate = self
@@ -99,21 +91,19 @@ extension Server: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
-            self.clients.append(peerID)
-            self.lobbyDelegate?.didServerConnect(with: peerID)
+            self.clientsPeerIDs.append(peerID)
         case MCSessionState.notConnected:
-            if let index = self.clients.firstIndex(of: peerID) {
-                self.clients.remove(at: index)
+            if let index = self.clientsPeerIDs.firstIndex(of: peerID) {
+                self.clientsPeerIDs.remove(at: index)
             }
-            self.lobbyDelegate?.didServerDisconnect(with: peerID)
         default:
-            print("Server state: \(state)")
+            break
         }
     }
     
     // Receive data
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        self.serverDelegate?.didReceiveMessage(from: peerID, messageData: data)
+        self.gameDelegate?.didReceiveMessage(from: peerID, messageData: data)
     }
     
     // Not used
