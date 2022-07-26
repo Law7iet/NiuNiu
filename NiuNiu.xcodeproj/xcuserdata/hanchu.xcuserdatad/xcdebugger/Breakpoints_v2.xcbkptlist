@@ -7,32 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AE0E4BD4-07E9-453A-884F-A0853B3958AC"
-            shouldBeEnabled = "Yes"
+            uuid = "5D2DFA95-E584-43C4-BF44-B02B0EA9F8B7"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NiuNiu/Models/Game/Dealer.swift"
+            filePath = "NiuNiu/Models/Game/Cards.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "stopBet()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FFE144B9-04BE-40E4-90A1-82513EAED348"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NiuNiu/Models/Game/Dealer.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
-            landmarkName = "didReceiveMessage(from:messageData:)"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "pickCardAt(index:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

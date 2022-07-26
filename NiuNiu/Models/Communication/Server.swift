@@ -8,7 +8,7 @@
 import MultipeerConnectivity
 
 protocol ServerGameDelegate {
-    func didDisconnect(with: MCPeerID)
+    func didDisconnect(with peerID: MCPeerID)
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 

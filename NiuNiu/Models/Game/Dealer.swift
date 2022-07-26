@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-class Dealer {
+class Dealer: ServerGameDelegate {
     
     // MARK: Properties
     // Data structures
@@ -57,6 +57,16 @@ class Dealer {
         return nil
     }
     
+    func printData() {
+        print("--PLAYERS--")
+        for x in self.players.elements {
+            print(x)
+        }
+        print("\n")
+        print("MaxBid: \(self.maxBid)")
+        print("TotalBid: \(self.totalBid)")
+    }
+    
     // MARK: Game's methods
     func makeDeck() {
         self.deck = Deck()
@@ -82,7 +92,8 @@ class Dealer {
                 self.totalBid += player.bid
             }
         }
-        print("totalBid: \(self.totalBid)")
+        print("----STOPBET----")
+        self.printData()
     }
     
     func stopCheck() {
@@ -93,29 +104,17 @@ class Dealer {
         
         // Compute the total bid
         // Change the status to the players who didn't check
+        self.totalBid = 0
         for player in self.players.elements {
-            if player.status == .check {
+            if player.status == .check || player.status == .allIn {
                 player.status = .cards
-                
-            } else if player.status == .allIn {
-                player.status = .cards
+                self.totalBid += player.bid
             } else {
                 player.status = .fold
             }
-
-            if player.bid != self.maxBid {
-                if player.bid == 0 {
-                    if player.status != .allIn {
-                        player.status = .fold
-                    }
-                } else {
-                    self.totalBid += player.bid
-                }
-            }
         }
-        // Change the players' status to .cards if they checked or played allin
-        
-        print("totalBid: \(self.totalBid)")
+        print("----STOPCHECK----")
+        self.printData()
     }
     
     func stopCards() {
@@ -130,6 +129,10 @@ class Dealer {
                 player.status = .fold
             }
         }
+        
+        print("----STOPCARDS----")
+        self.printData()
+        
     }
     
     func endMatch() {
@@ -150,7 +153,10 @@ class Dealer {
                 }
             }
         }
-        winner!.isWinner = true
+        print("----ENDMATCH----")
+        self.printData()
+        
+        winner!.status = .winner
         winner!.points = points + self.totalBid
 
         var users = [User]()
@@ -220,13 +226,6 @@ class Dealer {
                                 // Cards - Timer ends
                                 timer.invalidate()
                                 self.stopCards()
-
-                                // Change players status to fold if they didn't choose properly their cards
-                                for player in self.players.elements {
-                                    if player.score == .none {
-                                        player.status = .fold
-                                    }
-                                }
                                 
                                 // End Match
                                 self.endMatch()
@@ -241,10 +240,10 @@ class Dealer {
         }
     }
         
-}
-
-// MARK: HostManagerDelegate implementation
-extension Dealer: ServerGameDelegate {
+//}
+//
+//// MARK: HostManagerDelegate implementation
+//extension Dealer: ServerGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
         // TODO: Remove from players the disconnected player
@@ -252,37 +251,22 @@ extension Dealer: ServerGameDelegate {
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
-//        if let player = findPlayer(byMCPeerID: peerID, from: self.players.elements) {
-        var index = 0
-        for _ in self.players.elements {
-            if self.players[index].id == peerID {
-                break
-            } else {
-                index += 1
-            }
-        }
+        let player = self.findPlayer(byMCPeerID: peerID, from: self.players.elements)!
+    
         switch message.type {
+        // MARK: Bet
         case .bet:
-            self.players[index].bet(amount: message.users![0].bid)
-
-
-            
-//            let user = message.users![0]
-//            self.players[index].bid = user.bid
-//            self.players[index].points = user.points
-//            self.players[index].status = user.status
-//            print("\(user.name) - Bet: \(user.bid)")
+            player.bet(amount: message.users![0].bid)
+        // MARK: Check
         case .check:
-            let user = message.users![0]
-            self.players[index].bid = self.players[index].bid + user.bid
-            self.players[index].points = user.points
-            self.players[index].status = user.status
-            print("\(user.name) - Check: +\(user.bid)")
+            switch message.users![0].status {
+            case .check: player.check(amount: message.users![0].bid)
+            case .allIn: player.allIn()
+            default: break
+            }
+        // MARK: Cards
         case .cards:
-            let user = message.users![0]
-            let cards = user.cards!
-            self.players[index].cards = cards
-            print("\(user.name) - Cards")
+            player.pickCards(cards: message.users![0].cards!)
         default:
             print("Delaer.didReceiveMessage - Unexpected message type: \(message.type)")
         }

@@ -29,7 +29,7 @@
 		6A64740B28797F23000D6EC0 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A64740A28797F23000D6EC0 /* Client.swift */; };
 		6A6AE91D286DEC460067EE2D /* LobbyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6AE91C286DEC460067EE2D /* LobbyVC.swift */; };
 		6A6EAE37288B012700A89421 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6EAE36288B012700A89421 /* Utils.swift */; };
-		6A94FB0D288C4C0000C76513 /* EndViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A94FB0C288C4C0000C76513 /* EndViewController.swift */; };
+		6A94FB0D288C4C0000C76513 /* EndVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A94FB0C288C4C0000C76513 /* EndVC.swift */; };
 		6AA2360A2876AB450000F47E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA236092876AB450000F47E /* Message.swift */; };
 		6AA2360C2876ABC80000F47E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA2360B2876ABC80000F47E /* Card.swift */; };
 		6AA2360E2876ABE10000F47E /* RankEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA2360D2876ABE10000F47E /* RankEnum.swift */; };
@@ -84,7 +84,7 @@
 		6A64740A28797F23000D6EC0 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		6A6AE91C286DEC460067EE2D /* LobbyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyVC.swift; sourceTree = "<group>"; };
 		6A6EAE36288B012700A89421 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		6A94FB0C288C4C0000C76513 /* EndViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndViewController.swift; sourceTree = "<group>"; };
+		6A94FB0C288C4C0000C76513 /* EndVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndVC.swift; sourceTree = "<group>"; };
 		6AA236092876AB450000F47E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6AA2360B2876ABC80000F47E /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		6AA2360D2876ABE10000F47E /* RankEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankEnum.swift; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 				6A3B3B2C286F14F900E43530 /* SeacherVC.swift */,
 				6A6AE91C286DEC460067EE2D /* LobbyVC.swift */,
 				6AE46351288D8C6A004025E5 /* GameVC.swift */,
-				6A94FB0C288C4C0000C76513 /* EndViewController.swift */,
+				6A94FB0C288C4C0000C76513 /* EndVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -373,7 +373,7 @@
 				6AA2360A2876AB450000F47E /* Message.swift in Sources */,
 				6A1192512875D53A00699FC6 /* MessageEnum.swift in Sources */,
 				6A19534A2883256E00BF2A31 /* Cards.swift in Sources */,
-				6A94FB0D288C4C0000C76513 /* EndViewController.swift in Sources */,
+				6A94FB0D288C4C0000C76513 /* EndVC.swift in Sources */,
 				6ABCA88A28853D09004D5BF5 /* User.swift in Sources */,
 				6AA236102876ABF10000F47E /* SuitEnum.swift in Sources */,
 				6A19534828831CCA00BF2A31 /* Players.swift in Sources */,

@@ -138,6 +138,7 @@ class LobbyVC: UIViewController {
         // Close browsing or advertising tasks
         self.server?.stopAdvertising()
         self.client.stopBrowsing()
+        self.client.lobbyDelegate = nil
         // Start the game
         self.performSegue(withIdentifier: "showGameSegue", sender: nil)
     }
@@ -234,8 +235,10 @@ extension LobbyVC: ClientLobbyDelegate {
         let message = Message(data: messageData)
         switch message.type {
         case .startGame:
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "showGameSegue", sender: nil)
+            if self.server == nil {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showGameSegue", sender: nil)
+                }
             }
         case .closeSession:
             // Disconnect from the other peers
@@ -250,7 +253,7 @@ extension LobbyVC: ClientLobbyDelegate {
                 self.present(alert, animated: true)
             }
         default:
-            print("ClientLobbyVC.didReceiveMessage - unexpected message.type: \(message.type))")
+            break
         }
     }
 

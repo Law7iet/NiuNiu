@@ -30,7 +30,7 @@ class MainVC: UIViewController {
         }
     }
     
-    @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToMainVC(segue: UIStoryboardSegue) {}
     
 }
 

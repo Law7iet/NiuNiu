@@ -5,13 +5,24 @@
 //  Created by Han Chu on 16/07/22.
 //
 
-class Cards: Codable {
+class Cards: Codable, CustomStringConvertible {
     
     var elements: [Card]
     var chosenCards: [Bool]
     var numberOfPickedCards: Int
     var score: ScoreEnum
     var tieBreakerCard: Card?
+    var description: String {
+        var description = ""
+        for index in 0 ... 4 {
+            if self.chosenCards[index] == true {
+                description = "- [\(self.elements[index].description)]\n" + description
+            } else {
+                description = description + "- \(self.elements[index].description)\n"
+            }
+        }
+        return "Cards:\n" + description
+    }
     
     init(elements: [Card]) {
         self.elements = elements
@@ -35,19 +46,20 @@ class Cards: Codable {
         }
         // Score and tie-breaker card
         if self.numberOfPickedCards == 1 {
-            // No Niu
             let index = self.chosenCards.firstIndex(of: true)!
-            self.score = ScoreEnum(rawValue: self.elements[index].rank.rawValue)!
+            // Score and tie-breaker card
+            self.score = ScoreEnum(rawValue: self.elements[index].rank.value)!
             self.tieBreakerCard = self.elements[index]
         } else if self.numberOfPickedCards == 3 {
-            // Niu
             var totalThree = 0
             var totalTwo = 0
             for index in 0...4 {
                 if self.chosenCards[index] == true {
-                    totalThree = totalThree + self.elements[index].rank.rawValue
+                    // Picked cards sum
+                    totalThree = totalThree + self.elements[index].rank.value
                 } else {
-                    totalTwo = totalTwo + self.elements[index].rank.rawValue
+                    // Not picked cards sum
+                    totalTwo = totalTwo + self.elements[index].rank.value
                     // Compute the tie-breaker card
                     if self.tieBreakerCard == nil {
                         self.tieBreakerCard = self.elements[index]
@@ -58,9 +70,10 @@ class Cards: Codable {
                     }
                 }
             }
+            // Check if the picked cards are correct
             if totalThree % 10 == 0 {
                 // Compute the remain 2 cards
-                self.score =  ScoreEnum(rawValue: (totalTwo % 10) + 10)!
+                self.score =  ScoreEnum(rawValue: ((totalTwo % 10) + 20))!
             } else {
                 // Error: picked cards not allowed
                 self.score = .none
@@ -71,6 +84,8 @@ class Cards: Codable {
             self.score = .none
             self.tieBreakerCard = nil
         }
+        print("--SCORE--")
+        print(self.score)
     }
     
 }

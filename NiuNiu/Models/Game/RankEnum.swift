@@ -21,4 +21,40 @@ enum RankEnum: Int, CaseIterable, Codable {
     case queen = 12
     case king = 13
 
+    var description: String {
+        switch self {
+        case .ace: return "ace"
+        case .two: return "two"
+        case .three: return "three"
+        case .four: return "four"
+        case .five: return "five"
+        case .six: return "six"
+        case .seven: return "seven"
+        case .eight: return "eight"
+        case .nine: return "nine"
+        case .ten: return "ten"
+        case .jack: return "jack"
+        case .queen: return "queen"
+        case .king: return "king"
+        }
+    }
+    
+    var value: Int {
+        switch self {
+        case .ace: return 1
+        case .two: return 2
+        case .three: return 3
+        case .four: return 4
+        case .five: return 5
+        case .six: return 6
+        case .seven: return 7
+        case .eight: return 8
+        case .nine: return 9
+        case .ten: return 10
+        case .jack: return 10
+        case .queen: return 10
+        case .king: return 10
+        }
+    }
+    
 }

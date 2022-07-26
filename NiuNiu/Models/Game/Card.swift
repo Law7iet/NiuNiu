@@ -5,10 +5,13 @@
 //  Created by Han Chu on 07/07/22.
 //
 
-struct Card: Codable, Comparable {
+struct Card: Codable, Comparable, CustomStringConvertible {
     
     var rank: RankEnum
     var suit: SuitEnum
+    var description: String {
+        return "\(self.rank.rawValue) of \(self.suit.description)"
+    }
     
     init(rank x: RankEnum, suit y: SuitEnum) {
         rank = x

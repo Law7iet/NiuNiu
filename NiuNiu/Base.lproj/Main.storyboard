@@ -10,6 +10,24 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="6hv-UB-kQt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tc0-NO-ycV" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="e9q-CJ-ujc">
+                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="r3y-GR-cz2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MZ1-9P-nhe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2293" y="94"/>
+        </scene>
         <!--MainVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -26,7 +44,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Host game" buttonSize="large"/>
                                         <connections>
-                                            <segue destination="05W-vh-zCY" kind="show" id="TuB-gZ-Juj"/>
+                                            <segue destination="05W-vh-zCY" kind="show" identifier="showLobbySegue" id="TuB-gZ-Juj"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
@@ -34,7 +52,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Join game" buttonSize="large"/>
                                         <connections>
-                                            <segue destination="l9d-DM-1ku" kind="show" id="TMY-t1-OOY"/>
+                                            <segue destination="l9d-DM-1ku" kind="show" identifier="showSearcherSegue" id="TMY-t1-OOY"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -205,38 +223,18 @@
                                     <action selector="play:" destination="05W-vh-zCY" eventType="touchUpInside" id="wnB-mJ-Y6J"/>
                                 </connections>
                             </button>
-                            <connections>
-                                <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="showGameSegue" modalPresentationStyle="overCurrentContext" id="7Yz-bh-C97"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="playButton" destination="vLu-4z-w3w" id="hSa-jP-9lW"/>
                         <outlet property="playersCounterLabel" destination="Va1-6M-X1q" id="dTn-oF-oRd"/>
                         <outlet property="playersTableView" destination="wfs-Au-m2Q" id="lPV-Oi-oW6"/>
+                        <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="showGameSegue" modalPresentationStyle="overCurrentContext" id="QwQ-TG-PXd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fl6-TB-WyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3936" y="467"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="6hv-UB-kQt">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tc0-NO-ycV" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="e9q-CJ-ujc">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="r3y-GR-cz2"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MZ1-9P-nhe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2293" y="94"/>
         </scene>
         <!--GameVC-->
         <scene sceneID="mGO-UT-MzH">
@@ -252,13 +250,26 @@
                                     <constraint firstAttribute="height" constant="41" id="Nzt-mF-o0L"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Arv-rW-YmO" userLabel="Menu">
+                                <rect key="frame" x="367" y="64" width="41" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="GMT-g6-k4W"/>
+                                    <constraint firstAttribute="width" constant="41" id="cKU-DW-mGs"/>
+                                </constraints>
+                                <state key="normal">
+                                    <imageReference key="image" image="line.3.horizontal" catalog="system" symbolScale="large"/>
+                                </state>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="line.3.horizontal" catalog="system" symbolScale="large"/>
+                                </buttonConfiguration>
+                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AMA-AH-YMe" userLabel="Players Stack View">
                                 <rect key="frame" x="20" y="125" width="388" height="195"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lz9-dP-0wj" userLabel="Player 1 Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="105" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nV-C1-6N0" userLabel="Name">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nV-C1-6N0" userLabel="Name">
                                                 <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="31"/>
                                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                                 <state key="normal" title="Button"/>
@@ -278,7 +289,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Tmx-v0-4wI" userLabel="Player 2 Stack View">
                                         <rect key="frame" x="0.0" y="41" width="105" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J0Z-Hf-JP9" userLabel="Name">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J0Z-Hf-JP9" userLabel="Name">
                                                 <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="31"/>
                                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                                 <state key="normal" title="Button"/>
@@ -298,7 +309,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="036-gr-kza" userLabel="Player 3 Stack View">
                                         <rect key="frame" x="0.0" y="82" width="105" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t0S-gr-Awo" userLabel="Name">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t0S-gr-Awo" userLabel="Name">
                                                 <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="31"/>
                                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                                 <state key="normal" title="Button"/>
@@ -318,7 +329,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="snS-T3-BGY" userLabel="Player 4 Stack View">
                                         <rect key="frame" x="0.0" y="123" width="105" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xGp-fj-Bzv" userLabel="Name">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xGp-fj-Bzv" userLabel="Name">
                                                 <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="31"/>
                                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                                 <state key="normal" title="Button"/>
@@ -338,7 +349,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="N5n-ig-omR" userLabel="Player 5 Stack View">
                                         <rect key="frame" x="0.0" y="164" width="105" height="31"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Vq-Phq" userLabel="Name">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Vq-Phq" userLabel="Name">
                                                 <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="31"/>
                                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                                 <state key="normal" title="Button"/>
@@ -383,7 +394,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="-50" translatesAutoresizingMaskIntoConstraints="NO" id="ry0-Oe-n9L" userLabel="Cards Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="388" height="163.66666666666666"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SA1-kT-qx8" userLabel="Card 1">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SA1-kT-qx8" userLabel="Card 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="mYo-s2-GYQ"/>
@@ -394,7 +405,7 @@
                                                     <action selector="clickCard:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="RIT-mv-ta8"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9N-uy-h78" userLabel="Card 2">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9N-uy-h78" userLabel="Card 2">
                                                 <rect key="frame" x="67.666666666666657" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Gz1-2i-Rgf"/>
@@ -405,7 +416,7 @@
                                                     <action selector="clickCard:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="5m8-Sj-gTq"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epA-Eo-AcY" userLabel="Card 3">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epA-Eo-AcY" userLabel="Card 3">
                                                 <rect key="frame" x="135.33333333333334" y="0.0" width="117.33333333333334" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="epA-Eo-AcY" secondAttribute="height" multiplier="64:89" id="SXc-GF-3aI"/>
@@ -416,7 +427,7 @@
                                                     <action selector="clickCard:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="3t1-R6-vKJ"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTE-fl-q5K" userLabel="Card 4">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTE-fl-q5K" userLabel="Card 4">
                                                 <rect key="frame" x="202.66666666666666" y="0.0" width="117.66666666666666" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="2fl-H9-UzR"/>
@@ -427,7 +438,7 @@
                                                     <action selector="clickCard:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="70x-Fw-6nW"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tFk-Gq-9De" userLabel="Card 5">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tFk-Gq-9De" userLabel="Card 5">
                                                 <rect key="frame" x="270.33333333333331" y="0.0" width="117.66666666666669" height="163.66666666666666"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="tFk-Gq-9De" secondAttribute="height" multiplier="64:89" id="bIe-kU-TiV"/>
@@ -489,17 +500,13 @@
                                     </slider>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Arv-rW-YmO" userLabel="Menu">
-                                <rect key="frame" x="367" y="64" width="41" height="41"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="41" id="GMT-g6-k4W"/>
-                                    <constraint firstAttribute="width" constant="41" id="cKU-DW-mGs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal">
-                                    <imageReference key="image" image="line.3.horizontal" catalog="system" symbolScale="large"/>
-                                </state>
-                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fold" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9W-81-y8V">
+                                <rect key="frame" x="20" y="597" width="388" height="163.66666666666663"/>
+                                <color key="backgroundColor" red="0.49687500000000001" green="0.49375000000000002" blue="0.5" alpha="0.74564200680272108" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3Fo-iq-n81"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -508,14 +515,18 @@
                             <constraint firstItem="UY9-zN-ckO" firstAttribute="leading" secondItem="3Fo-iq-n81" secondAttribute="leading" constant="20" id="D17-Qf-4Gg"/>
                             <constraint firstItem="AMA-AH-YMe" firstAttribute="trailing" secondItem="3Fo-iq-n81" secondAttribute="trailing" constant="-20" id="DQJ-mh-zFt"/>
                             <constraint firstItem="J1o-V2-anF" firstAttribute="top" secondItem="AMA-AH-YMe" secondAttribute="bottom" constant="31" id="ESo-Rf-TdC"/>
+                            <constraint firstItem="q9W-81-y8V" firstAttribute="top" secondItem="ry0-Oe-n9L" secondAttribute="top" id="I3Z-aN-8J5"/>
+                            <constraint firstItem="q9W-81-y8V" firstAttribute="bottom" secondItem="ry0-Oe-n9L" secondAttribute="bottom" id="K3n-0h-hLt"/>
                             <constraint firstItem="UY9-zN-ckO" firstAttribute="top" secondItem="3Fo-iq-n81" secondAttribute="top" constant="20" id="KBo-id-ICL"/>
                             <constraint firstItem="XrL-kE-LYI" firstAttribute="trailing" secondItem="3Fo-iq-n81" secondAttribute="trailing" constant="-20" id="N5p-wS-N9Z"/>
                             <constraint firstItem="3Fo-iq-n81" firstAttribute="trailing" secondItem="Arv-rW-YmO" secondAttribute="trailing" constant="20" id="Raq-p9-cxZ"/>
                             <constraint firstItem="XrL-kE-LYI" firstAttribute="bottom" secondItem="3Fo-iq-n81" secondAttribute="bottom" constant="-20" id="Wb3-u0-4ts"/>
                             <constraint firstItem="Arv-rW-YmO" firstAttribute="top" secondItem="3Fo-iq-n81" secondAttribute="top" constant="20" id="YGq-Re-zdn"/>
                             <constraint firstItem="UY9-zN-ckO" firstAttribute="bottom" secondItem="AMA-AH-YMe" secondAttribute="top" constant="-20" id="YYk-aG-IrL"/>
+                            <constraint firstItem="q9W-81-y8V" firstAttribute="trailing" secondItem="ry0-Oe-n9L" secondAttribute="trailing" id="aRO-Ng-XgR"/>
                             <constraint firstItem="J1o-V2-anF" firstAttribute="leading" secondItem="3Fo-iq-n81" secondAttribute="leading" constant="20" id="ppG-Y5-dnW"/>
                             <constraint firstItem="XrL-kE-LYI" firstAttribute="leading" secondItem="3Fo-iq-n81" secondAttribute="leading" constant="20" id="qwu-y2-96g"/>
+                            <constraint firstItem="q9W-81-y8V" firstAttribute="leading" secondItem="ry0-Oe-n9L" secondAttribute="leading" id="w0P-Bc-Cbd"/>
                             <constraint firstItem="AMA-AH-YMe" firstAttribute="leading" secondItem="3Fo-iq-n81" secondAttribute="leading" constant="20" id="zPz-od-KAv"/>
                             <constraint firstItem="J1o-V2-anF" firstAttribute="trailing" secondItem="3Fo-iq-n81" secondAttribute="trailing" constant="-20" id="zdk-mg-foj"/>
                         </constraints>
@@ -525,6 +536,7 @@
                         <outlet property="actionButton" destination="Q6t-4f-Swf" id="Zku-rX-2F3"/>
                         <outlet property="betSlider" destination="6ui-4C-gBh" id="TgV-L5-Dhr"/>
                         <outlet property="foldButton" destination="nxR-N1-O2Y" id="X5W-C9-wyW"/>
+                        <outlet property="foldLabel" destination="q9W-81-y8V" id="hZQ-06-BML"/>
                         <outlet property="menuButton" destination="Arv-rW-YmO" id="cpX-Ka-aKq"/>
                         <outlet property="pointsLabel" destination="dI6-jI-cxd" id="PL8-a5-TuG"/>
                         <outlet property="statusLabel" destination="8nw-Ef-sKa" id="gr4-5n-MOH"/>
@@ -540,18 +552,19 @@
                         <outletCollection property="cardsButton" destination="epA-Eo-AcY" collectionClass="NSMutableArray" id="6WD-z9-LUo"/>
                         <outletCollection property="cardsButton" destination="FTE-fl-q5K" collectionClass="NSMutableArray" id="XSV-UB-KzB"/>
                         <outletCollection property="cardsButton" destination="tFk-Gq-9De" collectionClass="NSMutableArray" id="Xix-6p-p81"/>
-                        <segue destination="7xU-sw-sAn" kind="unwind" identifier="unwindToMainVC" unwindAction="prepareForUnwindWithSegue:" id="4wC-fP-H7c"/>
+                        <segue destination="7xU-sw-sAn" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="4wC-fP-H7c"/>
+                        <segue destination="M56-5n-2pX" kind="presentation" identifier="showEndSegue" modalPresentationStyle="overCurrentContext" id="g6j-AK-1PK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afo-So-4E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="7xU-sw-sAn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4835" y="467"/>
+            <point key="canvasLocation" x="4833.6448598130837" y="466.52267818574518"/>
         </scene>
-        <!--End View Controller-->
+        <!--EndVC-->
         <scene sceneID="bnI-ME-eq5">
             <objects>
-                <viewController id="M56-5n-2pX" customClass="EndViewController" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="M56-5n-2pX" customClass="EndVC" customModule="NiuNiu" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Czl-4C-MhB">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1099,6 +1112,9 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="32"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Quit"/>
+                                                <connections>
+                                                    <action selector="quit:" destination="M56-5n-2pX" eventType="touchUpInside" id="F1G-Mh-jcj"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nU3-Fm-wpL">
                                                 <rect key="frame" x="213.66666666666663" y="0.0" width="174.33333333333337" height="32"/>
@@ -1177,9 +1193,11 @@
                         <outletCollection property="cards5" destination="LZl-Nh-Oqo" collectionClass="NSMutableArray" id="pwq-AH-kHN"/>
                         <outletCollection property="cards5" destination="Ngo-dZ-yoH" collectionClass="NSMutableArray" id="wAo-0X-UR6"/>
                         <outletCollection property="cards5" destination="6ZV-tr-Muh" collectionClass="NSMutableArray" id="NT7-ue-zxa"/>
+                        <segue destination="B3C-4V-jZU" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="iRr-Ra-DTS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2i-yk-wLJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="B3C-4V-jZU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="5693" y="467"/>
         </scene>
