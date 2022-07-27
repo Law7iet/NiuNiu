@@ -57,122 +57,12 @@ class Dealer {
         return nil
     }
     
-    func printData() {
-        print("--PLAYERS--")
-        for x in self.players.elements {
-            print(x)
-        }
-        print("\n")
-        print("MaxBid: \(self.maxBid)")
-        print("TotalBid: \(self.totalBid)")
-    }
-    
-    // MARK: Game's methods
-    func makeDeck() {
+    // MARK: Game
+    func play() {
+        // MARK: Initialization
+        // Compute players and their cards
         self.deck = Deck()
         self.deck.shuffle()
-    }
-    
-    func stopBet() {
-        self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.stopBet)
-        )
-        
-        // Compute the highest bid and the total bid
-        // Change the status to the players who didn't bet
-        for player in self.players.elements {
-            if player.bid == 0 || player.status != .bet {
-                player.status = .fold
-            } else {
-                player.status = .check
-                if player.bid > self.maxBid {
-                    self.maxBid = player.bid
-                }
-                self.totalBid += player.bid
-            }
-        }
-        print("----STOPBET----")
-        self.printData()
-    }
-    
-    func stopCheck() {
-        self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.stopCheck)
-        )
-        
-        // Compute the total bid
-        // Change the status to the players who didn't check
-        self.totalBid = 0
-        for player in self.players.elements {
-            if player.status == .check || player.status == .allIn {
-                player.status = .cards
-                self.totalBid += player.bid
-            } else {
-                player.status = .fold
-            }
-        }
-        print("----STOPCHECK----")
-        self.printData()
-    }
-    
-    func stopCards() {
-        self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.stopCards)
-        )
-        
-        // Change status to the players whose didn't choose their cards
-        for player in self.players.elements {
-            if player.score == .none {
-                player.status = .fold
-            }
-        }
-        
-        print("----STOPCARDS----")
-        self.printData()
-        
-    }
-    
-    func endMatch() {
-        // Compute the winner
-        var winner: Player? = nil
-        for player in self.players.elements {
-            if winner == nil {
-                winner = player
-            } else {
-                if player.score != .none {
-                    if player.score > winner!.score {
-                        winner = player
-                    } else if player.score == winner!.score {
-                        if player.cards!.tieBreakerCard! > winner!.cards!.tieBreakerCard! {
-                            winner = player
-                        }
-                    }
-                }
-            }
-        }
-        print("----ENDMATCH----")
-        self.printData()
-        
-        winner!.status = .winner
-        winner!.points = points + self.totalBid
-
-        var users = [User]()
-        for player in self.players.elements {
-            users.append(player.convertToUser())
-        }
-        self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.endMatch, amount: self.totalBid, users: users)
-        )
-    }
-    
-    func play() {
-        var timerCounter: Int
-        // Set Players and their cards
-        self.makeDeck()
         var users = [User]()
         for player in self.players.elements {
             let cards = self.deck.getCards()
@@ -180,66 +70,120 @@ class Dealer {
             player.status = .bet
             users.append(player.convertToUser())
         }
+        // Send players and their cards to clients
         self.server.sendMessage(
             to: self.players.getAvailableMCPeerIDs(),
             message: Message(.startMatch, users: users)
         )
         
-        // Bet
-        self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
-            message: Message(.startBet)
-        )
-
-        // Bet - Timer starts
-        timerCounter = 0
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if timerCounter == self.time {
-                // Bet - Timer ends
-                timer.invalidate()
-                self.stopBet()
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+            timerCounter += 1
+            switch timerCounter {
+            case Utils.timerShort + Utils.timerOffset:
+                // MARK: Bet - Start
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.startBet)
+                )
                 
-                // Check
+            case Utils.timerShort + 2 * Utils.timerOffset + 1 * Utils.timerLong:
+                // MARK: Bet - Stop
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.stopBet)
+                )
+                // Compute the highest bid and the total bid
+                // Change the status to the players who didn't bet
+                for player in self.players.elements {
+                    if player.bid == 0 || player.status != .bet {
+                        player.status = .fold
+                    } else {
+                        player.status = .check
+                        if player.bid > self.maxBid {
+                            self.maxBid = player.bid
+                        }
+                        self.totalBid += player.bid
+                    }
+                }
+                // MARK: Check - Start
                 self.server.sendMessage(
                     to: self.players.getAvailableMCPeerIDs(),
                     message: Message(.startCheck, amount: self.maxBid)
                 )
 
-                // Check - Timer starts
-                timerCounter = 0
-                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                    if timerCounter == self.time {
-                        // Check - Timer ends
-                        timer.invalidate()
-                        self.stopCheck()
-
-                        // Cards
-                        self.server.sendMessage(
-                            to: self.players.getAvailableMCPeerIDs(),
-                            message: Message(.startCards)
-                        )
-
-                        // Cards - Timer starts
-                        timerCounter = 0
-                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                            if timerCounter == self.time {
-                                // Cards - Timer ends
-                                timer.invalidate()
-                                self.stopCards()
-                                
-                                // End Match
-                                self.endMatch()
+            case Utils.timerShort + 3 * Utils.timerOffset + 2 * Utils.timerLong:
+                // MARK: Check - Stop
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.stopCheck)
+                )
+                // Compute the total bid
+                // Change the status to the players who didn't check
+                self.totalBid = 0
+                for player in self.players.elements {
+                    if player.status == .check || player.status == .allIn {
+                        player.status = .cards
+                        self.totalBid += player.bid
+                    } else {
+                        player.status = .fold
+                    }
+                }
+                
+                // MARK: Cards - Start
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.startCards)
+                )
+                
+            case Utils.timerShort + 3 * Utils.timerOffset + 3 * Utils.timerLong:
+                // MARK: Cards - Stop
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.stopCards)
+                )
+                // Change status to the players whose didn't choose their cards
+                for player in self.players.elements {
+                    if player.score == .none {
+                        player.status = .fold
+                    }
+                }
+                // MARK: End Match
+                // Compute the winner
+                var winner: Player? = nil
+                for player in self.players.elements {
+                    if winner == nil {
+                        winner = player
+                    } else {
+                        if player.score != .none {
+                            if player.score > winner!.score {
+                                winner = player
+                            } else if player.score == winner!.score {
+                                if player.cards!.tieBreakerCard! > winner!.cards!.tieBreakerCard! {
+                                    winner = player
+                                }
                             }
-                            timerCounter = timerCounter + 1
                         }
                     }
-                    timerCounter = timerCounter + 1
                 }
+                winner!.status = .winner
+                winner!.points = self.points + self.totalBid
+
+                var users = [User]()
+                for player in self.players.elements {
+                    users.append(player.convertToUser())
+                }
+                self.server.sendMessage(
+                    to: self.players.getAvailableMCPeerIDs(),
+                    message: Message(.endMatch, amount: self.totalBid, users: users)
+                )
+                
+            default:
+                break
             }
-            timerCounter = timerCounter + 1
         }
     }
-        
+
 }
 
 // MARK: HostManagerDelegate implementation

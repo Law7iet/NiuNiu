@@ -19,15 +19,16 @@ class GameVC: UIViewController {
     var maxBid = 0
     var totalBid = 0
     var clickedButtons = [false, false, false, false, false]
+    var timer: Timer?
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
-    @IBOutlet weak var userLabel: UILabel!
-    @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var foldLabel: UILabel!
+    @IBOutlet weak var playerLabel: UILabel!
+    @IBOutlet weak var pointsLabel: UILabel!
     
     @IBOutlet weak var menuButton: UIButton!
-    @IBOutlet var playersButton: [UIButton]!
+    @IBOutlet var usersButton: [UIButton]!
     @IBOutlet var cardsButton: [UIButton]!
     @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var foldButton: UIButton!
@@ -65,14 +66,27 @@ class GameVC: UIViewController {
         menuButton.menu = menu
     }
     
-    func setTimer(time: Int) {
-        var timerCounter = 0
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.timerLabel.text = String(time - timerCounter)
-            if timerCounter == time {
-                timer.invalidate()
+    func setupPlayers() {
+        var index = 0
+        for user in self.users {
+            if user.name == self.client.peerID.displayName {
+                // Setup himself cards
+                self.player = user.convertToPlayer(withPeerID: self.client.peerID)
+                for cardIndex in 0 ... 4 {
+                    let image = UIImage(named: self.player.cards!.elements[cardIndex].getName())
+                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
+                }
+                // Setup himself labels
+                self.playerLabel.text = self.player.id.displayName
+                self.pointsLabel.text = "Points: \(self.player.points)"
+                self.betSlider.minimumValue = 0.0
+                self.betSlider.maximumValue = Float(self.player.points)
             } else {
-                timerCounter += 1
+                // Setup the other players
+                self.usersButton[index].setTitle(user.name, for: UIControl.State.normal)
+                self.usersButton[index].isEnabled = true
+                self.usersButton[index].isHidden = false
+                index += 1
             }
         }
     }
@@ -82,31 +96,25 @@ class GameVC: UIViewController {
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
+        
         self.dealer?.play()
-        self.statusLabel.text = "The game will start soon"
-        var timerCounter = 0
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.timerLabel.text = String(Utils.timerShort - timerCounter)
-            if timerCounter == Utils.timerShort {
-                timer.invalidate()
-                // Start the game
-                if self.dealer != nil {
-                    self.dealer!.play()
-                }
-            } else {
-                timerCounter += 1
-            }
+        // Hide UI
+        for userButton in self.usersButton {
+            userButton.isHidden = true
         }
+        for playerCard in self.cardsButton {
+            playerCard.isHidden = true
+        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let endVC = segue.destination as! EndVC
-        if self.dealer != nil {
-            endVC.dealer = self.dealer!
+        if let endVC = segue.destination as? EndVC {
+            endVC.dealer = self.dealer
+            endVC.client = self.client
+            endVC.users = self.users
+            endVC.prize = self.totalBid
         }
-        endVC.client = self.client
-        endVC.users = self.users
-        endVC.prize = self.totalBid
     }
     
     // MARK: Actions
@@ -209,31 +217,6 @@ class GameVC: UIViewController {
 
 extension GameVC: ClientGameDelegate {
     
-    // MARK: Supporting fuctions
-    func setupPlayers() {
-        var index = 0
-        for user in self.users {
-            if user.name == self.client.peerID.displayName {
-                // Setup himself cards
-                self.player = user.convertToPlayer(withPeerID: self.client.peerID)
-                for cardIndex in 0 ... 4 {
-                    let image = UIImage(named: self.player.cards!.elements[cardIndex].getName())
-                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
-                }
-                // Setup himself labels
-                self.userLabel.text = self.player.id.displayName
-                self.pointsLabel.text = "Points: \(self.player.points)"
-                self.betSlider.minimumValue = 0.0
-                self.betSlider.maximumValue = Float(self.player.points)
-            } else {
-                // Setup the other players
-                self.playersButton[index].setTitle(user.name, for: UIControl.State.normal)
-                self.playersButton[index].isEnabled = true
-                index += 1
-            }
-        }
-    }
-    
     func didDisconnect(with peerID: MCPeerID) {}
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
@@ -242,112 +225,137 @@ extension GameVC: ClientGameDelegate {
         // MARK: StartMatch
         case .startMatch:
             DispatchQueue.main.async {
-                self.statusLabel.text = "Match started!"
+                self.statusLabel.text = "The game will start soon"
+                self.timerLabel.text = String(Utils.timerShort)
                 self.users = message.users!
                 self.setupPlayers()
-                for btn in self.cardsButton {
-                    btn.isEnabled = true
+                var timerCounter = 0
+                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+                    timerCounter += 1
+                    self.timerLabel.text = String(Utils.timerShort - timerCounter)
+                    if timerCounter == Utils.timerShort {
+                        timer.invalidate()
+                        self.statusLabel.text = "Match started!"
+                        self.timerLabel.text = ""
+                        
+                        for btn in self.cardsButton {
+                            btn.isEnabled = true
+                            btn.isHidden = false
+                        }
+                    }
                 }
             }
         // MARK: StartBet
         case .startBet:
             DispatchQueue.main.async {
-                // TODO: All players that receive .startBet shouldn't have .fold as status
-                if self.player.status != .fold {
-
-                    self.player.status = .bet
-                    self.statusLabel.text = "Start Bet!"
-
-                    self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
-                    self.actionButton.isEnabled = true
-                    self.foldButton.isEnabled = true
-                    self.betSlider.isEnabled = true
-                    
-                    self.setTimer(time: Utils.timerLong)
+                self.player.status = .bet
+                self.statusLabel.text = "Start Bet!"
+                self.timerLabel.text = String(Utils.timerLong)
+                self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
+                self.actionButton.isEnabled = true
+                self.foldButton.isEnabled = true
+                self.betSlider.isEnabled = true
+                
+                var timerCounter = 0
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+                    timerCounter += 1
+                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
+                    if timerCounter == Utils.timerLong {
+                        timer.invalidate()
+                        self.player.status = .none
+                        self.statusLabel.text = "Stop Bet!"
+                        self.timerLabel.text = ""
+                        self.actionButton.isEnabled = false
+                        self.foldButton.isEnabled = false
+                        self.betSlider.isEnabled = false
+                    }
                 }
             }
         // MARK: StopBet
         case .stopBet:
             DispatchQueue.main.async {
-                // TODO: All players that receive .stopBet shouldn't have .fold as status
-                if self.player.status != .fold {
-                    
-                    self.player.status = .none
-                    self.statusLabel.text = "Stop Bet!"
-                    
-                    self.actionButton.isEnabled = false
-                    self.foldButton.isEnabled = false
-                    self.betSlider.isEnabled = false
-                }
+                self.timer?.invalidate()
+                self.player.status = .none
+                self.statusLabel.text = "Stop Bet!"
+                self.timerLabel.text = ""
+                self.actionButton.isEnabled = false
+                self.foldButton.isEnabled = false
+                self.betSlider.isEnabled = false
             }
         // MARK: StartCheck
         case .startCheck:
             DispatchQueue.main.async {
-                // TODO: All players that receive .startCheck shouldn't have .fold as status
-                if self.player.status != .fold {
-                    
-                    self.statusLabel.text = "Start Check!"
-                    self.maxBid = message.amount!
-                    
-                    if self.player.bid != self.maxBid {
-                        let diff = self.maxBid - self.player.bid
-                        if diff < self.player.points {
-                            // Setup bet button and labels
-                            self.player.status = .check
-                            self.actionButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
-                            self.actionButton.isEnabled = true
-                            self.foldButton.isEnabled = true
-                        } else {
-                            // The user doens't have enough points
-                            self.player.status = .allIn
-                            self.actionButton.setTitle("All-in", for: UIControl.State.normal)
-                            self.actionButton.isEnabled = true
-                            self.foldButton.isEnabled = true
-                        }
+                self.statusLabel.text = "Start Check!"
+                self.timerLabel.text = String(Utils.timerLong)
+                self.maxBid = message.amount!
+                if self.player.bid != self.maxBid {
+                    let diff = self.maxBid - self.player.bid
+                    if diff < self.player.points {
+                        // Setup bet button and labels
+                        self.player.status = .check
+                        self.actionButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
+                        self.actionButton.isEnabled = true
+                        self.foldButton.isEnabled = true
+                    } else {
+                        // The user doens't have enough points
+                        self.player.status = .allIn
+                        self.actionButton.setTitle("All-in", for: UIControl.State.normal)
+                        self.actionButton.isEnabled = true
+                        self.foldButton.isEnabled = true
                     }
-                    
-                    self.setTimer(time: Utils.timerLong)
                 }
                 
+                var timerCounter = 0
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+                    timerCounter += 1
+                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
+                    if timerCounter == Utils.timerLong {
+                        timer.invalidate()
+                        self.statusLabel.text = "Stop Check!"
+                        self.timerLabel.text = ""
+                        self.actionButton.isEnabled = false
+                        self.foldButton.isEnabled = false
+                    }
+                }
             }
         // MARK: StopCheck
         case .stopCheck:
             DispatchQueue.main.async {
-                // TODO: All players that receive .stopCheck shouldn't have .fold as status
-                if self.player.status != .fold {
-                    
-                    self.player.status = .none
-                    self.statusLabel.text = "Stop Check!"
-                    
-                    self.actionButton.isEnabled = false
-                    self.foldButton.isEnabled = false
-                }
+                self.timer?.invalidate()
+                self.player.status = .none
+                self.statusLabel.text = "Stop Check!"
+                self.timerLabel.text = ""
+                self.actionButton.isEnabled = false
+                self.foldButton.isEnabled = false
             }
         // MARK: StartCards
         case .startCards:
             DispatchQueue.main.async {
-                // TODO: All players that receive .stopBet shouldn't have .fold as status
-                if self.player.status != .fold {
+                self.player.status = .cards
+                self.statusLabel.text = "Start pick cards!"
+                self.timerLabel.text = String(Utils.timerLong)
+                self.actionButton.isEnabled = true
+                self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
                     
-                    self.player.status = .cards
-                    self.statusLabel.text = "Start pick cards!"
-    
-                    self.actionButton.isEnabled = true
-                    self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
-                    
-                    self.setTimer(time: Utils.timerLong)
+                var timerCounter = 0
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+                    timerCounter += 1
+                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
+                    if timerCounter == Utils.timerLong {
+                        timer.invalidate()
+                        self.player.status = .none
+                        self.statusLabel.text = "Stop Cards!"
+                        self.timerLabel.text = ""
+                    }
                 }
             }
         // MARK: StopCards
         case .stopCards:
             DispatchQueue.main.async {
-                self.statusLabel.text = "Stop cards!"
-                // TODO: All players that receive .stopBet shouldn't have .fold as status
-                if self.player.status != .fold {
-                 
-                    self.player.status = .none
-                    self.statusLabel.text = "Stop Cards!"
-                }
+                self.timer?.invalidate()
+                self.player.status = .none
+                self.statusLabel.text = "Stop Cards!"
+                self.timerLabel.text = ""
             }
         // MARK: EndMatch
         case .endMatch:

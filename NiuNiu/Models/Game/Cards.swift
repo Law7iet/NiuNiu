@@ -73,7 +73,11 @@ class Cards: Codable, CustomStringConvertible {
             // Check if the picked cards are correct
             if totalThree % 10 == 0 {
                 // Compute the remain 2 cards
-                self.score =  ScoreEnum(rawValue: ((totalTwo % 10) + 20))!
+                if totalTwo % 20 == 0 {
+                    self.score = .niuNiu
+                } else {
+                    self.score =  ScoreEnum(rawValue: ((totalTwo % 10) + 20))!
+                }
             } else {
                 // Error: picked cards not allowed
                 self.score = .none
