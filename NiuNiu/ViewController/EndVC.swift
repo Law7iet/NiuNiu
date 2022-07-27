@@ -15,6 +15,8 @@ class EndVC: UIViewController {
     var users: [User]!
     var prize: Int!
     
+    var play = false
+    
     @IBOutlet weak var winnerID: UILabel!
     @IBOutlet weak var winnerPoints: UILabel!
     @IBOutlet weak var winnerScore: UILabel!
@@ -31,6 +33,9 @@ class EndVC: UIViewController {
     @IBOutlet var cards5: [UIButton]!
     lazy var playerCards = [cards1, cards2, cards3, cards4, cards5]
     
+    @IBOutlet weak var endLabel: UILabel!
+    @IBOutlet weak var playButton: UIButton!
+    
     // MARK: Supporting functions
     func setupCard(buttons: [UIButton], cards: Cards) {
         var cardTrueIndex = 0
@@ -39,7 +44,7 @@ class EndVC: UIViewController {
             let image = UIImage(named: cards[cardIndex].getName())
             if cards.chosenCards[cardIndex] == true {
                 buttons[cardTrueIndex].setBackgroundImage(image, for: UIControl.State.normal)
-                buttons[cardTrueIndex].layer.cornerRadius = Utils.cornerRadius
+                buttons[cardTrueIndex].layer.cornerRadius = Utils.cornerRadiusSmall
                 buttons[cardTrueIndex].layer.borderWidth = Utils.borderWidth(withHeight: buttons[0].frame.height)
                 buttons[cardTrueIndex].layer.borderColor = UIColor.red.cgColor
                 cardTrueIndex += 1
@@ -50,17 +55,16 @@ class EndVC: UIViewController {
         }
     }
     
-    // MARK: Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Setup users
+    func setupUsers() {
         if self.dealer != nil {
             self.users = [User]()
             for player in self.dealer!.players.elements {
                 self.users?.append(player.convertToUser())
             }
         }
-        // Make graphics
+    }
+    
+    func setupUI() {
         var userIndex = 0
         for user in self.users! {
             if user.status == .winner {
@@ -76,6 +80,38 @@ class EndVC: UIViewController {
                 self.setupCard(buttons: self.playerCards[userIndex]!, cards: user.cards!)
                 userIndex += 1
             }
+        }
+    }
+    
+    // MARK: Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setupUsers()
+        self.setupUI()
+        var timerCounter = 0
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+            if timerCounter >= Utils.timerLong {
+                timer.invalidate()
+                if self.play == true {
+                    self.performSegue(withIdentifier: "unwindToGameVC", sender: self)
+                } else {
+                    self.performSegue(withIdentifier: "unwindToGameVC", sender: self)
+                }
+            } else {
+                if self.play == false {
+                    self.endLabel.text = "Do you want to continue to play? (\(Utils.timerLong - timerCounter))"
+                } else {
+                    self.endLabel.text = "Next match will start in \(Utils.timerLong - timerCounter) seconds"
+                }
+                timerCounter += 1
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let gameVC = segue.destination as? GameVC {
+            gameVC.dealer = self.dealer
+            gameVC.client = self.client
         }
     }
     
@@ -107,5 +143,9 @@ class EndVC: UIViewController {
         self.present(alert, animated: true)
     }
     
+    @IBAction func play(_ sender: Any) {
+        self.play = true
+        self.playButton.isEnabled = false
+    }
 
 }

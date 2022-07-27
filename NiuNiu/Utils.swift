@@ -14,6 +14,7 @@ class Utils {
     static let points = 100
     
     static let cornerRadius = CGFloat(5.0)
+    static let cornerRadiusSmall = CGFloat(3.0)
     // borderWitdh it's equal to: 1.85% of the card's height
     static func borderWidth(withHeight height: CGFloat) -> CGFloat {
         return height * 1.85 / 100

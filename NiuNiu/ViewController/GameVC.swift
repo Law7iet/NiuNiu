@@ -82,6 +82,7 @@ class GameVC: UIViewController {
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
+        self.dealer?.play()
         self.statusLabel.text = "The game will start soon"
         var timerCounter = 0
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
@@ -174,7 +175,7 @@ class GameVC: UIViewController {
                 message: Message(.check, users: [self.player.convertToUser()])
             )
         case .cards:
-            // TODO: Lock the cards
+            self.actionButton.setTitle("Cards picked", for: UIControl.State.normal)
             self.client.sendMessageToServer(
                 message: Message(.cards, users: [self.player.convertToUser()])
             )
@@ -203,6 +204,7 @@ class GameVC: UIViewController {
         }
     }
     
+    @IBAction func unwindToGameVC(segue: UIStoryboardSegue) {}
 }
 
 extension GameVC: ClientGameDelegate {
@@ -225,7 +227,7 @@ extension GameVC: ClientGameDelegate {
                 self.betSlider.maximumValue = Float(self.player.points)
             } else {
                 // Setup the other players
-                self.playersButton[index].setTitle(self.users[index].name, for: UIControl.State.normal)
+                self.playersButton[index].setTitle(user.name, for: UIControl.State.normal)
                 self.playersButton[index].isEnabled = true
                 index += 1
             }

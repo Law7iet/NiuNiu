@@ -7,7 +7,7 @@
 
 import MultipeerConnectivity
 
-class Dealer: ServerGameDelegate {
+class Dealer {
     
     // MARK: Properties
     // Data structures
@@ -240,10 +240,10 @@ class Dealer: ServerGameDelegate {
         }
     }
         
-//}
-//
-//// MARK: HostManagerDelegate implementation
-//extension Dealer: ServerGameDelegate {
+}
+
+// MARK: HostManagerDelegate implementation
+extension Dealer: ServerGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
         // TODO: Remove from players the disconnected player
@@ -270,10 +270,6 @@ class Dealer: ServerGameDelegate {
         default:
             print("Delaer.didReceiveMessage - Unexpected message type: \(message.type)")
         }
-//        } else {
-//            print("\(peerID) not found in the players")
-//            return
-//        }
     }
     
 }
