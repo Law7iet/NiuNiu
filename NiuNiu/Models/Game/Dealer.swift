@@ -211,6 +211,13 @@ extension Dealer: ServerGameDelegate {
         // MARK: Cards
         case .cards:
             player.pickCards(cards: message.users![0].cards!)
+            
+        case .reqPlayer:
+            let player = Utils.findPlayer(byName: message.users![0].name,from: self.players.elements)
+            if player != nil {
+                self.server.sendMessage(to: [peerID], message: Message(.resPlayer, users: [player!.convertToUser()]))
+            }
+            
         default:
             print("Delaer.didReceiveMessage - Unexpected message type: \(message.type)")
         }

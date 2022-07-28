@@ -22,6 +22,7 @@ enum MessageEnum: Codable {
 
     // Game utility
     case timer
+    case resPlayer
     
     // Connections
     case closeLobby
@@ -33,6 +34,7 @@ enum MessageEnum: Codable {
     case check
     case cards
     case fold
+    case reqPlayer
     
     // MARK: Other
     case none

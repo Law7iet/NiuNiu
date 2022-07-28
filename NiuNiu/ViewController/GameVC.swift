@@ -20,6 +20,8 @@ class GameVC: UIViewController {
     var totalBid = 0
     var clickedButtons = [false, false, false, false, false]
     var timer: Timer?
+    var userData: UIAlertController?
+    var userDataSpinner: UIActivityIndicatorView?
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -116,14 +118,27 @@ class GameVC: UIViewController {
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
-//        let player = Utils.findPlayer(byName: sender.currentTitle!, from: self.dealer.players.elements)!
-//        let alert = UIAlertController(
-//            title: player.id.displayName,
-//            message: "Points: \(player.points)",
-//            preferredStyle: UIAlertController.Style.actionSheet
-//        )
-//        alert.addAction(UIAlertAction(title: "Close", style: .default))
-//        self.present(alert, animated: true)
+        let user = Utils.findUser(
+            byName: sender.currentTitle!,
+            from: self.users)!
+        self.userData = UIAlertController(
+            title: user.name,
+            message: "Fetching data...\n\n",
+            preferredStyle: .actionSheet
+        )
+        self.self.userData!.addAction(UIAlertAction(title: "Close", style: .default))
+        
+        self.userDataSpinner = UIActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 30, y: 60, width: 40, height: 40)
+        )
+        self.userDataSpinner!.startAnimating();
+        self.userData!.view.addSubview(self.userDataSpinner!)
+
+        self.present(self.self.userData!, animated: true, completion: nil)
+        
+        self.client.sendMessageToServer(
+            message: Message(.reqPlayer, users: [user])
+        )
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -383,6 +398,11 @@ extension GameVC: ClientGameDelegate {
         case .endGame:
             print("endGame")
         
+        case .resPlayer:
+            DispatchQueue.main.async {
+                self.userData?.message = "Points: \(message.users![0].points)\nBid: \(message.users![0].bid)"
+                self.userDataSpinner?.stopAnimating()
+            }
         // TODO: check if there're closeConnection or closeLobby
         default:
             print("ClientGameVC.didReceiveMessageFrom - message.type == \(message.type)")
