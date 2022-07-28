@@ -168,13 +168,14 @@ class Dealer {
                 }
                 winner!.status = .winner
                 winner!.points = self.points + self.totalBid
-
+                print("Players points:")
                 var users = [User]()
                 for player in self.players.elements {
                     users.append(player.convertToUser())
+                    print("- \(player.id.displayName) \(player.points)")
                 }
                 self.server.sendMessage(
-                    to: self.players.getAvailableMCPeerIDs(),
+                    to: self.server.clientsPeerIDs,
                     message: Message(.endMatch, amount: self.totalBid, users: users)
                 )
                 

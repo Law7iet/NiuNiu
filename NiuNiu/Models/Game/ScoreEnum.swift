@@ -40,7 +40,7 @@ enum ScoreEnum: Int, Codable, Comparable {
     
     var description: String {
         switch self {
-        case .none: return "None"
+        case .none: return "Zero"
         case .one: return "One"
         case .two: return "Two"
         case .three: return "Three"

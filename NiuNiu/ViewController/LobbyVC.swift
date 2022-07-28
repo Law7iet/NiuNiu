@@ -77,6 +77,7 @@ class LobbyVC: UIViewController {
     func getExitAlert(withText text: String) -> UIAlertController {
         let alert = UIAlertController(title: "Exit from lobby", message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
+            self.client.disconnect()
             self.navigationController?.popViewController(animated: true)
         }))
         return alert

@@ -76,7 +76,11 @@ class EndVC: UIViewController {
             } else {
                 self.playerIDs[userIndex].text = user.name
                 self.playerPoints[userIndex].text = "Points: \(user.points)"
-                self.playerScore[userIndex].text = user.score.description
+                if user.status == .fold {
+                    self.playerScore[userIndex].text = "Fold"
+                } else {
+                    self.playerScore[userIndex].text = user.score.description
+                }
                 self.setupCard(buttons: self.playerCards[userIndex]!, cards: user.cards!)
                 userIndex += 1
             }
@@ -96,11 +100,13 @@ class EndVC: UIViewController {
                 if self.play == true {
                     self.performSegue(withIdentifier: "backToGameSegue", sender: self)
                 } else {
+                    self.dealer?.server.disconnect()
+                    self.client.disconnect()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: self)
                 }
             } else {
                 if self.play == false {
-                    self.endLabel.text = "Do you want to continue to play? (\(Utils.timerLong - timerCounter))"
+                    self.endLabel.text = "Do you want to continue playing? (\(Utils.timerLong - timerCounter))"
                 } else {
                     self.endLabel.text = "Next match will start in \(Utils.timerLong - timerCounter) seconds"
                 }
@@ -160,6 +166,7 @@ extension EndVC: ClientEndDelegate {
                 title: "Ok",
                 style: .default,
                 handler: {(action) in
+                    self.client.disconnect()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
                 }
             ))

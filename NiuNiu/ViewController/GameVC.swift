@@ -74,6 +74,7 @@ class GameVC: UIViewController {
                 for cardIndex in 0 ... 4 {
                     let image = UIImage(named: self.player.cards!.elements[cardIndex].getName())
                     self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
+                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.disabled)
                 }
                 // Setup himself labels
                 self.playerLabel.text = self.player.id.displayName
@@ -90,6 +91,16 @@ class GameVC: UIViewController {
         }
     }
     
+    func checkPickCards() {
+        if self.player.status == .cards {
+            if self.player.cards!.numberOfPickedCards == 1 || self.player.cards!.numberOfPickedCards == 3 {
+                self.actionButton.isEnabled = true
+            } else {
+                self.actionButton.isEnabled = false
+            }
+        }
+    }
+    
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,13 +109,9 @@ class GameVC: UIViewController {
         
         self.dealer?.play()
         // Hide UI
-        for userButton in self.usersButton {
-            userButton.isHidden = true
+        for btn in self.usersButton + self.cardsButton {
+            btn.isHidden = true
         }
-        for playerCard in self.cardsButton {
-            playerCard.isHidden = true
-        }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -156,13 +163,7 @@ class GameVC: UIViewController {
             }
         }
         // Enable or disable action button
-        if self.player.status == .cards {
-            if self.player.cards!.numberOfPickedCards == 1 || self.player.cards!.numberOfPickedCards == 3 {
-                self.actionButton.isEnabled = true
-            } else {
-                self.actionButton.isEnabled = false
-            }
-        }
+        self.checkPickCards()
     }
 
     @IBAction func clickAction(_ sender: Any) {
@@ -196,6 +197,9 @@ class GameVC: UIViewController {
             )
         case .cards:
             self.actionButton.setTitle("Cards picked", for: UIControl.State.normal)
+            for btn in self.cardsButton {
+                btn.isEnabled = false
+            }
             self.client.sendMessageToServer(
                 message: Message(.cards, users: [self.player.convertToUser()])
             )
@@ -208,8 +212,10 @@ class GameVC: UIViewController {
         self.foldButton.isEnabled = false
         self.actionButton.isEnabled = false
         self.betSlider.isEnabled = false
-        
         self.foldLabel.isHidden = false
+        for btn in self.cardsButton {
+            btn.isEnabled = false
+        }
         self.foldLabel.layer.cornerRadius = Utils.cornerRadius
         self.player.status = .fold
         self.client.sendMessageToServer(
@@ -239,6 +245,8 @@ extension GameVC: ClientGameDelegate {
                 title: "Ok",
                 style: .default,
                 handler: {(action) in
+                    self.dealer?.server.disconnect()
+                    self.client.disconnect()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
                 }
             ))
@@ -306,7 +314,16 @@ extension GameVC: ClientGameDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                self.player.status = .none
+                if self.player.bid == 0 {
+                    self.player.status = .fold
+                    for btn in self.cardsButton {
+                        btn.isEnabled = false
+                    }
+                    self.foldLabel.isHidden = false
+                    self.foldLabel.layer.cornerRadius = Utils.cornerRadius
+                } else {
+                    self.player.status = .none
+                }
                 self.statusLabel.text = "Stop Bet!"
                 self.timerLabel.text = ""
                 self.actionButton.isEnabled = false
@@ -365,7 +382,9 @@ extension GameVC: ClientGameDelegate {
                 self.player.status = .cards
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(Utils.timerLong)
-                self.actionButton.isEnabled = true
+                if self.player.status != .fold {
+                    self.checkPickCards()
+                }
                 self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
                     
                 var timerCounter = 0
@@ -387,6 +406,9 @@ extension GameVC: ClientGameDelegate {
                 self.player.status = .none
                 self.statusLabel.text = "Stop Cards!"
                 self.timerLabel.text = ""
+                for btn in self.cardsButton {
+                    btn.isEnabled = false
+                }
             }
         // MARK: EndMatch
         case .endMatch:
