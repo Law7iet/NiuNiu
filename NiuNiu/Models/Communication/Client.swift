@@ -24,6 +24,10 @@ protocol ClientGameDelegate {
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data)
 }
 
+protocol ClientEndDelegate {
+    func didDisconnect(with peerID: MCPeerID)
+}
+
 class Client: NSObject {
     
     // MARK: Properties
@@ -35,6 +39,7 @@ class Client: NSObject {
     var searchDelegate: ClientSearchDelegate?
     var lobbyDelegate: ClientLobbyDelegate?
     var gameDelegate: ClientGameDelegate?
+    var endDelegate: ClientEndDelegate?
     
     // MARK: Methods
     init(peerID: MCPeerID) {
@@ -125,6 +130,7 @@ extension Client: MCSessionDelegate {
         case MCSessionState.notConnected:
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.gameDelegate?.didDisconnect(with: peerID)
+            self.endDelegate?.didDisconnect(with: peerID)
             if self.serversPeerID == peerID {
                 self.serversPeerID = nil
             }

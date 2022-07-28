@@ -5,7 +5,7 @@
 //  Created by Han Chu on 23/07/22.
 //
 
-import UIKit
+import MultipeerConnectivity
 
 class EndVC: UIViewController {
 
@@ -86,6 +86,7 @@ class EndVC: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.client.endDelegate = self
         self.setupUsers()
         self.setupUI()
         var timerCounter = 0
@@ -93,9 +94,9 @@ class EndVC: UIViewController {
             if timerCounter >= Utils.timerLong {
                 timer.invalidate()
                 if self.play == true {
-                    self.performSegue(withIdentifier: "unwindToGameVC", sender: self)
+                    self.performSegue(withIdentifier: "backToGameSegue", sender: self)
                 } else {
-                    self.performSegue(withIdentifier: "unwindToGameVC", sender: self)
+                    self.performSegue(withIdentifier: "backToMainSegue", sender: self)
                 }
             } else {
                 if self.play == false {
@@ -131,13 +132,9 @@ class EndVC: UIViewController {
             title: "Yes",
             style: .destructive,
             handler: { action in
-                // Notify and exit or close
-                if self.dealer != nil {
-                    self.dealer?.server.sendMessage(to: self.dealer!.server.clientsPeerIDs, message: Message(.closeLobby))
-                } else {
-                    self.client.sendMessageToServer(message: Message(.closeSession))
-                }
-                self.performSegue(withIdentifier: "unwindToMainVC", sender: self)
+                self.dealer?.server.disconnect()
+                self.client.disconnect()
+                self.performSegue(withIdentifier: "backToMainSegue", sender: self)
             }
         ))
         self.present(alert, animated: true)
@@ -148,4 +145,28 @@ class EndVC: UIViewController {
         self.playButton.isEnabled = false
     }
 
+}
+
+extension EndVC: ClientEndDelegate {
+    
+    func didDisconnect(with peerID: MCPeerID) {
+        if peerID == self.client.serversPeerID && self.dealer == nil {
+            let alert = UIAlertController(
+                title: "Exit from lobby",
+                message: "The lobby has been closed",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "Ok",
+                style: .default,
+                handler: {(action) in
+                    self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
+                }
+            ))
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
+        }
+    }
+    
 }

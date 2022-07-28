@@ -15,6 +15,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tc0-NO-ycV" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="4Ih-s8-n8a"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="e9q-CJ-ujc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -554,6 +555,7 @@
                         <outletCollection property="cardsButton" destination="tFk-Gq-9De" collectionClass="NSMutableArray" id="Xix-6p-p81"/>
                         <segue destination="7xU-sw-sAn" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="4wC-fP-H7c"/>
                         <segue destination="M56-5n-2pX" kind="presentation" identifier="showEndSegue" modalPresentationStyle="overCurrentContext" id="g6j-AK-1PK"/>
+                        <segue destination="tc0-NO-ycV" kind="presentation" identifier="backToMainSegue" modalPresentationStyle="overFullScreen" id="WOn-YX-ZXF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afo-So-4E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1199,7 +1201,8 @@
                         <outletCollection property="cards5" destination="Ngo-dZ-yoH" collectionClass="NSMutableArray" id="wAo-0X-UR6"/>
                         <outletCollection property="cards5" destination="6ZV-tr-Muh" collectionClass="NSMutableArray" id="NT7-ue-zxa"/>
                         <segue destination="B3C-4V-jZU" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="iRr-Ra-DTS"/>
-                        <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="unwindToGameVC" modalPresentationStyle="overCurrentContext" id="r8X-wQ-4AQ"/>
+                        <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="backToGameSegue" modalPresentationStyle="overCurrentContext" id="r8X-wQ-4AQ"/>
+                        <segue destination="tc0-NO-ycV" kind="presentation" identifier="backToMainSegue" modalPresentationStyle="overCurrentContext" id="TCa-Jb-oMc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2i-yk-wLJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1209,8 +1212,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QwQ-TG-PXd"/>
-        <segue reference="s22-Bn-U35"/>
+        <segue reference="r8X-wQ-4AQ"/>
+        <segue reference="TuB-gZ-Juj"/>
+        <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>

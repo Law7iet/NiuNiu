@@ -52,12 +52,9 @@ class GameVC: UIViewController {
                 style: .destructive,
                 handler: { action in
                     // Notify and exit or close
-                    if self.dealer != nil {
-                        self.dealer?.server.sendMessage(to: self.dealer!.server.clientsPeerIDs, message: Message(.closeLobby))
-                    } else {
-                        self.client.sendMessageToServer(message: Message(.closeSession))
-                    }
-                    self.performSegue(withIdentifier: "unwindToMainVC", sender: self)
+                    self.dealer?.server.disconnect()
+                    self.client.disconnect()
+                    self.performSegue(withIdentifier: "backToMainSegue", sender: self)
                 }
             ))
             self.present(alert, animated: true)
@@ -212,12 +209,31 @@ class GameVC: UIViewController {
         }
     }
     
-    @IBAction func unwindToGameVC(segue: UIStoryboardSegue) {}
 }
 
 extension GameVC: ClientGameDelegate {
     
-    func didDisconnect(with peerID: MCPeerID) {}
+    func didDisconnect(with peerID: MCPeerID) {
+        if peerID == self.client.serversPeerID && self.dealer == nil {
+            let alert = UIAlertController(
+                title: "Exit from lobby",
+                message: "The lobby has been closed",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "Ok",
+                style: .default,
+                handler: {(action) in
+                    self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
+                }
+            ))
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
+        } else {
+            // TODO: Remove the user who left the lobby
+        }
+    }
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
