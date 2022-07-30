@@ -14,7 +14,7 @@ class GameVC: UIViewController {
     
     var client: Client!
     var player: Player!
-    var users: [User]!
+    var players: [Player]!
     
     var maxBid = 0
     var totalBid = 0
@@ -30,8 +30,8 @@ class GameVC: UIViewController {
     @IBOutlet weak var pointsLabel: UILabel!
     
     @IBOutlet weak var menuButton: UIButton!
-    @IBOutlet var usersButton: [UIButton]!
-    @IBOutlet var cardsButton: [UIButton]!
+    @IBOutlet var playersButtons: [UIButton]!
+    @IBOutlet var cardsButtons: [UIButton]!
     @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var foldButton: UIButton!
     @IBOutlet weak var betSlider: UISlider!
@@ -67,25 +67,25 @@ class GameVC: UIViewController {
     
     func setupPlayers() {
         var index = 0
-        for user in self.users {
-            if user.name == self.client.peerID.displayName {
+        for player in self.players {
+            if player.id == self.client.peerID.displayName {
                 // Setup himself cards
-                self.player = user.convertToPlayer(withPeerID: self.client.peerID)
+                self.player = player
                 for cardIndex in 0 ... 4 {
-                    let image = UIImage(named: self.player.cards[cardIndex].getName())
-                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
-                    self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.disabled)
+                    let image = UIImage(named: self.player.cards[cardIndex].fileName)
+                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
+                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: UIControl.State.disabled)
                 }
                 // Setup himself labels
-                self.playerLabel.text = self.player.id.displayName
+                self.playerLabel.text = self.player.id
                 self.pointsLabel.text = "Points: \(self.player.points)"
                 self.betSlider.minimumValue = 0.0
                 self.betSlider.maximumValue = Float(self.player.points)
             } else {
                 // Setup the other players
-                self.usersButton[index].setTitle(user.name, for: UIControl.State.normal)
-                self.usersButton[index].isEnabled = true
-                self.usersButton[index].isHidden = false
+                self.playersButtons[index].setTitle(player.id, for: UIControl.State.normal)
+                self.playersButtons[index].isEnabled = true
+                self.playersButtons[index].isHidden = false
                 index += 1
             }
         }
@@ -109,7 +109,7 @@ class GameVC: UIViewController {
         
         self.dealer?.play()
         // Hide UI
-        for btn in self.usersButton + self.cardsButton {
+        for btn in self.playersButtons + self.cardsButtons {
             btn.isHidden = true
         }
     }
@@ -118,18 +118,16 @@ class GameVC: UIViewController {
         if let endVC = segue.destination as? EndVC {
             endVC.dealer = self.dealer
             endVC.client = self.client
-            endVC.users = self.users
+            endVC.users = self.players
             endVC.prize = self.totalBid
         }
     }
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
-        let user = Utils.findUser(
-            byName: sender.currentTitle!,
-            from: self.users)!
+        let player = Utils.findPlayer(byName: sender.currentTitle!, from: self.players)!
         self.userData = UIAlertController(
-            title: user.name,
+            title: player.id,
             message: "Fetching data...\n\n",
             preferredStyle: .actionSheet
         )
@@ -144,18 +142,18 @@ class GameVC: UIViewController {
         self.present(self.self.userData!, animated: true, completion: nil)
         
         self.client.sendMessageToServer(
-            message: Message(.reqPlayer, users: [user])
+            message: Message(.reqPlayer, players: [player])
         )
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
         // Animation of the card
-        if let index = self.cardsButton.firstIndex(of: sender) {
+        if let index = self.cardsButtons.firstIndex(of: sender) {
             self.player.pickCard(atIndex: index)
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
                 sender.layer.cornerRadius = Utils.cornerRadius
-                sender.layer.borderWidth = Utils.borderWidth(withHeight: self.cardsButton[0].frame.height)
+                sender.layer.borderWidth = Utils.borderWidth(withHeight: self.cardsButtons[0].frame.height)
                 sender.layer.borderColor = UIColor.red.cgColor
             } else {
                 self.clickedButtons[index] = false
@@ -178,7 +176,7 @@ class GameVC: UIViewController {
             self.player.points = self.player.points - bid
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
             self.client.sendMessageToServer(
-                message: Message(.bet, users: [self.player.convertToUser()])
+                message: Message(.bet, players: [self.player])
             )
         case .check:
             let diff = self.maxBid - self.player.bid
@@ -186,22 +184,22 @@ class GameVC: UIViewController {
             self.player.points = self.player.points - diff
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
             self.client.sendMessageToServer(
-                message: Message(.check, users: [self.player.convertToUser()])
+                message: Message(.check, players: [self.player])
             )
         case .allIn:
             self.player.bid += self.player.points
             self.player.points = 0
             self.pointsLabel.text = "Points: 0"
             self.client.sendMessageToServer(
-                message: Message(.check, users: [self.player.convertToUser()])
+                message: Message(.check, players: [self.player])
             )
         case .cards:
             self.actionButton.setTitle("Cards picked", for: UIControl.State.normal)
-            for btn in self.cardsButton {
+            for btn in self.cardsButtons {
                 btn.isEnabled = false
             }
             self.client.sendMessageToServer(
-                message: Message(.cards, users: [self.player.convertToUser()])
+                message: Message(.cards, players: [self.player])
             )
         default:
             break
@@ -213,13 +211,13 @@ class GameVC: UIViewController {
         self.actionButton.isEnabled = false
         self.betSlider.isEnabled = false
         self.foldLabel.isHidden = false
-        for btn in self.cardsButton {
+        for btn in self.cardsButtons {
             btn.isEnabled = false
         }
         self.foldLabel.layer.cornerRadius = Utils.cornerRadius
         self.player.status = .fold
         self.client.sendMessageToServer(
-            message: Message(.fold, users: [self.player.convertToUser()])
+            message: Message(.fold, players: [self.player])
         )
     }
     
@@ -235,7 +233,7 @@ class GameVC: UIViewController {
 extension GameVC: ClientGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID == self.client.serversPeerID && self.dealer == nil {
+        if peerID == self.client.serverPeerID && self.dealer == nil {
             let alert = UIAlertController(
                 title: "Exit from lobby",
                 message: "The lobby has been closed",
@@ -253,8 +251,6 @@ extension GameVC: ClientGameDelegate {
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
             }
-        } else {
-            // TODO: Remove the user who left the lobby
         }
     }
     
@@ -266,7 +262,7 @@ extension GameVC: ClientGameDelegate {
             DispatchQueue.main.async {
                 self.statusLabel.text = "The game will start soon"
                 self.timerLabel.text = String(Utils.timerShort)
-                self.users = message.users!
+                self.players = message.players!
                 self.setupPlayers()
                 var timerCounter = 0
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
@@ -277,7 +273,7 @@ extension GameVC: ClientGameDelegate {
                         self.statusLabel.text = "Match started!"
                         self.timerLabel.text = ""
                         
-                        for btn in self.cardsButton {
+                        for btn in self.cardsButtons {
                             btn.isEnabled = true
                             btn.isHidden = false
                         }
@@ -316,7 +312,7 @@ extension GameVC: ClientGameDelegate {
                 self.timer?.invalidate()
                 if self.player.bid == 0 {
                     self.player.status = .fold
-                    for btn in self.cardsButton {
+                    for btn in self.cardsButtons {
                         btn.isEnabled = false
                     }
                     self.foldLabel.isHidden = false
@@ -406,7 +402,7 @@ extension GameVC: ClientGameDelegate {
                 self.player.status = .none
                 self.statusLabel.text = "Stop Cards!"
                 self.timerLabel.text = ""
-                for btn in self.cardsButton {
+                for btn in self.cardsButtons {
                     btn.isEnabled = false
                 }
             }
@@ -414,7 +410,7 @@ extension GameVC: ClientGameDelegate {
         case .endMatch:
             DispatchQueue.main.async {
                 self.totalBid = message.amount!
-                self.users = message.users!
+                self.players = message.players!
                 self.performSegue(withIdentifier: "showEndSegue", sender: nil)
             }
         case .endGame:
@@ -422,7 +418,7 @@ extension GameVC: ClientGameDelegate {
         
         case .resPlayer:
             DispatchQueue.main.async {
-                self.userData?.message = "Points: \(message.users![0].points)\nBid: \(message.users![0].bid)"
+                self.userData?.message = "Points: \(message.players![0].points)\nBid: \(message.players![0].bid)"
                 self.userDataSpinner?.stopAnimating()
             }
         // TODO: check if there're closeConnection or closeLobby

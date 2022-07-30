@@ -38,7 +38,7 @@ class LobbyVC: UIViewController {
         self.client.lobbyDelegate = self
         self.client.searchDelegate = self
         if self.server != nil {
-            self.client.serversPeerID = self.server!.peerID
+            self.client.serverPeerID = self.server!.peerID
         }
     }
     
@@ -94,7 +94,6 @@ class LobbyVC: UIViewController {
         super.viewWillAppear(animated)
         self.setupLobby()
         self.setupClient()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -108,7 +107,7 @@ class LobbyVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.server?.sendMessage(
-            to: self.server!.clientsPeerIDs,
+            to: self.server!.clientPeerIDs,
             message: Message(.closeLobby)
         )
         self.client.disconnect()
@@ -133,7 +132,7 @@ class LobbyVC: UIViewController {
     // MARK: Actions
     @IBAction func play(_ sender: Any) {
         self.server?.sendMessage(
-            to: self.server!.clientsPeerIDs,
+            to: self.server!.clientPeerIDs,
             message: Message(.startGame, amount: Utils.points)
         )
         // Close browsing or advertising tasks
@@ -217,7 +216,7 @@ extension LobbyVC: ClientSearchDelegate {
 extension LobbyVC: ClientLobbyDelegate {
     
     func didConnect(with peerID: MCPeerID) {
-        if (self.server == nil && peerID != self.client.serversPeerID) || self.server != nil {
+        if (self.server == nil && peerID != self.client.serverPeerID) || self.server != nil {
             DispatchQueue.main.async {
                 self.addPlayerInTableView(peerID: peerID)
             }
@@ -225,7 +224,7 @@ extension LobbyVC: ClientLobbyDelegate {
     }
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID != self.client.serversPeerID {
+        if peerID != self.client.serverPeerID {
             DispatchQueue.main.async {
                 self.removePlayerInTableView(peerID: peerID)
             }

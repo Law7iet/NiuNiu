@@ -5,8 +5,9 @@
 //  Created by Han Chu on 16/07/22.
 //
 
-enum ScoreEnum: Int, Codable, Comparable {
+enum ScoreEnum: Int, Codable, Comparable  {
 
+    // No value
     case none = 0
     // No Niu
     case one = 1
@@ -34,6 +35,7 @@ enum ScoreEnum: Int, Codable, Comparable {
     case niuNine = 29
     case niuNiu = 30
     
+    /// A string that describes the score value
     var description: String {
         switch self {
         case .none: return "Zero"

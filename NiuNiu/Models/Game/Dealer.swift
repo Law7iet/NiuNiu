@@ -11,12 +11,14 @@ class Dealer {
     
     // MARK: Properties
     // Data structures
-    /// The class that communicates with clients.
+    /// The class that communicates with clients
     var server: Server
-    /// The cards.
+    /// The cards
     var deck: Deck
     /// The players in the lobby
     var players: [Player]
+    /// The dictionary that matches the player's name with their MCPeerID
+    var playerDict = [String: MCPeerID]()
     
     // Game Settings
     var time: Int
@@ -38,8 +40,9 @@ class Dealer {
         self.server = server
         self.deck = Deck()
         self.players = [Player]()
-        for peerID in server.clientsPeerIDs {
-            players.append(Player(id: peerID, points: points))
+        for peerID in server.clientPeerIDs {
+            players.append(Player(id: peerID.displayName, points: points))
+            self.playerDict[peerID.displayName] = peerID
         }
         
         // Others
@@ -51,15 +54,6 @@ class Dealer {
     }
     
     // MARK: Supporting functions
-    func findPlayer(byMCPeerID peerID: MCPeerID, from players: [Player]) -> Player? {
-        for player in players {
-            if player.id == peerID {
-                return player
-            }
-        }
-        return nil
-    }
-    
     /// Get an array of MCPeerID of the players in the class with .fold status.
     /// This is the list of the players that the Server has to send a message.
     /// - Returns: The array of MCPeerID
@@ -67,7 +61,7 @@ class Dealer {
         var peerList = [MCPeerID]()
         for player in self.players {
             if player.status != .fold {
-                peerList.append(player.id)
+                peerList.append(self.playerDict[player.id]!)
             }
         }
         return peerList
@@ -75,20 +69,20 @@ class Dealer {
     
     // MARK: Game
     func startMatch() {
+        self.maxBid = 0
+        self.totalBid = 0
         // Compute players and their cards
         self.deck = Deck()
         self.deck.shuffle()
-        var users = [User]()
         for player in self.players {
             let cards = self.deck.getCards()
             player.cards = cards
             player.status = .bet
-            users.append(player.convertToUser())
         }
         // Send players and their cards to clients
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
-            message: Message(.startMatch, users: users)
+            message: Message(.startMatch, players: self.players)
         )
     }
     
@@ -185,13 +179,9 @@ class Dealer {
         winner!.status = .winner
         winner!.points = winner!.points + self.totalBid
         
-        var users = [User]()
-        for player in self.players {
-            users.append(player.convertToUser())
-        }
         self.server.sendMessage(
-            to: self.server.clientsPeerIDs,
-            message: Message(.endMatch, amount: self.totalBid, users: users)
+            to: self.server.clientPeerIDs,
+            message: Message(.endMatch, amount: self.totalBid, players: self.players)
         )
     }
     
@@ -225,37 +215,41 @@ class Dealer {
 extension Dealer: ServerGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
-        // TODO: Remove from players the disconnected player
+        // Remove from players and the dictionary the disconnected player
+        let player = Utils.findPlayer(byName: peerID.displayName, from: self.players)!
+        let index = self.players.firstIndex(of: player)!
+        self.players.remove(at: index)
+        self.playerDict.removeValue(forKey: peerID.displayName)
     }
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
-        let player = self.findPlayer(byMCPeerID: peerID, from: self.players)!
+        let player = Utils.findPlayer(byName: peerID.displayName, from: self.players)!
     
         switch message.type {
         // MARK: Bet
         case .bet:
-            player.bet(amount: message.users![0].bid)
+            player.bet(amount: message.players![0].bid)
         // MARK: Check
         case .check:
-            switch message.users![0].status {
-            case .check: player.check(amount: message.users![0].bid)
+            switch message.players![0].status {
+            case .check: player.check(amount: message.players![0].bid)
             case .allIn: player.allIn()
             default: break
             }
         // MARK: Cards
         case .cards:
             player.chooseCards(
-                cards: message.users![0].cards,
-                pickedCards: message.users![0].pickedCards,
-                numberOfPickedCards: message.users![0].numberOfPickedCards,
-                tieBreakerCard: message.users![0].tieBreakerCard,
-                score: message.users![0].score
+                cards: message.players![0].cards,
+                pickedCards: message.players![0].pickedCards,
+                numberOfPickedCards: message.players![0].numberOfPickedCards,
+                tieBreakerCard: message.players![0].tieBreakerCard,
+                score: message.players![0].score
             )
         case .reqPlayer:
-            let player = Utils.findPlayer(byName: message.users![0].name,from: self.players)
+            let player = Utils.findPlayer(byName: message.players![0].id,from: self.players)
             if player != nil {
-                self.server.sendMessage(to: [peerID], message: Message(.resPlayer, users: [player!.convertToUser()]))
+                self.server.sendMessage(to: [peerID], message: Message(.resPlayer, players: [player!]))
             }
             
         default:

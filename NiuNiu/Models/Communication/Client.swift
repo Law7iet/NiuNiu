@@ -34,7 +34,7 @@ class Client: NSObject {
     var session: MCSession
     var browser: MCNearbyServiceBrowser
     var peerID: MCPeerID
-    var serversPeerID: MCPeerID?
+    var serverPeerID: MCPeerID?
     // Delegates
     var searchDelegate: ClientSearchDelegate?
     var lobbyDelegate: ClientLobbyDelegate?
@@ -85,12 +85,12 @@ class Client: NSObject {
     /// The server MCPeerID is saved in the client object when the client connects to the server.
     /// - Parameter msg: The message to send.
     func sendMessageToServer(message msg: Message) {
-        if self.serversPeerID != nil {
+        if self.serverPeerID != nil {
             if let data = msg.convertToData() {
                 do {
                     try self.session.send(
                         data,
-                        toPeers: [self.serversPeerID!],
+                        toPeers: [self.serverPeerID!],
                         with: .reliable
                     )
                 } catch {
@@ -131,8 +131,8 @@ extension Client: MCSessionDelegate {
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.gameDelegate?.didDisconnect(with: peerID)
             self.endDelegate?.didDisconnect(with: peerID)
-            if self.serversPeerID == peerID {
-                self.serversPeerID = nil
+            if self.serverPeerID == peerID {
+                self.serverPeerID = nil
             }
         default:
             break

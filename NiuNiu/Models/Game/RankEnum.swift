@@ -5,7 +5,7 @@
 //  Created by Han Chu on 07/07/22.
 //
 
-enum RankEnum: Int, CaseIterable, Codable {
+enum RankEnum: Int, CaseIterable, Codable, Comparable {
     
     case ace = 1
     case two = 2
@@ -20,25 +20,8 @@ enum RankEnum: Int, CaseIterable, Codable {
     case jack = 11
     case queen = 12
     case king = 13
-
-    var description: String {
-        switch self {
-        case .ace: return "ace"
-        case .two: return "two"
-        case .three: return "three"
-        case .four: return "four"
-        case .five: return "five"
-        case .six: return "six"
-        case .seven: return "seven"
-        case .eight: return "eight"
-        case .nine: return "nine"
-        case .ten: return "ten"
-        case .jack: return "jack"
-        case .queen: return "queen"
-        case .king: return "king"
-        }
-    }
     
+    /// The integer value of the enum during the score calculation
     var value: Int {
         switch self {
         case .ace: return 1
@@ -55,6 +38,10 @@ enum RankEnum: Int, CaseIterable, Codable {
         case .queen: return 10
         case .king: return 10
         }
+    }
+    
+    static func < (lhs: RankEnum, rhs: RankEnum) -> Bool {
+        return lhs.rawValue < rhs.rawValue
     }
     
 }
