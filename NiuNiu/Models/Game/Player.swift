@@ -12,28 +12,31 @@ class Player: Comparable, CustomStringConvertible {
     // MARK: Properties
     var id: MCPeerID!
     var status: PlayerEnum
-    var isWinner: Bool
     var points: Int
     var bid: Int
-    var cards: Cards?
-    /// The player's score. It is calculated on the cards he picks
-    var score: ScoreEnum {
-        get {
-            if self.cards != nil {
-                return self.cards!.score
-            } else {
-                return .none
-            }
-        }
-    }
-    /// A string that describes all player's properties
+    var cards: [Card]
+    var pickedCards: [Bool]
+    var numberOfPickedCards: Int
+    var tieBreakerCard: Card?
+    var score: ScoreEnum
+    
     var description: String {
         var description = "Player: \(self.id.displayName)\n"
         description += "Status: \(self.status)\n"
         description += "Points: \(self.points)\n"
         description += "Bid: \(self.bid)\n"
         description += "Score: \(self.score)\n"
-        description += "\(self.cards!)"
+        
+        var cardsDescription = ""
+        for index in 0 ... 4 {
+            if self.pickedCards[index] == true {
+                cardsDescription = "- [\(self.cards[index].description)]\n" + cardsDescription
+            } else {
+                cardsDescription = cardsDescription + "- \(self.cards[index].description)\n"
+            }
+        }
+        
+        description += "Cards:\n" + cardsDescription
         return description
     }
     
@@ -41,17 +44,12 @@ class Player: Comparable, CustomStringConvertible {
     init(id: MCPeerID, points: Int?) {
         self.id = id
         self.status = .none
-        self.bid = 0
         self.points = points ?? 100
-        self.isWinner = false
-    }
-    
-    func setCards(cards: [Card]) {
-        self.cards = Cards(elements: cards)
-    }
-    
-    func setCards(cards: Cards?) {
-        self.cards = cards
+        self.bid = 0
+        self.cards = [Card]()
+        self.pickedCards = [false, false, false, false, false]
+        self.numberOfPickedCards = 0
+        self.score = .none
     }
     
     func convertToUser() -> User {
@@ -83,9 +81,71 @@ class Player: Comparable, CustomStringConvertible {
     
     /// Change the player's status, and player.cards property with the argument.
     /// - Parameter cards: the cards.
-    func pickCards(cards: Cards) {
+    /// - Parameter pickedCards: the cards picked by the player
+    /// - Parameter numberOfPickedCards: the number of picked cards
+    /// - Parameter tieBreakerCard: the card used if there's a tie
+    /// - Parameter score: the score
+    func chooseCards(cards: [Card], pickedCards: [Bool], numberOfPickedCards: Int, tieBreakerCard: Card?, score: ScoreEnum) {
         self.status = .cards
         self.cards = cards
+        self.pickedCards = pickedCards
+        self.numberOfPickedCards = numberOfPickedCards
+        self.tieBreakerCard = tieBreakerCard
+        self.score = score
+    }
+    
+    func pickCard(atIndex index: Int) {
+        // Change pickedCards and numberOfPickedCards
+        if self.pickedCards[index] == false {
+            self.pickedCards[index] = true
+            self.numberOfPickedCards = self.numberOfPickedCards + 1
+        } else {
+            self.pickedCards[index] = false
+            self.numberOfPickedCards = self.numberOfPickedCards - 1
+        }
+        
+        // Compute the score and the tie breaker card
+        if self.numberOfPickedCards == 1 {
+            let index = self.pickedCards.firstIndex(of: true)!
+            self.score = ScoreEnum(rawValue: self.cards[index].rank.value)!
+            self.tieBreakerCard = self.cards[index]
+        } else if self.numberOfPickedCards == 3 {
+            // Compute the sum of the cards
+            var totalThree = 0
+            var totalTwo = 0
+            for index in 0...4 {
+                if self.pickedCards[index] == true {
+                    totalThree = totalThree + self.cards[index].rank.value
+                } else {
+                    totalTwo = totalTwo + self.cards[index].rank.value
+                    // Tie-breaker card
+                    if self.tieBreakerCard == nil {
+                        self.tieBreakerCard = self.cards[index]
+                    } else {
+                        if self.tieBreakerCard! < self.cards[index] {
+                            self.tieBreakerCard = self.cards[index]
+                        }
+                    }
+                }
+            }
+            // Check if the picked cards are correct
+            if totalThree % 10 == 0 {
+                // Score
+                if totalTwo % 10 == 0 {
+                    self.score = .niuNiu
+                } else {
+                    self.score =  ScoreEnum(rawValue: ((totalTwo % 10) + 20))!
+                }
+            } else {
+                // Error: picked cards not allowed
+                self.score = .none
+                self.tieBreakerCard = nil
+            }
+        } else {
+            // Error: picked an illegal number of cards
+            self.score = .none
+            self.tieBreakerCard = nil
+        }
     }
     
     static func < (lhs: Player, rhs: Player) -> Bool {

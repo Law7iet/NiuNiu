@@ -72,7 +72,7 @@ class GameVC: UIViewController {
                 // Setup himself cards
                 self.player = user.convertToPlayer(withPeerID: self.client.peerID)
                 for cardIndex in 0 ... 4 {
-                    let image = UIImage(named: self.player.cards!.elements[cardIndex].getName())
+                    let image = UIImage(named: self.player.cards[cardIndex].getName())
                     self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
                     self.cardsButton[cardIndex].setBackgroundImage(image, for: UIControl.State.disabled)
                 }
@@ -93,7 +93,7 @@ class GameVC: UIViewController {
     
     func checkPickCards() {
         if self.player.status == .cards {
-            if self.player.cards!.numberOfPickedCards == 1 || self.player.cards!.numberOfPickedCards == 3 {
+            if self.player.numberOfPickedCards == 1 || self.player.numberOfPickedCards == 3 {
                 self.actionButton.isEnabled = true
             } else {
                 self.actionButton.isEnabled = false
@@ -151,7 +151,7 @@ class GameVC: UIViewController {
     @IBAction func clickCard(_ sender: UIButton) {
         // Animation of the card
         if let index = self.cardsButton.firstIndex(of: sender) {
-            self.player.cards!.pickCardAt(index: index)
+            self.player.pickCard(atIndex: index)
             if self.clickedButtons[index] == false {
                 self.clickedButtons[index] = true
                 sender.layer.cornerRadius = Utils.cornerRadius

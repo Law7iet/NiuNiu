@@ -7,14 +7,12 @@
 
 enum PlayerEnum: Codable {
 
-    // Players' status
     case bet
     case check
     case allIn
     case cards
     case fold
     case winner
-
     case none
     
     var description: String {
@@ -28,4 +26,5 @@ enum PlayerEnum: Codable {
         case .none: return "none"
         }
     }
+
 }

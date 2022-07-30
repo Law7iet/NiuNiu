@@ -37,12 +37,12 @@ class EndVC: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     
     // MARK: Supporting functions
-    func setupCard(buttons: [UIButton], cards: Cards) {
+    func setupCard(buttons: [UIButton], cards: [Card], pickedCards: [Bool]) {
         var cardTrueIndex = 0
         var cardFalseIndex = 4
         for cardIndex in 0 ... 4 {
             let image = UIImage(named: cards[cardIndex].getName())
-            if cards.chosenCards[cardIndex] == true {
+            if pickedCards[cardIndex] == true {
                 buttons[cardTrueIndex].setBackgroundImage(image, for: UIControl.State.normal)
                 buttons[cardTrueIndex].layer.cornerRadius = Utils.cornerRadiusSmall
                 buttons[cardTrueIndex].layer.borderWidth = Utils.borderWidth(withHeight: buttons[0].frame.height)
@@ -58,7 +58,7 @@ class EndVC: UIViewController {
     func setupUsers() {
         if self.dealer != nil {
             self.users = [User]()
-            for player in self.dealer!.players.elements {
+            for player in self.dealer!.players {
                 self.users?.append(player.convertToUser())
             }
         }
@@ -72,7 +72,7 @@ class EndVC: UIViewController {
                 self.winnerID.text = user.name
                 self.winnerPoints.text = "Points: \(user.points - self.prize) + \(self.prize!)"
                 self.winnerScore.text = user.score.description
-                self.setupCard(buttons: self.winnerCards, cards: user.cards!)
+                self.setupCard(buttons: self.winnerCards, cards: user.cards, pickedCards: user.pickedCards)
             } else {
                 self.playerIDs[userIndex].text = user.name
                 self.playerPoints[userIndex].text = "Points: \(user.points)"
@@ -81,7 +81,7 @@ class EndVC: UIViewController {
                 } else {
                     self.playerScore[userIndex].text = user.score.description
                 }
-                self.setupCard(buttons: self.playerCards[userIndex]!, cards: user.cards!)
+                self.setupCard(buttons: self.playerCards[userIndex]!, cards: user.cards, pickedCards: user.pickedCards)
                 userIndex += 1
             }
         }

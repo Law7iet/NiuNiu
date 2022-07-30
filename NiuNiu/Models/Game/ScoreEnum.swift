@@ -33,10 +33,6 @@ enum ScoreEnum: Int, Codable, Comparable {
     case niuEight = 28
     case niuNine = 29
     case niuNiu = 30
-
-    static func < (lhs: ScoreEnum, rhs: ScoreEnum) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
     
     var description: String {
         switch self {
@@ -65,6 +61,10 @@ enum ScoreEnum: Int, Codable, Comparable {
         case .niuNine: return "NiuNine"
         case .niuNiu: return "NiuNiu"
         }
+    }
+
+    static func < (lhs: ScoreEnum, rhs: ScoreEnum) -> Bool {
+        return lhs.rawValue < rhs.rawValue
     }
     
 }

@@ -16,7 +16,7 @@ class Dealer {
     /// The cards.
     var deck: Deck
     /// The players in the lobby
-    var players: Players
+    var players: [Player]
     
     // Game Settings
     var time: Int
@@ -37,7 +37,10 @@ class Dealer {
         // Data Structures
         self.server = server
         self.deck = Deck()
-        self.players = Players(players: server.clientsPeerIDs, points: points)
+        self.players = [Player]()
+        for peerID in server.clientsPeerIDs {
+            players.append(Player(id: peerID, points: points))
+        }
         
         // Others
         self.maxBid = 0
@@ -57,40 +60,53 @@ class Dealer {
         return nil
     }
     
+    /// Get an array of MCPeerID of the players in the class with .fold status.
+    /// This is the list of the players that the Server has to send a message.
+    /// - Returns: The array of MCPeerID
+    func getAvailableMCPeerIDs() -> [MCPeerID] {
+        var peerList = [MCPeerID]()
+        for player in self.players {
+            if player.status != .fold {
+                peerList.append(player.id)
+            }
+        }
+        return peerList
+    }
+    
     // MARK: Game
     func startMatch() {
         // Compute players and their cards
         self.deck = Deck()
         self.deck.shuffle()
         var users = [User]()
-        for player in self.players.elements {
+        for player in self.players {
             let cards = self.deck.getCards()
-            player.setCards(cards: cards)
+            player.cards = cards
             player.status = .bet
             users.append(player.convertToUser())
         }
         // Send players and their cards to clients
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.startMatch, users: users)
         )
     }
     
     func startBet() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.startBet)
         )
     }
     
     func stopBet() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.stopBet)
         )
         // Compute the highest bid and the total bid
         // Change the status to the players who didn't bet
-        for player in self.players.elements {
+        for player in self.players {
             if player.bid <= 0 || player.status != .bet {
                 player.status = .fold
             } else {
@@ -105,20 +121,20 @@ class Dealer {
     
     func startCheck() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.startCheck, amount: self.maxBid)
         )
     }
     
     func stopCheck() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.stopCheck)
         )
         // Compute the total bid
         // Change the status to the players who didn't check
         self.totalBid = 0
-        for player in self.players.elements {
+        for player in self.players {
             if player.status == .check || player.status == .allIn {
                 player.status = .cards
                 self.totalBid += player.bid
@@ -130,18 +146,18 @@ class Dealer {
     
     func startCards() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.startCards)
         )
     }
     
     func stopCards() {
         self.server.sendMessage(
-            to: self.players.getAvailableMCPeerIDs(),
+            to: self.getAvailableMCPeerIDs(),
             message: Message(.stopCards)
         )
         // Change status to the players whose didn't choose their cards
-        for player in self.players.elements {
+        for player in self.players {
             if player.score == .none {
                 player.status = .fold
             }
@@ -151,7 +167,7 @@ class Dealer {
     func endMatch() {
         // Compute the winner
         var winner: Player? = nil
-        for player in self.players.elements {
+        for player in self.players {
             if winner == nil {
                 winner = player
             } else {
@@ -159,7 +175,7 @@ class Dealer {
                     if player.score > winner!.score {
                         winner = player
                     } else if player.score == winner!.score {
-                        if player.cards!.tieBreakerCard! > winner!.cards!.tieBreakerCard! {
+                        if player.tieBreakerCard! > winner!.tieBreakerCard! {
                             winner = player
                         }
                     }
@@ -170,7 +186,7 @@ class Dealer {
         winner!.points = winner!.points + self.totalBid
         
         var users = [User]()
-        for player in self.players.elements {
+        for player in self.players {
             users.append(player.convertToUser())
         }
         self.server.sendMessage(
@@ -214,7 +230,7 @@ extension Dealer: ServerGameDelegate {
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
         let message = Message(data: messageData)
-        let player = self.findPlayer(byMCPeerID: peerID, from: self.players.elements)!
+        let player = self.findPlayer(byMCPeerID: peerID, from: self.players)!
     
         switch message.type {
         // MARK: Bet
@@ -229,10 +245,15 @@ extension Dealer: ServerGameDelegate {
             }
         // MARK: Cards
         case .cards:
-            player.pickCards(cards: message.users![0].cards!)
-            
+            player.chooseCards(
+                cards: message.users![0].cards,
+                pickedCards: message.users![0].pickedCards,
+                numberOfPickedCards: message.users![0].numberOfPickedCards,
+                tieBreakerCard: message.users![0].tieBreakerCard,
+                score: message.users![0].score
+            )
         case .reqPlayer:
-            let player = Utils.findPlayer(byName: message.users![0].name,from: self.players.elements)
+            let player = Utils.findPlayer(byName: message.users![0].name,from: self.players)
             if player != nil {
                 self.server.sendMessage(to: [peerID], message: Message(.resPlayer, users: [player!.convertToUser()]))
             }

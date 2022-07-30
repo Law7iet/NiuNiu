@@ -9,6 +9,7 @@ struct Card: Codable, Comparable, CustomStringConvertible {
     
     var rank: RankEnum
     var suit: SuitEnum
+    
     var description: String {
         return "\(self.rank.rawValue) of \(self.suit.description)"
     }
@@ -18,32 +19,21 @@ struct Card: Codable, Comparable, CustomStringConvertible {
         suit = y
     }
     
-    func getRankAsString() -> String {
-        return String(self.rank.rawValue)
-    }
-    
-    func getSuitAsString() -> String {
-        switch suit {
-        case .hearts:
-            return "hearts"
-        case .diamonds:
-            return "diamonds"
-        case .clubs:
-            return "clubs"
-        case .spades:
-            return "spades"
-        }
-    }
-    
     func getName() -> String {
-        return "\(self.getRankAsString())_of_\(self.getSuitAsString())"
+        var suit: String
+        switch self.suit {
+        case .hearts: suit = "hearts"
+        case .diamonds: suit = "diamonds"
+        case .clubs: suit = "clubs"
+        case .spades: suit = "spades"
+        }
+        return "\(self.rank.rawValue)_of_\(suit)"
     }
     
     static func < (lhs: Card, rhs: Card) -> Bool {
         if lhs.rank.rawValue != rhs.rank.rawValue {
             return lhs.rank.rawValue < rhs.rank.rawValue
         } else {
-            // Equal rank value
             return lhs.suit.rawValue < rhs.suit.rawValue
         }
     }
