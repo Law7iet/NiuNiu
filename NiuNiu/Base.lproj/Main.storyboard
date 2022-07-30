@@ -543,16 +543,16 @@
                         <outlet property="pointsLabel" destination="dI6-jI-cxd" id="PL8-a5-TuG"/>
                         <outlet property="statusLabel" destination="8nw-Ef-sKa" id="gr4-5n-MOH"/>
                         <outlet property="timerLabel" destination="UmH-Yt-AeE" id="JUk-08-vMG"/>
-                        <outletCollection property="usersButton" destination="7nV-C1-6N0" collectionClass="NSMutableArray" id="PNl-Ie-MIb"/>
-                        <outletCollection property="usersButton" destination="J0Z-Hf-JP9" collectionClass="NSMutableArray" id="NPX-dm-udC"/>
-                        <outletCollection property="usersButton" destination="t0S-gr-Awo" collectionClass="NSMutableArray" id="m4h-rO-QXS"/>
-                        <outletCollection property="usersButton" destination="xGp-fj-Bzv" collectionClass="NSMutableArray" id="Lpo-oy-tK9"/>
-                        <outletCollection property="usersButton" destination="lap-Vq-Phq" collectionClass="NSMutableArray" id="tzt-Gy-aKx"/>
-                        <outletCollection property="cardsButton" destination="SA1-kT-qx8" collectionClass="NSMutableArray" id="DRV-Ch-Qo3"/>
-                        <outletCollection property="cardsButton" destination="O9N-uy-h78" collectionClass="NSMutableArray" id="qgi-xR-Tw8"/>
-                        <outletCollection property="cardsButton" destination="epA-Eo-AcY" collectionClass="NSMutableArray" id="6WD-z9-LUo"/>
-                        <outletCollection property="cardsButton" destination="FTE-fl-q5K" collectionClass="NSMutableArray" id="XSV-UB-KzB"/>
-                        <outletCollection property="cardsButton" destination="tFk-Gq-9De" collectionClass="NSMutableArray" id="Xix-6p-p81"/>
+                        <outletCollection property="playersButtons" destination="7nV-C1-6N0" collectionClass="NSMutableArray" id="PNl-Ie-MIb"/>
+                        <outletCollection property="playersButtons" destination="J0Z-Hf-JP9" collectionClass="NSMutableArray" id="NPX-dm-udC"/>
+                        <outletCollection property="playersButtons" destination="t0S-gr-Awo" collectionClass="NSMutableArray" id="m4h-rO-QXS"/>
+                        <outletCollection property="playersButtons" destination="xGp-fj-Bzv" collectionClass="NSMutableArray" id="Lpo-oy-tK9"/>
+                        <outletCollection property="playersButtons" destination="lap-Vq-Phq" collectionClass="NSMutableArray" id="tzt-Gy-aKx"/>
+                        <outletCollection property="cardsButtons" destination="SA1-kT-qx8" collectionClass="NSMutableArray" id="DRV-Ch-Qo3"/>
+                        <outletCollection property="cardsButtons" destination="O9N-uy-h78" collectionClass="NSMutableArray" id="qgi-xR-Tw8"/>
+                        <outletCollection property="cardsButtons" destination="epA-Eo-AcY" collectionClass="NSMutableArray" id="6WD-z9-LUo"/>
+                        <outletCollection property="cardsButtons" destination="FTE-fl-q5K" collectionClass="NSMutableArray" id="XSV-UB-KzB"/>
+                        <outletCollection property="cardsButtons" destination="tFk-Gq-9De" collectionClass="NSMutableArray" id="Xix-6p-p81"/>
                         <segue destination="7xU-sw-sAn" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="4wC-fP-H7c"/>
                         <segue destination="M56-5n-2pX" kind="presentation" identifier="showEndSegue" modalPresentationStyle="overCurrentContext" id="g6j-AK-1PK"/>
                         <segue destination="tc0-NO-ycV" kind="presentation" identifier="backToMainSegue" modalPresentationStyle="overFullScreen" id="WOn-YX-ZXF"/>

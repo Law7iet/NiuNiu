@@ -11,7 +11,7 @@ class Message: Codable {
     
     var type: MessageEnum
     var amount: Int?
-    var users: [User]?
+    var players: [Player]?
     
     init(_ type: MessageEnum) {
         self.type = type
@@ -22,15 +22,15 @@ class Message: Codable {
         self.amount = amount
     }
     
-    init(_ type: MessageEnum, users: [User]) {
+    init(_ type: MessageEnum, players: [Player]) {
         self.type = type
-        self.users = users
+        self.players = players
     }
     
-    init(_ type: MessageEnum, amount: Int?, users: [User]?) {
+    init(_ type: MessageEnum, amount: Int?, players: [Player]?) {
         self.type = type
         self.amount = amount
-        self.users = users
+        self.players = players
     }
     
     init(data: Data) {
@@ -38,7 +38,7 @@ class Message: Codable {
         if object != nil {
             self.type = object!.type
             self.amount = object!.amount
-            self.users = object!.users
+            self.players = object!.players
         } else {
             self.type = .error
         }
@@ -48,7 +48,7 @@ class Message: Codable {
         let object = Message(
             self.type,
             amount: self.amount,
-            users: self.users
+            players: self.players
         )
         return try? JSONEncoder().encode(object)
     }

@@ -7,10 +7,10 @@
 
 import MultipeerConnectivity
 
-class Player: Comparable, CustomStringConvertible {
+class Player: Codable, Comparable, CustomStringConvertible {
     
     // MARK: Properties
-    var id: MCPeerID!
+    var id: String
     var status: PlayerEnum
     var points: Int
     var bid: Int
@@ -20,13 +20,9 @@ class Player: Comparable, CustomStringConvertible {
     var tieBreakerCard: Card?
     var score: ScoreEnum
     
+    // MARK: For debug
+    /// A string that describes the player
     var description: String {
-        var description = "Player: \(self.id.displayName)\n"
-        description += "Status: \(self.status)\n"
-        description += "Points: \(self.points)\n"
-        description += "Bid: \(self.bid)\n"
-        description += "Score: \(self.score)\n"
-        
         var cardsDescription = ""
         for index in 0 ... 4 {
             if self.pickedCards[index] == true {
@@ -36,12 +32,18 @@ class Player: Comparable, CustomStringConvertible {
             }
         }
         
+        var description = ""
+        description += "Player: \(self.id)\n"
+        description += "Status: \(self.status)\n"
+        description += "Points: \(self.points)\n"
+        description += "Bid: \(self.bid)\n"
+        description += "Score: \(self.score)\n"
         description += "Cards:\n" + cardsDescription
         return description
     }
     
     // MARK: Methods
-    init(id: MCPeerID, points: Int?) {
+    init(id: String, points: Int?) {
         self.id = id
         self.status = .none
         self.points = points ?? 100
@@ -50,10 +52,6 @@ class Player: Comparable, CustomStringConvertible {
         self.pickedCards = [false, false, false, false, false]
         self.numberOfPickedCards = 0
         self.score = .none
-    }
-    
-    func convertToUser() -> User {
-        return User(player: self)
     }
     
     /// Change the player's status, bid and reduce his points
@@ -151,8 +149,9 @@ class Player: Comparable, CustomStringConvertible {
     static func < (lhs: Player, rhs: Player) -> Bool {
         return lhs.points < rhs.points
     }
-
+    
     static func == (lhs: Player, rhs: Player) -> Bool {
-        return lhs.id.displayName == rhs.id.displayName
+        return lhs.id == rhs.id
     }
+
 }

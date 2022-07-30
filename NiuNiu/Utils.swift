@@ -9,31 +9,24 @@ import UIKit
 import MultipeerConnectivity
 
 class Utils {
+    // Game setting
     static let timerOffset = 1
     static let timerShort = 3
     static let timerLong = 20
     static let points = 100
     
+    // Card setting
     static let cornerRadius = CGFloat(5.0)
     static let cornerRadiusSmall = CGFloat(3.0)
     // borderWitdh it's equal to: 1.85% of the card's height
     static func borderWidth(withHeight height: CGFloat) -> CGFloat {
         return height * 1.85 / 100
     }
-    
+
     static func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
         for player in players {
-            if player.id.displayName == playerName {
+            if player.id == playerName {
                 return player
-            }
-        }
-        return nil
-    }
-    
-    static func findUser(byName playerName: String, from users: [User]) -> User? {
-        for user in users {
-            if user.name == playerName {
-                return user
             }
         }
         return nil

@@ -105,7 +105,7 @@ extension SeacherVC: UITableViewDelegate {
             style: .default,
             handler: { [self] (action: UIAlertAction) in
                 // Join lobby
-                self.client.serversPeerID = user
+                self.client.serverPeerID = user
                 self.client.connect(to: user)
                 self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }

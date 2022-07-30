@@ -18,7 +18,7 @@ class Server: NSObject {
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
     var peerID: MCPeerID
-    var clientsPeerIDs: [MCPeerID]
+    var clientPeerIDs: [MCPeerID]
     // Delegates
     var gameDelegate: ServerGameDelegate?
     
@@ -35,7 +35,7 @@ class Server: NSObject {
             serviceType: "niu-niu-game"
         )
         self.peerID = peerID
-        self.clientsPeerIDs = [MCPeerID]()
+        self.clientPeerIDs = [MCPeerID]()
         super.init()
         self.session.delegate = self
         self.advertiser.delegate = self
@@ -80,7 +80,9 @@ extension Server: MCNearbyServiceAdvertiserDelegate {
     
     // Receive connection
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        invitationHandler(true, self.session)
+        if self.clientPeerIDs.count < 6 {
+            invitationHandler(true, self.session)
+        }
     }
     
 }
@@ -91,10 +93,10 @@ extension Server: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
-            self.clientsPeerIDs.append(peerID)
+            self.clientPeerIDs.append(peerID)
         case MCSessionState.notConnected:
-            if let index = self.clientsPeerIDs.firstIndex(of: peerID) {
-                self.clientsPeerIDs.remove(at: index)
+            if let index = self.clientPeerIDs.firstIndex(of: peerID) {
+                self.clientPeerIDs.remove(at: index)
             }
         default:
             break

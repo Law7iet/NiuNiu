@@ -15,6 +15,7 @@ enum PlayerEnum: Codable {
     case winner
     case none
     
+    // MARK: For debug
     var description: String {
         switch self {
         case .bet: return "bet"

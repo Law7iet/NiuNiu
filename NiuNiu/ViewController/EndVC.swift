@@ -12,7 +12,7 @@ class EndVC: UIViewController {
     // MARK: Properties
     var dealer: Dealer?
     var client: Client!
-    var users: [User]!
+    var users: [Player]!
     var prize: Int!
     
     var play = false
@@ -41,7 +41,7 @@ class EndVC: UIViewController {
         var cardTrueIndex = 0
         var cardFalseIndex = 4
         for cardIndex in 0 ... 4 {
-            let image = UIImage(named: cards[cardIndex].getName())
+            let image = UIImage(named: cards[cardIndex].fileName)
             if pickedCards[cardIndex] == true {
                 buttons[cardTrueIndex].setBackgroundImage(image, for: UIControl.State.normal)
                 buttons[cardTrueIndex].layer.cornerRadius = Utils.cornerRadiusSmall
@@ -57,9 +57,9 @@ class EndVC: UIViewController {
     
     func setupUsers() {
         if self.dealer != nil {
-            self.users = [User]()
+            self.users = [Player]()
             for player in self.dealer!.players {
-                self.users?.append(player.convertToUser())
+                self.users?.append(player)
             }
         }
     }
@@ -69,12 +69,12 @@ class EndVC: UIViewController {
         for user in self.users! {
             if user.status == .winner {
                 // Manage the winner
-                self.winnerID.text = user.name
+                self.winnerID.text = user.id
                 self.winnerPoints.text = "Points: \(user.points - self.prize) + \(self.prize!)"
                 self.winnerScore.text = user.score.description
                 self.setupCard(buttons: self.winnerCards, cards: user.cards, pickedCards: user.pickedCards)
             } else {
-                self.playerIDs[userIndex].text = user.name
+                self.playerIDs[userIndex].text = user.id
                 self.playerPoints[userIndex].text = "Points: \(user.points)"
                 if user.status == .fold {
                     self.playerScore[userIndex].text = "Fold"
@@ -156,7 +156,7 @@ class EndVC: UIViewController {
 extension EndVC: ClientEndDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID == self.client.serversPeerID && self.dealer == nil {
+        if peerID == self.client.serverPeerID && self.dealer == nil {
             let alert = UIAlertController(
                 title: "Exit from lobby",
                 message: "The lobby has been closed",
