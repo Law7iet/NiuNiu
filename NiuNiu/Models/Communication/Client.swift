@@ -11,6 +11,8 @@ import MultipeerConnectivity
 protocol ClientSearchDelegate {
     func didFindHost(with peerID: MCPeerID)
     func didLoseHost(with peerID: MCPeerID)
+    func didConnectWithHost(_ peerID: MCPeerID)
+    func didDisconnectWithHost(_ peerID: MCPeerID)
 }
 
 protocol ClientLobbyDelegate {
@@ -73,7 +75,7 @@ class Client: NSObject {
             peerID,
             to: self.session,
             withContext: nil,
-            timeout: 30
+            timeout: Utils.pendingTimer
         )
     }
     
@@ -126,8 +128,10 @@ extension Client: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
+            self.searchDelegate?.didConnectWithHost(peerID)
             self.lobbyDelegate?.didConnect(with: peerID)
         case MCSessionState.notConnected:
+            self.searchDelegate?.didDisconnectWithHost(peerID)
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.gameDelegate?.didDisconnect(with: peerID)
             self.endDelegate?.didDisconnect(with: peerID)

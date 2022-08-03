@@ -44,14 +44,14 @@ class LobbyVC: UIViewController {
     
     func update() {
         // UI
-        self.playersCounterLabel.text = "\(self.lobby.count) of 6 players found"
+        self.playersCounterLabel.text = "\(self.lobby.count) of \(Utils.numberOfPlayers) players found"
         if self.lobby.count > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
         } else if self.lobby.count < 2 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
         // Advertiser
-        if self.lobby.count == 6 {
+        if self.lobby.count == Utils.numberOfPlayers {
             self.server?.stopAdvertising()
         } else {
             self.server?.startAdvertising()
@@ -74,12 +74,13 @@ class LobbyVC: UIViewController {
         }
     }
     
-    func getExitAlert(withText text: String) -> UIAlertController {
-        let alert = UIAlertController(title: "Exit from lobby", message: text, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action) in
-            self.client.disconnect()
-            self.navigationController?.popViewController(animated: true)
-        }))
+    func getExitAlert(withMessage message: String) -> UIAlertController {
+        let alert = Utils.getOneButtonAlert(
+            title: "Exit the lobby",
+            message: message) { (alertAction: UIAlertAction) in
+                self.client.disconnect()
+                self.navigationController?.popViewController(animated: true)
+            }
         return alert
     }
 
@@ -106,10 +107,7 @@ class LobbyVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.server?.sendMessage(
-            to: self.server!.clientPeerIDs,
-            message: Message(.closeLobby)
-        )
+        self.server?.disconnect()
         self.client.disconnect()
     }
     
@@ -171,26 +169,37 @@ extension LobbyVC: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.server != nil {
             let user = self.lobby[indexPath.row]
+            
+            var title: String
+            var message: String
+            var action: (UIAlertAction) -> Void
             if user == self.server?.peerID {
-                // Do nothing - The host can't kick himself
-                return
-            }
-            let alert = UIAlertController(
-                title: "Remove user",
-                message: "Do you want to remove the user " + user.displayName + "?",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: "Yes",
-                style: .default,
-                handler: {(action: UIAlertAction) in
+                title = "Exit the lobby"
+                message = "If you quit the lobby, the lobby will close. Are you sure to quit?"
+                action = { (alertAction: UIAlertAction) in
+                    // Notify and exit or close
+                    self.server?.disconnect()
+                    self.client.disconnect()
+                    self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                title = "Remove user"
+                message = "Do you want to remove the user " + user.displayName + "?"
+                action = { (alertAction: UIAlertAction) in
                     let msg = Message(.closeSession)
                     self.server?.sendMessage(to: [user], message: msg)
                 }
+            }
+            
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(
+                title: "Yes",
+                style: .destructive,
+                handler: action
             ))
             alert.addAction(UIAlertAction(
                 title: "No",
-                style: .destructive
+                style: .cancel
             ))
             present(alert, animated: true, completion: nil)
         }
@@ -201,7 +210,7 @@ extension LobbyVC: UITableViewDelegate {
 // MARK: ClientSearchDelegate implementation
 // Used by host's client
 extension LobbyVC: ClientSearchDelegate {
-    
+        
     func didFindHost(with peerID: MCPeerID) {
         if peerID == self.server?.peerID {
             self.client.connect(to: peerID)
@@ -209,7 +218,9 @@ extension LobbyVC: ClientSearchDelegate {
     }
     
     func didLoseHost(with peerID: MCPeerID) {}
-    
+    func didConnectWithHost(_ peerID: MCPeerID) {}
+    func didDisconnectWithHost(_ peerID: MCPeerID) {}
+
 }
 
 // MARK: ClientLobbyDelegate implementation
@@ -228,6 +239,13 @@ extension LobbyVC: ClientLobbyDelegate {
             DispatchQueue.main.async {
                 self.removePlayerInTableView(peerID: peerID)
             }
+        } else {
+            if self.server == nil {
+                let alert = self.getExitAlert(withMessage: "The lobby has been closed")
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
+            }
         }
     }
     
@@ -243,12 +261,7 @@ extension LobbyVC: ClientLobbyDelegate {
         case .closeSession:
             // Disconnect from the other peers
             self.client.disconnect()
-            let alert = self.getExitAlert(withText: "The host removed you from the lobby")
-            DispatchQueue.main.async {
-                self.present(alert, animated: true)
-            }
-        case .closeLobby:
-            let alert = self.getExitAlert(withText: "The lobby has been closed")
+            let alert = self.getExitAlert(withMessage: "The host removed you from the lobby")
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
             }

@@ -1188,15 +1188,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="g6j-AK-1PK"/>
-        <segue reference="r8X-wQ-4AQ"/>
-        <segue reference="TuB-gZ-Juj"/>
+        <segue reference="QwQ-TG-PXd"/>
+        <segue reference="s22-Bn-U35"/>
         <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>
-        <image name="line.3.horizontal" catalog="system" width="32" height="32"/>
-        <image name="person" catalog="system" width="32" height="32"/>
+        <image name="line.3.horizontal" catalog="system" width="128" height="64"/>
+        <image name="person" catalog="system" width="128" height="117"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

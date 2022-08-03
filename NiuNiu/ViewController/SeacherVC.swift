@@ -104,10 +104,8 @@ extension SeacherVC: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: { [self] (action: UIAlertAction) in
-                // Join lobby
-                self.client.serverPeerID = user
+                // Request to join in the server
                 self.client.connect(to: user)
-                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
             }
         ))
         alert.addAction(UIAlertAction(
@@ -128,6 +126,24 @@ extension SeacherVC: ClientSearchDelegate {
     
     func didLoseHost(with: MCPeerID) {
         self.removeHostInTableView(peerID: with)
+    }
+    
+    func didConnectWithHost(_ peerID: MCPeerID) {
+        self.client.serverPeerID = peerID
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
+        }
+    }
+    
+    func didDisconnectWithHost(_ peerID: MCPeerID) {
+        let alert = Utils.getOneButtonAlert(
+            title: "Can't join in the lobby",
+            message: "The lobby is full",
+            action: nil
+        )
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
 
 }

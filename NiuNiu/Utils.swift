@@ -9,6 +9,10 @@ import UIKit
 import MultipeerConnectivity
 
 class Utils {
+    // Debug
+    static let numberOfPlayers = 6
+    static let pendingTimer = 2.5
+    
     // Game setting
     static let timerOffset = 1
     static let timerShort = 3
@@ -38,5 +42,11 @@ class Utils {
             array.append(peerID.displayName)
         }
         return array
+    }
+    
+    static func getOneButtonAlert(title: String, message: String, action: ((UIAlertAction) -> Void)?) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: action))
+        return alert
     }
 }
