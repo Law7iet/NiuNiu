@@ -18,6 +18,7 @@ class GameVC: UIViewController {
     
     var maxBid = 0
     var totalBid = 0
+    var isClicked = false
     var clickedButtons = [false, false, false, false, false]
     var timer: Timer?
     var userData: UIAlertController?
@@ -85,8 +86,23 @@ class GameVC: UIViewController {
                 // Setup the other players
                 self.playersButtons[index].setTitle(player.id, for: UIControl.State.normal)
                 self.playersButtons[index].isEnabled = true
-                self.playersButtons[index].isHidden = false
                 index += 1
+            }
+        }
+    }
+    
+    func setupUserButton(withSlider flag: Bool, turnOn: Bool) {
+        if turnOn {
+            self.actionButton.isEnabled = true
+            self.foldButton.isEnabled = true
+            if flag {
+                self.betSlider.isEnabled = flag == true
+            }
+        } else {
+            self.actionButton.isEnabled = false
+            self.foldButton.isEnabled = false
+            if flag {
+                self.betSlider.isEnabled = false
             }
         }
     }
@@ -101,6 +117,22 @@ class GameVC: UIViewController {
         }
     }
     
+    func fold() {
+        // Disable buttons
+        self.setupUserButton(withSlider: true, turnOn: false)
+        for btn in self.cardsButtons {
+            btn.isEnabled = false
+        }
+        // Show/hide views
+        self.foldLabel.layer.cornerRadius = Utils.cornerRadius
+        self.foldLabel.isHidden = false
+        // Change data
+        self.player.status = .fold
+        self.client.sendMessageToServer(
+            message: Message(.fold, players: [self.player])
+        )
+    }
+    
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,6 +140,7 @@ class GameVC: UIViewController {
         self.client.gameDelegate = self
         
         self.dealer?.play()
+        
         // Hide UI
         for btn in self.playersButtons + self.cardsButtons {
             btn.isHidden = true
@@ -165,19 +198,23 @@ class GameVC: UIViewController {
     }
 
     @IBAction func clickAction(_ sender: Any) {
-        self.actionButton.isEnabled = false
-        self.foldButton.isEnabled = false
-        self.betSlider.isEnabled = false
+        
+        self.isClicked = true
+        self.setupUserButton(withSlider: true, turnOn: false)
         
         switch self.player.status {
         case .bet:
             let bid = Int(self.betSlider.value)
-            self.player.bid = bid
-            self.player.points = self.player.points - bid
-            self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
-            self.client.sendMessageToServer(
-                message: Message(.bet, players: [self.player])
-            )
+            if bid == 0 {
+                self.fold()
+            } else {
+                self.player.bid = bid
+                self.player.points = self.player.points - bid
+                self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
+                self.client.sendMessageToServer(
+                    message: Message(.bet, players: [self.player])
+                )
+            }
         case .check:
             let diff = self.maxBid - self.player.bid
             self.player.bid = diff
@@ -206,19 +243,8 @@ class GameVC: UIViewController {
         }
     }
     
-    @IBAction func fold(_ sender: Any) {
-        self.foldButton.isEnabled = false
-        self.actionButton.isEnabled = false
-        self.betSlider.isEnabled = false
-        self.foldLabel.isHidden = false
-        for btn in self.cardsButtons {
-            btn.isEnabled = false
-        }
-        self.foldLabel.layer.cornerRadius = Utils.cornerRadius
-        self.player.status = .fold
-        self.client.sendMessageToServer(
-            message: Message(.fold, players: [self.player])
-        )
+    @IBAction func clickFold(_ sender: Any) {
+        self.fold()
     }
     
     @IBAction func changeSliderValue(_ sender: UISlider) {
@@ -260,21 +286,29 @@ extension GameVC: ClientGameDelegate {
         // MARK: StartMatch
         case .startMatch:
             DispatchQueue.main.async {
-                self.statusLabel.text = "The game will start soon"
-                self.timerLabel.text = String(Utils.timerShort)
+                // Initialization of data
+                self.maxBid = 0
+                self.totalBid = 0
                 self.players = message.players!
                 self.setupPlayers()
+                // Initialization of UI
+                self.statusLabel.text = "The game will start soon"
+                self.timerLabel.text = String(Utils.timerShort)
+                // TODO: change action, fold and slider visibility?
+                for btn in self.playersButtons + self.cardsButtons {
+                    btn.isHidden = true
+                }
+                // Start the timer
                 var timerCounter = 0
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
                     self.timerLabel.text = String(Utils.timerShort - timerCounter)
                     if timerCounter == Utils.timerShort {
                         timer.invalidate()
+                        // Change UI
                         self.statusLabel.text = "Match started!"
                         self.timerLabel.text = ""
-                        
-                        for btn in self.cardsButtons {
-                            btn.isEnabled = true
+                        for btn in self.playersButtons + self.cardsButtons {
                             btn.isHidden = false
                         }
                     }
@@ -283,26 +317,25 @@ extension GameVC: ClientGameDelegate {
         // MARK: StartBet
         case .startBet:
             DispatchQueue.main.async {
+                // Change data
                 self.player.status = .bet
+                self.isClicked = false
+                // Change UI
                 self.statusLabel.text = "Start Bet!"
                 self.timerLabel.text = String(Utils.timerLong)
                 self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
-                self.actionButton.isEnabled = true
-                self.foldButton.isEnabled = true
-                self.betSlider.isEnabled = true
-                
+                self.setupUserButton(withSlider: true, turnOn: true)
+                // Set timer
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
                     self.timerLabel.text = String(Utils.timerLong - timerCounter)
                     if timerCounter == Utils.timerLong {
                         timer.invalidate()
-                        self.player.status = .none
+                        // Change UI
                         self.statusLabel.text = "Stop Bet!"
                         self.timerLabel.text = ""
-                        self.actionButton.isEnabled = false
-                        self.foldButton.isEnabled = false
-                        self.betSlider.isEnabled = false
+                        self.setupUserButton(withSlider: true, turnOn: false)
                     }
                 }
             }
@@ -310,55 +343,50 @@ extension GameVC: ClientGameDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                if self.player.bid == 0 {
-                    self.player.status = .fold
-                    for btn in self.cardsButtons {
-                        btn.isEnabled = false
-                    }
-                    self.foldLabel.isHidden = false
-                    self.foldLabel.layer.cornerRadius = Utils.cornerRadius
-                } else {
-                    self.player.status = .none
+                if self.isClicked == false || self.player.bid == 0 {
+                    // The player didn't bet
+                    self.fold()
                 }
+                // Change UI
                 self.statusLabel.text = "Stop Bet!"
                 self.timerLabel.text = ""
-                self.actionButton.isEnabled = false
-                self.foldButton.isEnabled = false
-                self.betSlider.isEnabled = false
+                self.setupUserButton(withSlider: true, turnOn: false)
             }
         // MARK: StartCheck
         case .startCheck:
             DispatchQueue.main.async {
+                // Change UI
                 self.statusLabel.text = "Start Check!"
                 self.timerLabel.text = String(Utils.timerLong)
+                // Change data
                 self.maxBid = message.amount!
+                self.isClicked = false
+                // Control if player can check/all-in
                 if self.player.bid != self.maxBid {
                     let diff = self.maxBid - self.player.bid
                     if diff < self.player.points {
-                        // Setup bet button and labels
+                        // Check
                         self.player.status = .check
                         self.actionButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
-                        self.actionButton.isEnabled = true
-                        self.foldButton.isEnabled = true
                     } else {
-                        // The user doens't have enough points
+                        // All-in
                         self.player.status = .allIn
                         self.actionButton.setTitle("All-in", for: UIControl.State.normal)
-                        self.actionButton.isEnabled = true
-                        self.foldButton.isEnabled = true
                     }
+                    // Change UI
+                    self.setupUserButton(withSlider: false, turnOn: true)
                 }
-                
+                // Set timer
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
                     self.timerLabel.text = String(Utils.timerLong - timerCounter)
                     if timerCounter == Utils.timerLong {
                         timer.invalidate()
+                        // Change UI
                         self.statusLabel.text = "Stop Check!"
                         self.timerLabel.text = ""
-                        self.actionButton.isEnabled = false
-                        self.foldButton.isEnabled = false
+                        self.setupUserButton(withSlider: false, turnOn: false)
                     }
                 }
             }
@@ -366,30 +394,34 @@ extension GameVC: ClientGameDelegate {
         case .stopCheck:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                self.player.status = .none
+                if self.isClicked == false && self.player.bid != self.maxBid {
+                    // The player didn't check
+                    self.fold()
+                }
+                // Change UI
                 self.statusLabel.text = "Stop Check!"
                 self.timerLabel.text = ""
-                self.actionButton.isEnabled = false
-                self.foldButton.isEnabled = false
+                self.setupUserButton(withSlider: false, turnOn: false)
             }
         // MARK: StartCards
         case .startCards:
             DispatchQueue.main.async {
+                // Change data
                 self.player.status = .cards
+                self.isClicked = false
+                // Change UI
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(Utils.timerLong)
-                if self.player.status != .fold {
-                    self.checkPickCards()
-                }
                 self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
-                    
+                self.checkPickCards()
+                // Set timer
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
                     self.timerLabel.text = String(Utils.timerLong - timerCounter)
                     if timerCounter == Utils.timerLong {
                         timer.invalidate()
-                        self.player.status = .none
+                        // Change UI
                         self.statusLabel.text = "Stop Cards!"
                         self.timerLabel.text = ""
                     }
@@ -399,7 +431,7 @@ extension GameVC: ClientGameDelegate {
         case .stopCards:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                self.player.status = .none
+                // Change UI
                 self.statusLabel.text = "Stop Cards!"
                 self.timerLabel.text = ""
                 for btn in self.cardsButtons {
@@ -421,7 +453,7 @@ extension GameVC: ClientGameDelegate {
                 self.userData?.message = "Points: \(message.players![0].points)\nBid: \(message.players![0].bid)"
                 self.userDataSpinner?.stopAnimating()
             }
-        // TODO: check if there're closeConnection or closeLobby
+
         default:
             print("ClientGameVC.didReceiveMessageFrom - message.type == \(message.type)")
         }

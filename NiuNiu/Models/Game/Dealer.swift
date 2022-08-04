@@ -129,7 +129,7 @@ class Dealer {
         // Change the status to the players who didn't check
         self.totalBid = 0
         for player in self.players {
-            if player.status == .check || player.status == .allIn {
+            if (player.status == .check && player.bid == self.maxBid) || (player.status == .allIn) {
                 player.status = .cards
                 self.totalBid += player.bid
             } else {
