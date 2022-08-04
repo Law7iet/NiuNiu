@@ -99,6 +99,7 @@ extension Server: MCSessionDelegate {
         case MCSessionState.notConnected:
             if let index = self.clientPeerIDs.firstIndex(of: peerID) {
                 self.clientPeerIDs.remove(at: index)
+                self.gameDelegate?.didDisconnect(with: peerID)
             }
         default:
             break

@@ -54,13 +54,13 @@ class Dealer {
     }
     
     // MARK: Supporting functions
-    /// Get an array of MCPeerID of the players in the class with .fold status.
+    /// Get an array of MCPeerID of the players in the class with .fold or .disconnected status.
     /// This is the list of the players that the Server has to send a message.
     /// - Returns: The array of MCPeerID
     func getAvailableMCPeerIDs() -> [MCPeerID] {
         var peerList = [MCPeerID]()
         for player in self.players {
-            if player.status != .fold {
+            if player.status != .fold && player.status != .disconnected {
                 peerList.append(self.playerDict[player.id]!)
             }
         }
@@ -183,6 +183,16 @@ class Dealer {
             to: self.server.clientPeerIDs,
             message: Message(.endMatch, amount: self.totalBid, players: self.players)
         )
+        
+        // Remove player
+        for player in players {
+            if player.status == .disconnected || player.points == 0 {
+                let index = self.players.firstIndex(of: player)!
+                self.players.remove(at: index)
+                self.playerDict.removeValue(forKey: player.id)
+            }
+        }
+
     }
     
     func play() {
@@ -216,10 +226,9 @@ extension Dealer: ServerGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
         // Remove from players and the dictionary the disconnected player
-        let player = Utils.findPlayer(byName: peerID.displayName, from: self.players)!
-        let index = self.players.firstIndex(of: player)!
-        self.players.remove(at: index)
-        self.playerDict.removeValue(forKey: peerID.displayName)
+        if let player = Utils.findPlayer(byName: peerID.displayName, from: self.players) {
+            player.status = .disconnected
+        }
     }
     
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {

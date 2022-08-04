@@ -2,17 +2,25 @@
 
 ## TODO
 
-- Gestione dei clients che si disconnettono durante la partita (in GameVC e EndVC)
 - Settings
-
+- Nessun vincitore
+- Cosa fare quando un giocatore perde tutto (EndVC)
 
 ## DOING
 
-
 ## CHECK
 
+- Gestione dei clients che si disconnettono durante la partita (in GameVC e EndVC)
+    - Host
+        - il server rimuove da clientPeerIDs il peer disconnesso e chiama il dealer
+        - il dealer segna il giocatore da rimuovere
+        - a fine partita lo rimuove
+    - Client
+        - segna il giocatore disconnesso (blocca il suo bottone)
+
 - Aggiungere la possibilità di ritirarsi (fold) durante la fase della scelta delle carte
-- Attivare la view "Fold"
+    - Attivare la view "Fold"
+
 - Round successivo sono visibili le carte?
 - Quando non fai il Check, puoi fare lo stesso il pick
 - Cambiare la visibilità dei bottoni action, fold e slider ad inizio game?

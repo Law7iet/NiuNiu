@@ -78,6 +78,8 @@ class EndVC: UIViewController {
                 self.playerPoints[userIndex].text = "Points: \(user.points)"
                 if user.status == .fold {
                     self.playerScore[userIndex].text = "Fold"
+                } else if user.status == .disconnected {
+                    self.playerScore[userIndex].text = "Disconnected"
                 } else {
                     self.playerScore[userIndex].text = user.score.description
                 }
@@ -93,6 +95,19 @@ class EndVC: UIViewController {
         self.client.endDelegate = self
         self.setupUsers()
         self.setupUI()
+        
+        for player in self.users {
+            if player.id == self.client.peerID.displayName {
+                if player.bid <= 0 {
+                    // Lose
+                    
+                } else {
+                    // Can continue
+                    
+                }
+            }
+        }
+        
         var timerCounter = 0
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             if timerCounter >= Utils.timerLong {

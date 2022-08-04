@@ -277,6 +277,12 @@ extension GameVC: ClientGameDelegate {
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
             }
+        } else {
+            for btn in self.playersButtons {
+                if btn.title(for: UIControl.State.normal) == peerID.displayName {
+                    btn.isEnabled = false
+                }
+            }
         }
     }
     
