@@ -15,8 +15,8 @@ class Utils {
     
     // Game setting
     static let timerOffset = 1
-    static let timerShort = 3
-    static let timerLong = 20
+    static let timerShort = 2
+    static let timerLong = 10
     static let points = 100
     
     // Card setting

@@ -151,7 +151,7 @@ class GameVC: UIViewController {
         if let endVC = segue.destination as? EndVC {
             endVC.dealer = self.dealer
             endVC.client = self.client
-            endVC.users = self.players
+            endVC.players = self.players
             endVC.prize = self.totalBid
         }
     }
@@ -278,9 +278,11 @@ extension GameVC: ClientGameDelegate {
                 self.present(alert, animated: true)
             }
         } else {
-            for btn in self.playersButtons {
-                if btn.title(for: UIControl.State.normal) == peerID.displayName {
-                    btn.isEnabled = false
+            DispatchQueue.main.async {
+                for btn in self.playersButtons {
+                    if btn.title(for: UIControl.State.normal) == peerID.displayName {
+                        btn.isEnabled = false
+                    }
                 }
             }
         }
@@ -349,12 +351,16 @@ extension GameVC: ClientGameDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
+                var message: String
                 if self.isClicked == false || self.player.bid == 0 {
                     // The player didn't bet
                     self.fold()
+                    message = "You didn't bet"
+                } else {
+                    message = "Stop bet"
                 }
                 // Change UI
-                self.statusLabel.text = "Stop Bet!"
+                self.statusLabel.text = message
                 self.timerLabel.text = ""
                 self.setupUserButton(withSlider: true, turnOn: false)
             }
@@ -400,12 +406,16 @@ extension GameVC: ClientGameDelegate {
         case .stopCheck:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
+                var message: String
                 if self.isClicked == false && self.player.bid != self.maxBid {
                     // The player didn't check
                     self.fold()
+                    message = "You didn't check"
+                } else {
+                    message = "Stop check"
                 }
                 // Change UI
-                self.statusLabel.text = "Stop Check!"
+                self.statusLabel.text = message
                 self.timerLabel.text = ""
                 self.setupUserButton(withSlider: false, turnOn: false)
             }
@@ -437,6 +447,10 @@ extension GameVC: ClientGameDelegate {
         case .stopCards:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
+                if self.isClicked == false {
+                    // The player didn't pick any cards
+                    self.fold()
+                }
                 // Change UI
                 self.statusLabel.text = "Stop Cards!"
                 self.timerLabel.text = ""
@@ -451,9 +465,7 @@ extension GameVC: ClientGameDelegate {
                 self.players = message.players!
                 self.performSegue(withIdentifier: "showEndSegue", sender: nil)
             }
-        case .endGame:
-            print("endGame")
-        
+
         case .resPlayer:
             DispatchQueue.main.async {
                 self.userData?.message = "Points: \(message.players![0].points)\nBid: \(message.players![0].bid)"

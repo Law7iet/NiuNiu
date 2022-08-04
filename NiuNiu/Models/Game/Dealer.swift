@@ -69,6 +69,15 @@ class Dealer {
     
     // MARK: Game
     func startMatch() {
+        // Remove player for previuos match
+        for player in players {
+            if player.status == .disconnected || player.points == 0 {
+                let index = self.players.firstIndex(of: player)!
+                self.players.remove(at: index)
+                self.playerDict.removeValue(forKey: player.id)
+            }
+        }
+        // Initialization of data
         self.maxBid = 0
         self.totalBid = 0
         // Compute players and their cards
@@ -76,8 +85,14 @@ class Dealer {
         self.deck.shuffle()
         for player in self.players {
             let cards = self.deck.getCards()
-            player.cards = cards
+            // Initialization of players
             player.status = .bet
+            player.bid = 0
+            player.cards = cards
+            player.pickedCards = [false, false, false, false, false]
+            player.numberOfPickedCards = 0
+            player.tieBreakerCard = nil
+            player.score = .none
         }
         // Send players and their cards to clients
         self.server.sendMessage(
@@ -101,7 +116,7 @@ class Dealer {
         // Compute the highest bid and the total bid
         // Change the status to the players who didn't bet
         for player in self.players {
-            if player.bid <= 0 || player.status != .bet {
+            if (player.bid <= 0 || player.status != .bet) && player.status != .disconnected  {
                 player.status = .fold
             } else {
                 player.status = .check
@@ -132,7 +147,7 @@ class Dealer {
             if (player.status == .check && player.bid == self.maxBid) || (player.status == .allIn) {
                 player.status = .cards
                 self.totalBid += player.bid
-            } else {
+            } else if player.status != .disconnected {
                 player.status = .fold
             }
         }
@@ -152,7 +167,7 @@ class Dealer {
         )
         // Change status to the players whose didn't choose their cards
         for player in self.players {
-            if player.score == .none {
+            if player.score == .none && player.status != .disconnected {
                 player.status = .fold
             }
         }
@@ -179,20 +194,13 @@ class Dealer {
         winner!.status = .winner
         winner!.points = winner!.points + self.totalBid
         
+        self.players.sort()
+        self.players.reverse()
+        
         self.server.sendMessage(
             to: self.server.clientPeerIDs,
             message: Message(.endMatch, amount: self.totalBid, players: self.players)
         )
-        
-        // Remove player
-        for player in players {
-            if player.status == .disconnected || player.points == 0 {
-                let index = self.players.firstIndex(of: player)!
-                self.players.remove(at: index)
-                self.playerDict.removeValue(forKey: player.id)
-            }
-        }
-
     }
     
     func play() {

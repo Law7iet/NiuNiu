@@ -11,6 +11,11 @@ Ogni carta ha come valore il proprio *valore numerico*; il fante, la regina e il
 
 Il *valore effettivo*, utilizzato nel caso dello spareggio, corrisponde al valore numerico della carta, mentre per il fante, la regina e il re, il loro valore effettivo è rispettivamente 11, 12 e 13.
 
+Il gioco è diviso di round.
+All'inizio del gioco ogni giocatore ha un punteggio.
+In ogni round il giocatore, utilizzando il proprio punteggio fa delle puntate.
+A fine round chi ottiene il punteggio più alto si prende tutti i punti.
+
 ### Calcolo del punteggio
 
 Ogni giocatore, in base alla combinazione di carte ha un punteggio; il punteggio, in ordine crescente, è 1, 2, 3, 4, 5, 6, 7, 8, 9 e 0.
