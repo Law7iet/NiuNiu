@@ -20,18 +20,23 @@ class Dealer {
     /// The dictionary that matches the player's name with their MCPeerID
     var playerDict = [String: MCPeerID]()
     
+    // Game data
+    var totalBid: Int
+    var maxBid: Int
+    
     // Game Settings
     var time: Int
     var points: Int
     
     // Others
     var timerCounter: Int
-    var totalBid: Int
-    var maxBid: Int
-    var winner: Player?
     
     // MARK: Methods
     init(server: Server, time: Int?, points: Int?) {
+        // Game data
+        self.maxBid = 0
+        self.totalBid = 0
+        
         // Game Settings
         self.time = time ?? Utils.timerLong
         self.points = points ?? Utils.points
@@ -46,15 +51,13 @@ class Dealer {
         }
         
         // Others
-        self.maxBid = 0
-        self.totalBid = 0
         self.timerCounter = 0
-        
         self.server.gameDelegate = self
     }
     
     // MARK: Supporting functions
     /// Get an array of MCPeerID of the players in the class with .fold or .disconnected status.
+    /// The MCPeerID is taken from the playerDict, using the players' id.
     /// This is the list of the players that the Server has to send a message.
     /// - Returns: The array of MCPeerID
     func getAvailableMCPeerIDs() -> [MCPeerID] {
@@ -67,16 +70,22 @@ class Dealer {
         return peerList
     }
     
-    // MARK: Game
-    func startMatch() {
-        // Remove player for previuos match
-        for player in players {
+    
+    /// Remove the players with status .disconnected or with points equals to 0.
+    /// This is must called before and match.
+    func removePlayers() {
+        for player in self.players {
             if player.status == .disconnected || player.points == 0 {
                 let index = self.players.firstIndex(of: player)!
                 self.players.remove(at: index)
                 self.playerDict.removeValue(forKey: player.id)
             }
         }
+    }
+    
+    // MARK: Game functions
+    func startMatch() {
+        self.removePlayers()
         // Initialization of data
         self.maxBid = 0
         self.totalBid = 0
@@ -85,16 +94,11 @@ class Dealer {
         self.deck.shuffle()
         for player in self.players {
             let cards = self.deck.getCards()
-            // Initialization of players
+            player.receiveCards(cards)
+            // Set the players' next status
             player.status = .bet
-            player.bid = 0
-            player.cards = cards
-            player.pickedCards = [false, false, false, false, false]
-            player.numberOfPickedCards = 0
-            player.tieBreakerCard = nil
-            player.score = .none
         }
-        // Send players and their cards to clients
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.startMatch, players: self.players)
@@ -102,6 +106,7 @@ class Dealer {
     }
     
     func startBet() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.startBet)
@@ -109,26 +114,29 @@ class Dealer {
     }
     
     func stopBet() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.stopBet)
         )
-        // Compute the highest bid and the total bid
+        // Compute the highest bid
         // Change the status to the players who didn't bet
         for player in self.players {
-            if (player.bid <= 0 || player.status != .bet) && player.status != .disconnected  {
-                player.status = .fold
-            } else {
-                player.status = .check
+            if player.bid > 0 && player.status == .bet {
                 if player.bid > self.maxBid {
                     self.maxBid = player.bid
                 }
-                self.totalBid += player.bid
+                // Set the players' next status
+                player.status = .check
+            } else if player.status != .disconnected {
+                // Change to fold only if the players is not disconnected
+                player.status = .fold
             }
         }
     }
     
     func startCheck() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.startCheck, amount: self.maxBid)
@@ -136,24 +144,27 @@ class Dealer {
     }
     
     func stopCheck() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.stopCheck)
         )
         // Compute the total bid
         // Change the status to the players who didn't check
-        self.totalBid = 0
         for player in self.players {
             if (player.status == .check && player.bid == self.maxBid) || (player.status == .allIn) {
-                player.status = .cards
                 self.totalBid += player.bid
+                // Set the player's next status
+                player.status = .cards
             } else if player.status != .disconnected {
+                // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
         }
     }
     
     func startCards() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.startCards)
@@ -161,6 +172,7 @@ class Dealer {
     }
     
     func stopCards() {
+        // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
             message: Message(.stopCards)
@@ -168,6 +180,7 @@ class Dealer {
         // Change status to the players whose didn't choose their cards
         for player in self.players {
             if player.score == .none && player.status != .disconnected {
+                // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
         }
@@ -178,25 +191,28 @@ class Dealer {
         var winner: Player? = nil
         for player in self.players {
             if winner == nil {
-                winner = player
+                if player.status != .fold {
+                    winner = player
+                }
             } else {
-                if player.score != .none {
-                    if player.score > winner!.score {
+                if player.score > winner!.score {
+                    winner = player
+                } else if player.score == winner!.score {
+                    // Tie breaker
+                    if player.tieBreakerCard! > winner!.tieBreakerCard! {
                         winner = player
-                    } else if player.score == winner!.score {
-                        if player.tieBreakerCard! > winner!.tieBreakerCard! {
-                            winner = player
-                        }
                     }
                 }
             }
         }
-        winner!.status = .winner
-        winner!.points = winner!.points + self.totalBid
-        
+        if winner != nil {
+            winner!.status = .winner
+            winner!.points = winner!.points + self.totalBid
+        }
+        // Sort the players for the scoreboard
         self.players.sort()
         self.players.reverse()
-        
+        // Send message
         self.server.sendMessage(
             to: self.server.clientPeerIDs,
             message: Message(.endMatch, amount: self.totalBid, players: self.players)
@@ -205,7 +221,6 @@ class Dealer {
     
     func play() {
         self.startMatch()
-        
         var timerCounter = 0
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             timerCounter += 1
@@ -236,6 +251,7 @@ extension Dealer: ServerGameDelegate {
         // Remove from players and the dictionary the disconnected player
         if let player = Utils.findPlayer(byName: peerID.displayName, from: self.players) {
             player.status = .disconnected
+            print("\(peerID.displayName) si è discconnesso")
         }
     }
     
@@ -244,6 +260,8 @@ extension Dealer: ServerGameDelegate {
         let player = Utils.findPlayer(byName: peerID.displayName, from: self.players)!
     
         switch message.type {
+        case .fold:
+            player.status = .fold
         // MARK: Bet
         case .bet:
             player.bet(amount: message.players![0].bid)

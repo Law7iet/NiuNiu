@@ -91,12 +91,13 @@ class EndVC: UIViewController {
         for player in self.players {
             if player.id == self.client.peerID.displayName {
                 if player.points <= 0 {
-                    // Lose
+                    // Can't continue playing
                     self.isLost = true
                     self.playButton.isEnabled = false
                 } else {
-                    // Can continue
+                    // Can continue playing
                     self.isLost = false
+                    self.playButton.isEnabled = true
                 }
             }
         }
@@ -105,18 +106,13 @@ class EndVC: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             if timerCounter >= Utils.timerLong {
                 timer.invalidate()
-                if self.isLost == true {
+                if self.isLost == false && self.play == true {
+                    self.performSegue(withIdentifier: "backToGameSegue", sender: self)
+                } else {
+                    self.play = false
                     self.dealer?.server.disconnect()
                     self.client.disconnect()
-                    self.performSegue(withIdentifier: "backToMainSegue", sender: self)
-                } else {
-                    if self.play == true {
-                        self.performSegue(withIdentifier: "backToGameSegue", sender: self)
-                    } else {
-                        self.dealer?.server.disconnect()
-                        self.client.disconnect()
-                        self.performSegue(withIdentifier: "backToMainSegue", sender: self)
-                    }
+                    self.endLabel.text = "Match started without you"
                 }
             } else {
                 self.endLabel.text = "Next match will start in \(Utils.timerLong - timerCounter) seconds"
@@ -134,35 +130,42 @@ class EndVC: UIViewController {
     
     // MARK: Actions
     @IBAction func quit(_ sender: Any) {
-        var message: String?
-        if self.dealer != nil {
-            message = "If you quit the game, the game will end. Are you sure to quit?"
-        } else {
-            if self.isLost == false {
-                message = "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
-            }
-        }
-        if message != nil {
-            let alert = UIAlertController(
-                title: "Quit the game",
-                message: message!,
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: "No",
-                style: .default)
-            )
-            alert.addAction(UIAlertAction(
-                title: "Yes",
-                style: .destructive,
-                handler: { action in
-                    self.play = false
-                    self.dealer?.server.disconnect()
-                    self.client.disconnect()
-                    self.performSegue(withIdentifier: "backToMainSegue", sender: self)
+        if isLost == false {
+            var message: String?
+            if self.dealer != nil {
+                message = "If you quit the game, the game will end. Are you sure to quit?"
+            } else {
+                if self.isLost == false {
+                    message = "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
                 }
-            ))
-            self.present(alert, animated: true)
+            }
+            if message != nil {
+                let alert = UIAlertController(
+                    title: "Quit the game",
+                    message: message!,
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(
+                    title: "No",
+                    style: .default)
+                )
+                alert.addAction(UIAlertAction(
+                    title: "Yes",
+                    style: .destructive,
+                    handler: { action in
+                        self.play = false
+                        self.dealer?.server.disconnect()
+                        self.client.disconnect()
+                        self.performSegue(withIdentifier: "backToMainSegue", sender: self)
+                    }
+                ))
+                self.present(alert, animated: true)
+            } else {
+                self.play = false
+                self.dealer?.server.disconnect()
+                self.client.disconnect()
+                self.performSegue(withIdentifier: "backToMainSegue", sender: self)
+            }
         } else {
             self.play = false
             self.dealer?.server.disconnect()
@@ -192,8 +195,8 @@ extension EndVC: ClientEndDelegate {
                 title: "Ok",
                 style: .default,
                 handler: {(action) in
+                    self.playButton.isEnabled = false
                     self.client.disconnect()
-                    self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
                 }
             ))
             DispatchQueue.main.async {
@@ -210,8 +213,8 @@ extension EndVC: ClientEndDelegate {
                 title: "Ok",
                 style: .default,
                 handler: {(action) in
+                    self.playButton.isEnabled = false
                     self.client.disconnect()
-                    self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
                 }
             ))
             DispatchQueue.main.async {

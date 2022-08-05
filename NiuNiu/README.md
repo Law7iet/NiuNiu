@@ -105,3 +105,45 @@ MVC
 - View (Main - storyboard)
 - Controller
     - ...
+
+----
+
+MainVC a seconda del bottone crea:
+- un client a SearchVC
+- un server e client a LobbyVC
+
+SearchVC:
+- quando appare inizia a cercare
+- quando trova un server passa in LobbyVC
+
+Il server aggiorna la sua lista dei client
+Il client segna chi è il server
+
+LobbyVC:
+- se ha un server inizia ad avvisare
+- il client è sicuramente collegato al server:
+    - viene indicato da SearchVC
+    - se non passa per SearchVC vuol dire che ha un server. In questo caso viene creato e collegato subito un client
+    
+L'host decide quando si inizia il gioco, e si passa a GameVC.
+
+GameVC:
+- ha un client, responsabile delle comunicazioni
+- ha un player, responsabile del gioco
+
+Il GameVC se è l'host ha inoltre:
+- un dealer, responsabile del gioco
+    - server, responsabile delle comunicazioni
+    - players, stato dei giocatori
+
+Il dealer:
+1. Prepara la partita
+    - Crea il mazzo
+    - Assegna ai giocatori le carte
+    - 
+
+
+
+
+
+

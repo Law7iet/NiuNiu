@@ -77,6 +77,17 @@ class Player: Codable, Comparable, CustomStringConvertible {
         self.points = 0
     }
     
+    /// Change the players' cards and initialize the properties related with the cards
+    /// - Parameter cards: the cards
+    func receiveCards(_ cards: [Card]) {
+        self.bid = 0
+        self.cards = cards
+        self.pickedCards = [false, false, false, false, false]
+        self.numberOfPickedCards = 0
+        self.tieBreakerCard = nil
+        self.score = .none
+    }
+    
     /// Change the player's status, and player.cards property with the argument.
     /// - Parameter cards: the cards.
     /// - Parameter pickedCards: the cards picked by the player
