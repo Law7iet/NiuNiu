@@ -128,6 +128,26 @@ class EndVC: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("EndVC willAppear")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("EndVC didAppear")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("EndVC willDisappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("EndVC didDisappear")
+    }
+    
     // MARK: Actions
     @IBAction func quit(_ sender: Any) {
         if isLost == false {
@@ -202,7 +222,7 @@ extension EndVC: ClientEndDelegate {
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
             }
-        } else if self.dealer?.server.clientPeerIDs.count == 1 {
+        } else if self.dealer?.server.connectedPeers.count == 1 {
             self.play = false
             let alert = UIAlertController(
                 title: "Exit from lobby",

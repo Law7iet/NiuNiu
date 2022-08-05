@@ -45,7 +45,7 @@ class Dealer {
         self.server = server
         self.deck = Deck()
         self.players = [Player]()
-        for peerID in server.clientPeerIDs {
+        for peerID in server.connectedPeers {
             players.append(Player(id: peerID.displayName, points: points))
             self.playerDict[peerID.displayName] = peerID
         }
@@ -191,7 +191,7 @@ class Dealer {
         var winner: Player? = nil
         for player in self.players {
             if winner == nil {
-                if player.status != .fold {
+                if player.status != .fold && player.status != .disconnected {
                     winner = player
                 }
             } else {
@@ -214,7 +214,7 @@ class Dealer {
         self.players.reverse()
         // Send message
         self.server.sendMessage(
-            to: self.server.clientPeerIDs,
+            to: self.server.connectedPeers,
             message: Message(.endMatch, amount: self.totalBid, players: self.players)
         )
     }
@@ -251,7 +251,6 @@ extension Dealer: ServerGameDelegate {
         // Remove from players and the dictionary the disconnected player
         if let player = Utils.findPlayer(byName: peerID.displayName, from: self.players) {
             player.status = .disconnected
-            print("\(peerID.displayName) si è discconnesso")
         }
     }
     
@@ -260,6 +259,7 @@ extension Dealer: ServerGameDelegate {
         let player = Utils.findPlayer(byName: peerID.displayName, from: self.players)!
     
         switch message.type {
+        // MARK: Fold
         case .fold:
             player.status = .fold
         // MARK: Bet

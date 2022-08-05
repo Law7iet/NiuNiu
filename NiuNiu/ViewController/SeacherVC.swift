@@ -48,6 +48,13 @@ class SeacherVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToBackground),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+        print("Searcher didLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,16 +62,34 @@ class SeacherVC: UIViewController {
         self.resetHosts()
         self.setupClient()
         self.client.startBrowsing()
+        print("SearcherVC willAppear")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("SearcherVC didAppear")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("SearcherVC willDisappear")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.client.stopBrowsing()
+        print("SearcherVC didDisappear")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let lobbyVC = segue.destination as! LobbyVC
         lobbyVC.client = self.client
+    }
+    
+    // MARK: Notification
+    @objc func appMovedToBackground() {
+        self.hosts.removeAll()
+        self.hostsTableView.reloadData()
     }
     
 }
@@ -132,17 +157,6 @@ extension SeacherVC: ClientSearchDelegate {
         self.client.serverPeerID = peerID
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
-        }
-    }
-    
-    func didDisconnectWithHost(_ peerID: MCPeerID) {
-        let alert = Utils.getOneButtonAlert(
-            title: "Can't join in the lobby",
-            message: "The lobby is full",
-            action: nil
-        )
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
         }
     }
 

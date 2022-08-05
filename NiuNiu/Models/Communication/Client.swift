@@ -12,7 +12,6 @@ protocol ClientSearchDelegate {
     func didFindHost(with peerID: MCPeerID)
     func didLoseHost(with peerID: MCPeerID)
     func didConnectWithHost(_ peerID: MCPeerID)
-    func didDisconnectWithHost(_ peerID: MCPeerID)
 }
 
 protocol ClientLobbyDelegate {
@@ -131,7 +130,6 @@ extension Client: MCSessionDelegate {
             self.searchDelegate?.didConnectWithHost(peerID)
             self.lobbyDelegate?.didConnect(with: peerID)
         case MCSessionState.notConnected:
-            self.searchDelegate?.didDisconnectWithHost(peerID)
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.gameDelegate?.didDisconnect(with: peerID)
             self.endDelegate?.didDisconnect(with: peerID)

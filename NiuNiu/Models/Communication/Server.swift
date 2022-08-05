@@ -18,7 +18,9 @@ class Server: NSObject {
     var session: MCSession
     var advertiser: MCNearbyServiceAdvertiser
     var peerID: MCPeerID
-    var clientPeerIDs: [MCPeerID]
+    var connectedPeers: [MCPeerID] {
+        self.session.connectedPeers
+    }
     // Delegates
     var gameDelegate: ServerGameDelegate?
     
@@ -35,7 +37,6 @@ class Server: NSObject {
             serviceType: "niu-niu-game"
         )
         self.peerID = peerID
-        self.clientPeerIDs = [MCPeerID]()
         super.init()
         self.session.delegate = self
         self.advertiser.delegate = self
@@ -69,6 +70,7 @@ class Server: NSObject {
                 )
             } catch {
                 print("Server.sendMessage - self.session.send error")
+                print(error)
             }
         } else {
             print("Server.sendMessage - data == nil")
@@ -80,7 +82,7 @@ extension Server: MCNearbyServiceAdvertiserDelegate {
     
     // Receive connection
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        if self.clientPeerIDs.count < Utils.numberOfPlayers {
+        if self.session.connectedPeers.count < Utils.numberOfPlayers {
             invitationHandler(true, self.session)
         } else {
             invitationHandler(false, nil)
@@ -95,13 +97,13 @@ extension Server: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case MCSessionState.connected:
-            self.clientPeerIDs.append(peerID)
+            print("Server connected with \(peerID.displayName)")
+        case MCSessionState.connecting:
+            print("Server connecting with \(peerID.displayName)")
         case MCSessionState.notConnected:
-            if let index = self.clientPeerIDs.firstIndex(of: peerID) {
-                self.clientPeerIDs.remove(at: index)
-                self.gameDelegate?.didDisconnect(with: peerID)
-            }
-        default:
+            print("Server disconnected with \(peerID.displayName)")
+            self.gameDelegate?.didDisconnect(with: peerID)
+        @unknown default:
             break
         }
     }

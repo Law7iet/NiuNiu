@@ -135,6 +135,7 @@ class GameVC: UIViewController {
     
     // MARK: Methods
     override func viewDidLoad() {
+        print("GameVC didLoad")
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
@@ -153,8 +154,31 @@ class GameVC: UIViewController {
             endVC.client = self.client
             endVC.players = self.players
             endVC.prize = self.totalBid
+            
+//            self.client.gameDelegate = nil
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("GameVC willAppear")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("GameVC didAppear")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("GameVC willDisappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("GameVC didDisappear")
+    }
+    
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {

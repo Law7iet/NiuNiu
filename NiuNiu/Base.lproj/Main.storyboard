@@ -101,7 +101,7 @@
                                         <rect key="frame" x="0.0" y="274" width="335" height="376"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Tgg-Bj-jm7" customClass="JoinCell" customModule="NiuNiu" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Tgg-Bj-jm7">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="335" height="43.666667938232422"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tgg-Bj-jm7" id="AXw-AG-aOT">
@@ -343,21 +343,18 @@
                                 <rect key="frame" x="20" y="351" width="335" height="20.333333333333314"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8nw-Ef-sKa">
-                                        <rect key="frame" x="0.0" y="0.0" width="243.66666666666666" height="20.333333333333332"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="236.66666666666666" height="20.333333333333332"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UmH-Yt-AeE" userLabel="Timer">
-                                        <rect key="frame" x="253.66666666666671" y="0.0" width="81.333333333333343" height="20.333333333333332"/>
+                                        <rect key="frame" x="246.66666666666671" y="0.0" width="88.333333333333343" height="20.333333333333332"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="8nw-Ef-sKa" firstAttribute="width" secondItem="UmH-Yt-AeE" secondAttribute="width" multiplier="3" id="R7m-fw-YLD"/>
-                                </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="XrL-kE-LYI" userLabel="User Stack View">
                                 <rect key="frame" x="20" y="498" width="335" height="260"/>
@@ -1177,9 +1174,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="r8X-wQ-4AQ"/>
+        <segue reference="QwQ-TG-PXd"/>
         <segue reference="s22-Bn-U35"/>
-        <segue reference="TCa-Jb-oMc"/>
+        <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>
