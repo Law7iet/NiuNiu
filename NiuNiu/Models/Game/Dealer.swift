@@ -30,6 +30,7 @@ class Dealer {
     
     // Others
     var timerCounter: Int
+    var timer: Timer?
     
     // MARK: Methods
     init(server: Server, time: Int?, points: Int?) {
@@ -222,7 +223,7 @@ class Dealer {
     func play() {
         self.startMatch()
         var timerCounter = 0
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             timerCounter += 1
             switch timerCounter {
             case Utils.timerShort + Utils.timerOffset:

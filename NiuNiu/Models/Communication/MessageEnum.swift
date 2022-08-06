@@ -25,7 +25,7 @@ enum MessageEnum: Codable {
     case resPlayer
     
     // Connections
-    case closeLobby
+//    case closeLobby
     case closeSession
 
     // MARK: Send from client

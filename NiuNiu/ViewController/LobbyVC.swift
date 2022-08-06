@@ -20,6 +20,15 @@ class LobbyVC: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     
     // MARK: Supporting functions
+    func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToForeground),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+    
     func setupTableView() {
         self.playersTableView.dataSource = self
         self.playersTableView.delegate = self
@@ -27,7 +36,13 @@ class LobbyVC: UIViewController {
     
     func setupLobby() {
         if self.server == nil {
-            self.lobby = [client.peerID]
+            // Get the clients that are already connected
+            var preLobby: [MCPeerID] = self.client.session.connectedPeers
+            // Remove the host
+            let index = preLobby.firstIndex(of: self.client.serverPeerID!)!
+            preLobby.remove(at: index)
+            
+            self.lobby = preLobby + [self.client.peerID]
             self.playButton.isHidden = true
         } else {
             self.lobby = [MCPeerID]()
@@ -74,14 +89,18 @@ class LobbyVC: UIViewController {
         }
     }
     
-    func getExitAlert(withMessage message: String) -> UIAlertController {
-        let alert = Utils.getOneButtonAlert(
-            title: "Exit the lobby",
-            message: message) { (alertAction: UIAlertAction) in
-                self.client.disconnect()
-                self.navigationController?.popViewController(animated: true)
+    func showExitAlert(withMessage message: String) {
+        self.client.disconnect()
+        if self.server == nil {
+            let alert = Utils.getOneButtonAlert(
+                title: "Exit from lobby",
+                message: message) { (alertAction: UIAlertAction) in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
             }
-        return alert
+        }
     }
 
     // MARK: Methods
@@ -89,20 +108,15 @@ class LobbyVC: UIViewController {
         super.viewDidLoad()
         self.setupTableView()
         self.setupLobby()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(appMovedToBackground),
-            name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
-        print("Lobby didLoad")
+        self.setupObservers()
+        print("LobbyVC didLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupLobby()
         self.setupClient()
-        print("Lobby willAppear")
+        print("LobbyVC willAppear")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,16 +125,14 @@ class LobbyVC: UIViewController {
         if server != nil {
             self.client.startBrowsing()
         }
-        print("Lobby didAppear")
+        print("LobbyVC didAppear")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        let msg = Message(.closeLobby)
-        self.server?.sendMessage(to: self.server!.connectedPeers, message: msg)
         self.client.disconnect()
-        
-        print("Lobby willDisappear")
+        self.server?.disconnect()
+        print("LobbyVC willDisappear")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -129,8 +141,7 @@ class LobbyVC: UIViewController {
         if server != nil {
             self.client.stopBrowsing()
         }
-        self.server?.disconnect()
-        print("Lobby didDisappear")
+        print("LobbyVC didDisappear")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -156,12 +167,18 @@ class LobbyVC: UIViewController {
     }
     
     // MARK: Notification
-    @objc func appMovedToBackground() {
-        let msg = Message(.closeLobby)
-        self.server?.sendMessage(to: self.server!.connectedPeers, message: msg)
-        self.client.disconnect()
-        self.server?.disconnect()
-        self.navigationController?.popViewController(animated: false)
+    @objc func appMovedToForeground() {
+        if Utils.getCurrentVC() is LobbyVC {
+            if self.client.session.connectedPeers.count == 0 {
+                if self.server == nil {
+                    self.showExitAlert(withMessage: "The lobby has been closed")
+                } else {
+                    self.server!.disconnect()
+                    self.showExitAlert(withMessage: "Lost connection with the clients")
+                }
+            }
+            print("LobbyVC foreground")
+        }
     }
 
 }
@@ -200,9 +217,6 @@ extension LobbyVC: UITableViewDelegate {
                 title = "Exit the lobby"
                 message = "If you quit the lobby, the lobby will close. Are you sure to quit?"
                 action = { (alertAction: UIAlertAction) in
-                    // Notify and exit or close
-                    let msg = Message(.closeLobby)
-                    self.server?.sendMessage(to: self.server!.connectedPeers, message: msg)
                     self.navigationController?.popViewController(animated: true)
                 }
             } else {
@@ -233,7 +247,7 @@ extension LobbyVC: UITableViewDelegate {
 // MARK: ClientSearchDelegate implementation
 // Used by host's client
 extension LobbyVC: ClientSearchDelegate {
-        
+
     func didFindHost(with peerID: MCPeerID) {
         if peerID == self.server?.peerID {
             self.client.connect(to: peerID)
@@ -241,9 +255,8 @@ extension LobbyVC: ClientSearchDelegate {
     }
     
     func didLoseHost(with peerID: MCPeerID) {}
-    func didConnectWithHost(_ peerID: MCPeerID) {}
-    func didDisconnectWithHost(_ peerID: MCPeerID) {}
-
+    func didHostAccept(_ peerID: MCPeerID) {}
+    func didHostReject(_ peerID: MCPeerID) {}
 }
 
 // MARK: ClientLobbyDelegate implementation
@@ -262,6 +275,8 @@ extension LobbyVC: ClientLobbyDelegate {
             DispatchQueue.main.async {
                 self.removePlayerInTableView(peerID: peerID)
             }
+        } else {
+            self.showExitAlert(withMessage: "The lobby has been closed")
         }
     }
     
@@ -275,21 +290,7 @@ extension LobbyVC: ClientLobbyDelegate {
                 }
             }
         case .closeSession:
-            self.client.disconnect()
-            let alert = self.getExitAlert(withMessage: "The host removed you from the lobby")
-            if self.server == nil {
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true)
-                }
-            }
-        case .closeLobby:
-            self.client.disconnect()
-            let alert = self.getExitAlert(withMessage: "The lobby has been closed")
-            if self.server == nil {
-               DispatchQueue.main.async {
-                   self.present(alert, animated: true)
-               }
-            }
+            self.showExitAlert(withMessage: "The host removed you from the lobby")
         default:
             break
         }

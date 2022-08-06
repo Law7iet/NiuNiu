@@ -16,16 +16,30 @@ class SeacherVC: UIViewController {
     @IBOutlet weak var hostsTableView: UITableView!
     
     // MARK: Supporting functions
+    func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToBackground),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToForeground),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+    
     func setupTableView() {
         self.hostsTableView.dataSource = self
         self.hostsTableView.delegate = self
     }
     
-    func setupClient() {
+    func setupViewWillAppear() {
+        // Client delegate
         self.client.searchDelegate = self
-    }
-    
-    func resetHosts() {
+        // Refresh the list of hosts
         self.hosts = [MCPeerID]()
         self.hostsTableView.reloadData()
     }
@@ -48,19 +62,13 @@ class SeacherVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(appMovedToBackground),
-            name: UIApplication.willResignActiveNotification,
-            object: nil
-        )
-        print("Searcher didLoad")
+        self.setupObservers()
+        print("SearcherVC didLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.resetHosts()
-        self.setupClient()
+        self.setupViewWillAppear()
         self.client.startBrowsing()
         print("SearcherVC willAppear")
     }
@@ -82,14 +90,29 @@ class SeacherVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Clear client's search delegate
+        self.client.searchDelegate = nil
+        // Setup the LobbyVC
         let lobbyVC = segue.destination as! LobbyVC
         lobbyVC.client = self.client
     }
     
     // MARK: Notification
     @objc func appMovedToBackground() {
-        self.hosts.removeAll()
-        self.hostsTableView.reloadData()
+        if Utils.getCurrentVC() is SeacherVC {
+            self.client.stopBrowsing()
+            self.hosts.removeAll()
+            self.hostsTableView.reloadData()
+            print("SearcherVC background")
+
+        }
+    }
+    
+    @objc func appMovedToForeground() {
+        if Utils.getCurrentVC() is SeacherVC {
+            self.client.startBrowsing()
+            print("SearcherVC foreground")
+        }
     }
     
 }
@@ -121,14 +144,16 @@ extension SeacherVC: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.hosts[indexPath.row]
         let alert = UIAlertController(
-            title: "Join",
-            message: "Do you want to join to \(user.displayName) lobby?",
+            title: "Join in the lobby",
+            message: "Do you want to join into the lobby of \(user.displayName)?",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
             title: "Yes",
             style: .default,
             handler: { [self] (action: UIAlertAction) in
+                // Mark the potential server
+                self.client.serverPeerID = user
                 // Request to join in the server
                 self.client.connect(to: user)
             }
@@ -153,10 +178,22 @@ extension SeacherVC: ClientSearchDelegate {
         self.removeHostInTableView(peerID: with)
     }
     
-    func didConnectWithHost(_ peerID: MCPeerID) {
-        self.client.serverPeerID = peerID
+    func didHostAccept(_ peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
+        }
+    }
+    
+    func didHostReject(_ peerID: MCPeerID) {
+        // Remove the potential server
+        self.client.serverPeerID = nil
+        let alert = Utils.getOneButtonAlert(
+            title: "Error",
+            message: "Can't join in the lobby",
+            action: nil
+        )
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
         }
     }
 

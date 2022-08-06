@@ -107,7 +107,7 @@ class GameVC: UIViewController {
         }
     }
     
-    func checkPickCards() {
+    func checkPickedCards() {
         if self.player.status == .cards {
             if self.player.numberOfPickedCards == 1 || self.player.numberOfPickedCards == 3 {
                 self.actionButton.isEnabled = true
@@ -218,7 +218,7 @@ class GameVC: UIViewController {
             }
         }
         // Enable or disable action button
-        self.checkPickCards()
+        self.checkPickedCards()
     }
 
     @IBAction func clickAction(_ sender: Any) {
@@ -283,18 +283,20 @@ class GameVC: UIViewController {
 extension GameVC: ClientGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID == self.client.serverPeerID && self.dealer == nil {
+        if self.client.session.connectedPeers.count == 1 {
+            // Insufficient players in the lobby
             let alert = UIAlertController(
                 title: "Exit from lobby",
-                message: "The lobby has been closed",
+                message: "Insufficient number of players",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
                 title: "Ok",
                 style: .default,
                 handler: {(action) in
-                    self.dealer?.server.disconnect()
                     self.client.disconnect()
+                    self.dealer?.timer?.invalidate()
+                    self.dealer?.server.disconnect()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
                 }
             ))
@@ -302,10 +304,44 @@ extension GameVC: ClientGameDelegate {
                 self.present(alert, animated: true)
             }
         } else {
-            DispatchQueue.main.async {
-                for btn in self.playersButtons {
-                    if btn.title(for: UIControl.State.normal) == peerID.displayName {
-                        btn.isEnabled = false
+            if peerID == self.client.serverPeerID {
+                var alert: UIAlertController
+                // Server disconnected
+                if self.dealer == nil {
+                    // Server disconnected from a guest
+                    alert = UIAlertController(
+                        title: "Exit from lobby",
+                        message: "Lost connection with the host",
+                        preferredStyle: .alert
+                    )
+                } else {
+                    // Server disconnected from the host
+                    alert = UIAlertController(
+                        title: "Exit from lobby",
+                        message: "Lost connection with the clients",
+                        preferredStyle: .alert
+                    )
+                }
+                alert.addAction(UIAlertAction(
+                    title: "Ok",
+                    style: .default,
+                    handler: {(action) in
+                        self.client.disconnect()
+                        self.dealer?.timer?.invalidate()
+                        self.dealer?.server.disconnect()
+                        self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
+                    }
+                ))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
+            } else {
+                // Player disconnected
+                DispatchQueue.main.async {
+                    for btn in self.playersButtons {
+                        if btn.title(for: UIControl.State.normal) == peerID.displayName {
+                            btn.isEnabled = false
+                        }
                     }
                 }
             }
@@ -453,7 +489,7 @@ extension GameVC: ClientGameDelegate {
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(Utils.timerLong)
                 self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
-                self.checkPickCards()
+                self.checkPickedCards()
                 // Set timer
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
