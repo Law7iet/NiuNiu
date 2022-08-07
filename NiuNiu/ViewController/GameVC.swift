@@ -148,17 +148,6 @@ class GameVC: UIViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let endVC = segue.destination as? EndVC {
-            endVC.dealer = self.dealer
-            endVC.client = self.client
-            endVC.players = self.players
-            endVC.prize = self.totalBid
-            
-//            self.client.gameDelegate = nil
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("GameVC willAppear")
@@ -179,6 +168,14 @@ class GameVC: UIViewController {
         print("GameVC didDisappear")
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let endVC = segue.destination as? EndVC {
+            endVC.dealer = self.dealer
+            endVC.client = self.client
+            endVC.players = self.players
+            endVC.prize = self.totalBid
+        }
+    }
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
@@ -305,8 +302,8 @@ extension GameVC: ClientGameDelegate {
             }
         } else {
             if peerID == self.client.serverPeerID {
-                var alert: UIAlertController
                 // Server disconnected
+                var alert: UIAlertController
                 if self.dealer == nil {
                     // Server disconnected from a guest
                     alert = UIAlertController(
@@ -489,6 +486,7 @@ extension GameVC: ClientGameDelegate {
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(Utils.timerLong)
                 self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
+                self.setupUserButton(withSlider: false, turnOn: true)
                 self.checkPickedCards()
                 // Set timer
                 var timerCounter = 0
@@ -500,6 +498,11 @@ extension GameVC: ClientGameDelegate {
                         // Change UI
                         self.statusLabel.text = "Stop Cards!"
                         self.timerLabel.text = ""
+                        self.setupUserButton(withSlider: false, turnOn: false)
+                        for btn in self.cardsButtons {
+                            btn.isEnabled = false
+                        }
+
                     }
                 }
             }
@@ -514,6 +517,7 @@ extension GameVC: ClientGameDelegate {
                 // Change UI
                 self.statusLabel.text = "Stop Cards!"
                 self.timerLabel.text = ""
+                self.setupUserButton(withSlider: false, turnOn: false)
                 for btn in self.cardsButtons {
                     btn.isEnabled = false
                 }

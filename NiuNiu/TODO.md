@@ -3,20 +3,21 @@
 ## TODO
 
 - Settings
-- Nessun vincitore
-    - Cambia la view:
-        - tutti sono in una unica stack
-        - se c'è il vincitore comprare in alto la label del vincitore
-- Esci dalla lobby se sei da solo
 
 ## DOING
 
+
+
 ## CHECK
 
-- Cosa fare quando un giocatore perde tutto (EndVC)
+
 
 ## DONE
 
+- Gestione fine match/fine partita
+- startPickCard allow fold
+- Nessun vincitore
+- Esci dalla lobby se sei da solo
 - Gestione dei clients che si disconnettono durante la partita (in GameVC e EndVC)
     - Host
         - il server rimuove da clientPeerIDs il peer disconnesso e chiama il dealer

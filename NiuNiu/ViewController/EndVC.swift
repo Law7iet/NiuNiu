@@ -15,26 +15,43 @@ class EndVC: UIViewController {
     var players: [Player]!
     var prize: Int!
     
-    var play = false
-    var isLost = false
-    
-    @IBOutlet weak var winnerLabel: UILabel!
+    var timer: Timer?
+    var clickedPlayBtn = false
+    var isGameOver = false
+    var changeEndLabel = true
     
     @IBOutlet var playerIDs: [UILabel]!
     @IBOutlet var playerPoints: [UILabel]!
     @IBOutlet var playerScore: [UILabel]!
-    // TODO: fix UI
+
     @IBOutlet var cards1: [UIButton]!
     @IBOutlet var cards2: [UIButton]!
     @IBOutlet var cards3: [UIButton]!
     @IBOutlet var cards4: [UIButton]!
     @IBOutlet var cards5: [UIButton]!
-    lazy var playerCards = [cards1, cards2, cards3, cards4, cards5]
+    @IBOutlet var cards6: [UIButton]!
+    lazy var playerCards = [cards1, cards2, cards3, cards4, cards5, cards6]
     
     @IBOutlet weak var endLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var quitButton: UIButton!
     
     // MARK: Supporting functions
+    func setupViewDidLoad() {
+        // Delegate
+        self.client.endDelegate = self
+        // Setup players and find if there's a loser
+        if self.dealer != nil {
+            self.players = [Player]()
+            for player in self.dealer!.players {
+                self.players?.append(player)
+                if player.points <= 0 {
+                    self.isGameOver = true
+                }
+            }
+        }
+    }
+    
     func setupCard(buttons: [UIButton], cards: [Card], pickedCards: [Bool]) {
         var cardTrueIndex = 0
         var cardFalseIndex = 4
@@ -53,18 +70,10 @@ class EndVC: UIViewController {
         }
     }
     
-    func setupUsers() {
-        if self.dealer != nil {
-            self.players = [Player]()
-            for player in self.dealer!.players {
-                self.players?.append(player)
-            }
-        }
-    }
-    
-    func setupUI() {
+    func setupPlayersUI() {
         var playerIndex = 0
         for player in self.players {
+            // Setup the players
             self.playerIDs[playerIndex].text = player.id
             if player.status == .winner {
                 self.playerPoints[playerIndex].text = "Points: \(player.points - self.prize) + \(self.prize!)"
@@ -84,48 +93,49 @@ class EndVC: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.client.endDelegate = self
-        self.setupUsers()
-        self.setupUI()
-        
-        for player in self.players {
-            if player.id == self.client.peerID.displayName {
-                if player.points <= 0 {
-                    // Can't continue playing
-                    self.isLost = true
-                    self.playButton.isEnabled = false
+        self.setupViewDidLoad()
+        self.setupPlayersUI()
+
+        // Setup endLabel and buttons
+        if self.isGameOver == true {
+            // UI
+            self.endLabel.text = "Game over"
+            self.changeEndLabel = false
+            self.quitButton.setTitle("Quit", for: UIControl.State.normal)
+            self.playButton.isEnabled = false
+            // Disconnection
+            self.client.disconnect()
+            self.dealer?.server.disconnect()
+        } else {
+            var timerCounter = 0
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+                if timerCounter >= Utils.timerLong {
+                    timer.invalidate()
+                    if self.clickedPlayBtn {
+                        // UI
+                        self.performSegue(withIdentifier: "backToGameSegue", sender: self)
+                    } else {
+                        // Data
+                        self.clickedPlayBtn = false
+                        self.isGameOver = true
+                        // UI
+                        self.endLabel.text = "Game over"
+                        self.quitButton.setTitle("Quit", for: UIControl.State.normal)
+                        self.playButton.isEnabled = false
+                        // Disconnection
+                        self.client.disconnect()
+                        self.dealer?.server.disconnect()
+                    }
                 } else {
-                    // Can continue playing
-                    self.isLost = false
-                    self.playButton.isEnabled = true
+                    if self.changeEndLabel {
+                        self.endLabel.text = "Next match will start in \(Utils.timerLong - timerCounter) seconds"
+                    }
+                    timerCounter += 1
                 }
             }
+
         }
         
-        var timerCounter = 0
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
-            if timerCounter >= Utils.timerLong {
-                timer.invalidate()
-                if self.isLost == false && self.play == true {
-                    self.performSegue(withIdentifier: "backToGameSegue", sender: self)
-                } else {
-                    self.play = false
-                    self.dealer?.server.disconnect()
-                    self.client.disconnect()
-                    self.endLabel.text = "Match started without you"
-                }
-            } else {
-                self.endLabel.text = "Next match will start in \(Utils.timerLong - timerCounter) seconds"
-                timerCounter += 1
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let gameVC = segue.destination as? GameVC {
-            gameVC.dealer = self.dealer
-            gameVC.client = self.client
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,54 +158,53 @@ class EndVC: UIViewController {
         print("EndVC didDisappear")
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let gameVC = segue.destination as? GameVC {
+            gameVC.dealer = self.dealer
+            gameVC.client = self.client
+        }
+    }
+    
     // MARK: Actions
     @IBAction func quit(_ sender: Any) {
-        if isLost == false {
-            var message: String?
-            if self.dealer != nil {
-                message = "If you quit the game, the game will end. Are you sure to quit?"
-            } else {
-                if self.isLost == false {
-                    message = "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
+        if isGameOver == false {
+            let message = self.dealer != nil ? "If you quit the game, the game will end. Are you sure to quit?" : "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
+            let alert = UIAlertController(
+                title: "Quit the game",
+                message: message,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "No",
+                style: .default)
+            )
+            alert.addAction(UIAlertAction(
+                title: "Yes",
+                style: .destructive,
+                handler: { action in
+                    // Data
+                    self.clickedPlayBtn = false
+                    self.isGameOver = true
+                    // UI
+                    self.endLabel.text = "Game over"
+                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
+                    self.playButton.isEnabled = false
+                    // Disconnection
+                    self.client.disconnect()
+                    self.dealer?.server.disconnect()
                 }
-            }
-            if message != nil {
-                let alert = UIAlertController(
-                    title: "Quit the game",
-                    message: message!,
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(
-                    title: "No",
-                    style: .default)
-                )
-                alert.addAction(UIAlertAction(
-                    title: "Yes",
-                    style: .destructive,
-                    handler: { action in
-                        self.play = false
-                        self.dealer?.server.disconnect()
-                        self.client.disconnect()
-                        self.performSegue(withIdentifier: "backToMainSegue", sender: self)
-                    }
-                ))
-                self.present(alert, animated: true)
-            } else {
-                self.play = false
-                self.dealer?.server.disconnect()
-                self.client.disconnect()
-                self.performSegue(withIdentifier: "backToMainSegue", sender: self)
-            }
+            ))
+            self.present(alert, animated: true)
         } else {
-            self.play = false
-            self.dealer?.server.disconnect()
-            self.client.disconnect()
+            // TODO: No need
+//            self.dealer?.server.disconnect()
+//            self.client.disconnect()
             self.performSegue(withIdentifier: "backToMainSegue", sender: self)
         }
     }
     
     @IBAction func play(_ sender: Any) {
-        self.play = true
+        self.clickedPlayBtn = true
         self.playButton.isEnabled = false
     }
 
@@ -204,41 +213,68 @@ class EndVC: UIViewController {
 extension EndVC: ClientEndDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
-        if peerID == self.client.serverPeerID && self.dealer == nil {
-            self.play = false
-            let alert = UIAlertController(
-                title: "Exit from lobby",
-                message: "The lobby has been closed",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: "Ok",
-                style: .default,
-                handler: {(action) in
+        if !self.isGameOver {
+            if self.client.session.connectedPeers.count == 1 {
+                // Insufficient players in the lobby
+                let alert = UIAlertController(
+                    title: "Exit from lobby",
+                    message: "Insufficient number of players",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(
+                    title: "Ok",
+                    style: .default
+                ))
+                DispatchQueue.main.async {
+                    // Data
+                    self.timer?.invalidate()
+                    self.clickedPlayBtn = false
+                    self.isGameOver = true
+                    // UI
+                    self.endLabel.text = "Game over"
+                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
                     self.playButton.isEnabled = false
+                    // Disconnection
                     self.client.disconnect()
+                    self.dealer?.server.disconnect()
+                    self.present(alert, animated: true)
                 }
-            ))
-            DispatchQueue.main.async {
-                self.present(alert, animated: true)
-            }
-        } else if self.dealer?.server.connectedPeers.count == 1 {
-            self.play = false
-            let alert = UIAlertController(
-                title: "Exit from lobby",
-                message: "Insufficient number of players",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: "Ok",
-                style: .default,
-                handler: {(action) in
+            } else if peerID == self.client.serverPeerID {
+                // Server disconnected
+                var alert: UIAlertController
+                if self.dealer == nil {
+                    // Server disconnected from a guest
+                    alert = UIAlertController(
+                        title: "Exit from lobby",
+                        message: "Lost connection with the host",
+                        preferredStyle: .alert
+                    )
+                } else {
+                    // Server disconnected from the host
+                    alert = UIAlertController(
+                        title: "Exit from lobby",
+                        message: "Lost connection with the clients",
+                        preferredStyle: .alert
+                    )
+                }
+                alert.addAction(UIAlertAction(
+                    title: "Ok",
+                    style: .default
+                ))
+                DispatchQueue.main.async {
+                    // Data
+                    self.timer?.invalidate()
+                    self.clickedPlayBtn = false
+                    self.isGameOver = true
+                    // UI
+                    self.endLabel.text = "Game over"
+                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
                     self.playButton.isEnabled = false
+                    // Disconnection
                     self.client.disconnect()
+                    self.dealer?.server.disconnect()
+                    self.present(alert, animated: true)
                 }
-            ))
-            DispatchQueue.main.async {
-                self.present(alert, animated: true)
             }
         }
     }

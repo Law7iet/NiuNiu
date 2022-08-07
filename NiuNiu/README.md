@@ -3,18 +3,19 @@
 
 ## Descrizione del gioco
 
-Niu Niu è un gioco di carte da 2 a 6 persone.
-Ogni giocatore ha 5 carte e lo scopo del gioco è quello di comporre il punteggio più alto.
-
+NiuNiu è un gioco di carte da 2 a 6 persone.
 Si utilizza le carte da gioco francesi.
-Ogni carta ha come valore il proprio *valore numerico*; il fante, la regina e il re hanno valore 10.
 
+Ogni carta ha come valore il proprio *valore numerico*; il fante, la regina e il re hanno valore 10.  
 Il *valore effettivo*, utilizzato nel caso dello spareggio, corrisponde al valore numerico della carta, mentre per il fante, la regina e il re, il loro valore effettivo è rispettivamente 11, 12 e 13.
 
 Il gioco è diviso di round.
 All'inizio del gioco ogni giocatore ha un punteggio.
-In ogni round il giocatore, utilizzando il proprio punteggio fa delle puntate.
+In ogni round il giocatore riceve 5 carte da un mazzo non usato e, utilizzando il proprio punteggio, fa delle puntate.
+Per poter continuare il round ogni giocatore deve adeguarsi alla puntata più alta.
 A fine round chi ottiene il punteggio più alto si prende tutti i punti.
+
+Il gioco termina quando un giocatore non ha più punti; il vincitore del gioco è chi ha più punti.
 
 ### Calcolo del punteggio
 

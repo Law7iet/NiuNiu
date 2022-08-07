@@ -546,7 +546,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1j4-eW-Wmu" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1j4-eW-Wmu" userLabel="Player 1 Stack View">
                                         <rect key="frame" x="0.0" y="30.333333333333336" width="335" height="80.333333333333314"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="kYU-BE-7Ro" userLabel="User Stack View">
@@ -633,7 +633,7 @@
                                             <constraint firstItem="wuV-9a-XqY" firstAttribute="trailing" secondItem="1j4-eW-Wmu" secondAttribute="trailing" id="y8r-VW-lMj"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fvT-NC-sM2" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fvT-NC-sM2" userLabel="Player 2 Stack View">
                                         <rect key="frame" x="0.0" y="120.66666666666666" width="335" height="80.333333333333343"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qjf-sL-cYm" userLabel="User Stack View">
@@ -720,19 +720,19 @@
                                             <constraint firstItem="qjf-sL-cYm" firstAttribute="trailing" secondItem="fvT-NC-sM2" secondAttribute="trailing" id="zTk-ty-Ht1"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QIO-zi-meO" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8Yz-8x-khx" userLabel="Player 3 Stack View">
                                         <rect key="frame" x="0.0" y="211" width="335" height="80.333333333333314"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Pm-aW-uzU" userLabel="User Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4gL-NB-Ted" userLabel="User Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="20.333333333333332"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ye3-UJ-33y" userLabel="Name">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dDO-h8-7Ci" userLabel="Name">
                                                         <rect key="frame" x="0.0" y="0.0" width="195" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMw-2L-3LS" userLabel="Points">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPd-Li-ExG" userLabel="Points">
                                                         <rect key="frame" x="205" y="0.0" width="130" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -740,58 +740,58 @@
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="Ye3-UJ-33y" firstAttribute="width" secondItem="gMw-2L-3LS" secondAttribute="width" multiplier="1.5" id="mv7-h1-UnI"/>
+                                                    <constraint firstItem="dDO-h8-7Ci" firstAttribute="width" secondItem="RPd-Li-ExG" secondAttribute="width" multiplier="1.5" id="glr-4R-7xr"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mac-FD-mYj" userLabel="Data Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vLT-FP-L1e" userLabel="Data Stack View">
                                                 <rect key="frame" x="0.0" y="30.333333333333314" width="335" height="50"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Eoy-GT-0jy" userLabel="Cards View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="2jG-7u-Vqd" userLabel="Cards View">
                                                         <rect key="frame" x="0.0" y="0.0" width="199.66666666666666" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jIc-gO-hCa">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7S-Rr-XEn">
                                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="jIc-gO-hCa" secondAttribute="height" multiplier="64:89" id="D8A-wC-Cgp"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="PHP-xT-Od7"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="Rwe-8n-L55"/>
+                                                                    <constraint firstAttribute="width" secondItem="h7S-Rr-XEn" secondAttribute="height" multiplier="64:89" id="lMG-LV-yqw"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ad-tA-tAQ">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ivz-6j-KLk">
                                                                 <rect key="frame" x="41" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="0Ad-tA-tAQ" secondAttribute="height" multiplier="64:89" id="cJ8-nB-eqU"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="pMi-Mh-c3Y"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="Bdf-bu-VXa"/>
+                                                                    <constraint firstAttribute="width" secondItem="ivz-6j-KLk" secondAttribute="height" multiplier="64:89" id="XxA-T6-1nU"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZN-yG-bLF">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OB1-Xh-Lfx">
                                                                 <rect key="frame" x="82" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="eZN-yG-bLF" secondAttribute="height" multiplier="64:89" id="ZAk-gQ-1is"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="lyX-PT-hMc"/>
+                                                                    <constraint firstAttribute="width" secondItem="OB1-Xh-Lfx" secondAttribute="height" multiplier="64:89" id="JoL-vI-MDI"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="yxO-P7-wT3"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4n-CH-Ox0">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCi-co-9n6">
                                                                 <rect key="frame" x="123.00000000000001" y="0.0" width="35.666666666666671" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="nGB-CD-qK5"/>
-                                                                    <constraint firstAttribute="width" secondItem="c4n-CH-Ox0" secondAttribute="height" multiplier="64:89" id="rxI-Bw-gOQ"/>
+                                                                    <constraint firstAttribute="width" secondItem="fCi-co-9n6" secondAttribute="height" multiplier="64:89" id="Q5P-In-m5t"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="ez6-4g-Iho"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ji0-7J-thu">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzo-IX-uY5">
                                                                 <rect key="frame" x="163.66666666666666" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="Y8Y-rg-NbW"/>
-                                                                    <constraint firstAttribute="width" secondItem="ji0-7J-thu" secondAttribute="height" multiplier="64:89" id="srx-Yn-CqU"/>
+                                                                    <constraint firstAttribute="width" secondItem="yzo-IX-uY5" secondAttribute="height" multiplier="64:89" id="59O-Gi-zeG"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="kFm-Je-o9e"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DFX-em-w6I" userLabel="Score">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8a-iN-eze" userLabel="Score">
                                                         <rect key="frame" x="209.66666666666666" y="0.0" width="125.33333333333334" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -801,25 +801,25 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="mac-FD-mYj" firstAttribute="trailing" secondItem="QIO-zi-meO" secondAttribute="trailing" id="2IS-Dx-6ut"/>
-                                            <constraint firstItem="mac-FD-mYj" firstAttribute="leading" secondItem="QIO-zi-meO" secondAttribute="leading" id="F2b-Lt-009"/>
-                                            <constraint firstItem="4Pm-aW-uzU" firstAttribute="trailing" secondItem="QIO-zi-meO" secondAttribute="trailing" id="pYm-sg-87X"/>
-                                            <constraint firstItem="4Pm-aW-uzU" firstAttribute="leading" secondItem="QIO-zi-meO" secondAttribute="leading" id="ygf-2E-NVn"/>
+                                            <constraint firstItem="vLT-FP-L1e" firstAttribute="trailing" secondItem="8Yz-8x-khx" secondAttribute="trailing" id="V8V-HA-a2g"/>
+                                            <constraint firstItem="4gL-NB-Ted" firstAttribute="trailing" secondItem="8Yz-8x-khx" secondAttribute="trailing" id="Ypb-SL-ghh"/>
+                                            <constraint firstItem="4gL-NB-Ted" firstAttribute="leading" secondItem="8Yz-8x-khx" secondAttribute="leading" id="bG8-We-sSv"/>
+                                            <constraint firstItem="vLT-FP-L1e" firstAttribute="leading" secondItem="8Yz-8x-khx" secondAttribute="leading" id="wxr-og-Yhy"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="sLO-Sv-LVj" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="eIo-NV-xk3" userLabel="Player 4 Stack View">
                                         <rect key="frame" x="0.0" y="301.33333333333331" width="335" height="80.333333333333314"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xN4-yH-NIC" userLabel="User Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AJy-sg-JiS" userLabel="User Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="20.333333333333332"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnD-pL-PCz" userLabel="Name">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BwI-dV-HEq" userLabel="Name">
                                                         <rect key="frame" x="0.0" y="0.0" width="195" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pG5-KG-lao" userLabel="Points">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CoO-6b-fzc" userLabel="Points">
                                                         <rect key="frame" x="205" y="0.0" width="130" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -827,58 +827,58 @@
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="LnD-pL-PCz" firstAttribute="width" secondItem="pG5-KG-lao" secondAttribute="width" multiplier="1.5" id="o4K-Zq-0pG"/>
+                                                    <constraint firstItem="BwI-dV-HEq" firstAttribute="width" secondItem="CoO-6b-fzc" secondAttribute="width" multiplier="1.5" id="Mpo-Y6-dq5"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uwl-nj-F9e" userLabel="Data Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1qK-wz-GZE" userLabel="Data Stack View">
                                                 <rect key="frame" x="0.0" y="30.333333333333371" width="335" height="50"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="GsR-6e-D9I" userLabel="Cards View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="voK-Wc-JxG" userLabel="Cards View">
                                                         <rect key="frame" x="0.0" y="0.0" width="199.66666666666666" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-RP-wC5">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIB-ci-JaM">
                                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="A7I-Ld-9YU"/>
-                                                                    <constraint firstAttribute="width" secondItem="ZI7-RP-wC5" secondAttribute="height" multiplier="64:89" id="Ri0-xq-hmj"/>
+                                                                    <constraint firstAttribute="width" secondItem="CIB-ci-JaM" secondAttribute="height" multiplier="64:89" id="BXI-JD-xOd"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="f6Z-GQ-OeB"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bw-bN-bNj">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r82-vC-u51">
                                                                 <rect key="frame" x="41" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="3bw-bN-bNj" secondAttribute="height" multiplier="64:89" id="B7Q-1M-JAY"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="UTs-4X-zzF"/>
+                                                                    <constraint firstAttribute="width" secondItem="r82-vC-u51" secondAttribute="height" multiplier="64:89" id="PYx-tb-acI"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="iAZ-Kw-NBs"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u8b-Nt-LsT">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czJ-pW-NP4">
                                                                 <rect key="frame" x="82" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="u8b-Nt-LsT" secondAttribute="height" multiplier="64:89" id="Egz-Wa-QZ7"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="q5m-dd-OnG"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="l0y-UR-Kjf"/>
+                                                                    <constraint firstAttribute="width" secondItem="czJ-pW-NP4" secondAttribute="height" multiplier="64:89" id="u3C-sS-ZwC"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8H3-Bg-MDp">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZK-ee-88L">
                                                                 <rect key="frame" x="123.00000000000001" y="0.0" width="35.666666666666671" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="8H3-Bg-MDp" secondAttribute="height" multiplier="64:89" id="Qsm-65-eLA"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="r8e-9J-J7A"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="IdS-hE-Y7A"/>
+                                                                    <constraint firstAttribute="width" secondItem="oZK-ee-88L" secondAttribute="height" multiplier="64:89" id="ohj-Em-u4P"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3wW-mb-EsJ">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXh-bQ-Raq">
                                                                 <rect key="frame" x="163.66666666666666" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="3wW-mb-EsJ" secondAttribute="height" multiplier="64:89" id="WrC-4Y-6tp"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="wWd-fZ-kOe"/>
+                                                                    <constraint firstAttribute="width" secondItem="SXh-bQ-Raq" secondAttribute="height" multiplier="64:89" id="mmA-na-LPr"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="tHb-cJ-eLC"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qgj-xC-FOY" userLabel="Score">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bB9-Tg-DfU" userLabel="Score">
                                                         <rect key="frame" x="209.66666666666666" y="0.0" width="125.33333333333334" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -888,25 +888,25 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="uwl-nj-F9e" firstAttribute="leading" secondItem="sLO-Sv-LVj" secondAttribute="leading" id="HhC-xJ-Vdb"/>
-                                            <constraint firstItem="xN4-yH-NIC" firstAttribute="trailing" secondItem="sLO-Sv-LVj" secondAttribute="trailing" id="RcM-tF-lE8"/>
-                                            <constraint firstItem="uwl-nj-F9e" firstAttribute="trailing" secondItem="sLO-Sv-LVj" secondAttribute="trailing" id="fMV-mZ-jo1"/>
-                                            <constraint firstItem="xN4-yH-NIC" firstAttribute="leading" secondItem="sLO-Sv-LVj" secondAttribute="leading" id="hLY-29-bdX"/>
+                                            <constraint firstItem="AJy-sg-JiS" firstAttribute="trailing" secondItem="eIo-NV-xk3" secondAttribute="trailing" id="Drb-ud-N5e"/>
+                                            <constraint firstItem="AJy-sg-JiS" firstAttribute="leading" secondItem="eIo-NV-xk3" secondAttribute="leading" id="LRA-zR-HYR"/>
+                                            <constraint firstItem="1qK-wz-GZE" firstAttribute="leading" secondItem="eIo-NV-xk3" secondAttribute="leading" id="bPP-OB-nVP"/>
+                                            <constraint firstItem="1qK-wz-GZE" firstAttribute="trailing" secondItem="eIo-NV-xk3" secondAttribute="trailing" id="whC-HH-aVl"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AuY-qs-Icj" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mjl-vx-DSf" userLabel="Player 5 Stack View">
                                         <rect key="frame" x="0.0" y="391.66666666666669" width="335" height="80.333333333333314"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xwD-iq-nXk" userLabel="User Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="y61-dR-yvi" userLabel="User Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="20.333333333333332"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1T-ub-eZm" userLabel="Name">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Joi-vP-oe4" userLabel="Name">
                                                         <rect key="frame" x="0.0" y="0.0" width="195" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgg-Dp-Rch" userLabel="Points">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUK-i7-1KQ" userLabel="Points">
                                                         <rect key="frame" x="205" y="0.0" width="130" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -914,58 +914,58 @@
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="B1T-ub-eZm" firstAttribute="width" secondItem="sgg-Dp-Rch" secondAttribute="width" multiplier="1.5" id="tig-Tt-BOC"/>
+                                                    <constraint firstItem="Joi-vP-oe4" firstAttribute="width" secondItem="mUK-i7-1KQ" secondAttribute="width" multiplier="1.5" id="s3Z-yj-5sD"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cYr-cI-lAn" userLabel="Data Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hf5-xJ-CX8" userLabel="Data Stack View">
                                                 <rect key="frame" x="0.0" y="30.333333333333314" width="335" height="50"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="skS-or-eCm" userLabel="Cards View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="pXw-vG-KyH" userLabel="Cards View">
                                                         <rect key="frame" x="0.0" y="0.0" width="199.66666666666666" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UK7-ZD-khs">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zY-3T-XN1">
                                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="UK7-ZD-khs" secondAttribute="height" multiplier="64:89" id="KUt-KE-wct"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="WCh-cb-aTa"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="AgW-zS-sg0"/>
+                                                                    <constraint firstAttribute="width" secondItem="1zY-3T-XN1" secondAttribute="height" multiplier="64:89" id="bWb-wq-aP0"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qxa-ad-ktK">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2df-2H-PB9">
                                                                 <rect key="frame" x="41" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="YGD-hr-mHx"/>
-                                                                    <constraint firstAttribute="width" secondItem="Qxa-ad-ktK" secondAttribute="height" multiplier="64:89" id="qZT-gY-QH6"/>
+                                                                    <constraint firstAttribute="width" secondItem="2df-2H-PB9" secondAttribute="height" multiplier="64:89" id="E0L-SZ-NLw"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="rDJ-as-7gU"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5n-MZ-rwr">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CgL-es-nIA">
                                                                 <rect key="frame" x="82" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="q5n-MZ-rwr" secondAttribute="height" multiplier="64:89" id="HpU-om-XTw"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="vh6-Ms-cD4"/>
+                                                                    <constraint firstAttribute="width" secondItem="CgL-es-nIA" secondAttribute="height" multiplier="64:89" id="UZ9-JX-Ssd"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="lPu-KG-KaJ"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKK-uc-AUg">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IF3-iA-tLP">
                                                                 <rect key="frame" x="123.00000000000001" y="0.0" width="35.666666666666671" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="mDl-h3-YwU"/>
-                                                                    <constraint firstAttribute="width" secondItem="hKK-uc-AUg" secondAttribute="height" multiplier="64:89" id="nY3-h1-v7g"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="Xmu-Tk-GVh"/>
+                                                                    <constraint firstAttribute="width" secondItem="IF3-iA-tLP" secondAttribute="height" multiplier="64:89" id="jsZ-A8-wsb"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yt3-gN-YLg">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4Q-vQ-9HZ">
                                                                 <rect key="frame" x="163.66666666666666" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="Yt3-gN-YLg" secondAttribute="height" multiplier="64:89" id="Ecl-Yd-Xkl"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="i57-99-dg1"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="42v-bL-xw1"/>
+                                                                    <constraint firstAttribute="width" secondItem="w4Q-vQ-9HZ" secondAttribute="height" multiplier="64:89" id="aua-a9-Anw"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mit-h0-JyX" userLabel="Score">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xfV-Sq-we8" userLabel="Score">
                                                         <rect key="frame" x="209.66666666666666" y="0.0" width="125.33333333333334" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -975,25 +975,25 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="xwD-iq-nXk" firstAttribute="leading" secondItem="AuY-qs-Icj" secondAttribute="leading" id="6Hw-Ek-ezj"/>
-                                            <constraint firstItem="cYr-cI-lAn" firstAttribute="leading" secondItem="AuY-qs-Icj" secondAttribute="leading" id="DC4-XZ-VDF"/>
-                                            <constraint firstItem="cYr-cI-lAn" firstAttribute="trailing" secondItem="AuY-qs-Icj" secondAttribute="trailing" id="Ehq-6u-Yt7"/>
-                                            <constraint firstItem="xwD-iq-nXk" firstAttribute="trailing" secondItem="AuY-qs-Icj" secondAttribute="trailing" id="egt-nS-ZII"/>
+                                            <constraint firstItem="y61-dR-yvi" firstAttribute="trailing" secondItem="mjl-vx-DSf" secondAttribute="trailing" id="PZF-th-SON"/>
+                                            <constraint firstItem="y61-dR-yvi" firstAttribute="leading" secondItem="mjl-vx-DSf" secondAttribute="leading" id="ZGk-VR-dvH"/>
+                                            <constraint firstItem="hf5-xJ-CX8" firstAttribute="trailing" secondItem="mjl-vx-DSf" secondAttribute="trailing" id="fAL-lF-lfT"/>
+                                            <constraint firstItem="hf5-xJ-CX8" firstAttribute="leading" secondItem="mjl-vx-DSf" secondAttribute="leading" id="uJq-Cw-kd5"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="n3C-9w-UJN" userLabel="Player Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qpr-V8-nxQ" userLabel="Player 6 Stack View">
                                         <rect key="frame" x="0.0" y="481.99999999999994" width="335" height="80.333333333333314"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4gy-oz-X1E" userLabel="User Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="dAT-pw-Oys" userLabel="User Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="20.333333333333332"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mef-Cw-8se" userLabel="Name">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPD-WU-c1s" userLabel="Name">
                                                         <rect key="frame" x="0.0" y="0.0" width="195" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oja-Ww-cHV" userLabel="Points">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WED-uY-BfA" userLabel="Points">
                                                         <rect key="frame" x="205" y="0.0" width="130" height="20.333333333333332"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -1001,58 +1001,58 @@
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="Mef-Cw-8se" firstAttribute="width" secondItem="oja-Ww-cHV" secondAttribute="width" multiplier="1.5" id="pal-TR-6de"/>
+                                                    <constraint firstItem="xPD-WU-c1s" firstAttribute="width" secondItem="WED-uY-BfA" secondAttribute="width" multiplier="1.5" id="wpY-WG-dhI"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qmx-d3-ljV" userLabel="Data Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6nx-JQ-U5h" userLabel="Data Stack View">
                                                 <rect key="frame" x="0.0" y="30.333333333333371" width="335" height="50"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ePC-YP-Ugc" userLabel="Cards View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="U5j-lu-Q2f" userLabel="Cards View">
                                                         <rect key="frame" x="0.0" y="0.0" width="199.66666666666666" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-He-757">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXH-Un-o3e">
                                                                 <rect key="frame" x="0.0" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="5Tl-ay-cOv"/>
-                                                                    <constraint firstAttribute="width" secondItem="y3w-He-757" secondAttribute="height" multiplier="64:89" id="K8p-wL-N7D"/>
+                                                                    <constraint firstAttribute="width" secondItem="aXH-Un-o3e" secondAttribute="height" multiplier="64:89" id="PTG-bc-nVp"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="qMI-4c-D1y"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ybt-DU-sm8">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ki0-5M-mOc">
                                                                 <rect key="frame" x="41" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="Ybt-DU-sm8" secondAttribute="height" multiplier="64:89" id="907-RS-Haq"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="roi-4j-IqP"/>
+                                                                    <constraint firstAttribute="width" secondItem="Ki0-5M-mOc" secondAttribute="height" multiplier="64:89" id="NoS-m2-jzf"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="eXn-eL-lt5"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LZl-Nh-Oqo">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Vu-dc-RlD">
                                                                 <rect key="frame" x="82" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="ZkQ-Tp-B33"/>
-                                                                    <constraint firstAttribute="width" secondItem="LZl-Nh-Oqo" secondAttribute="height" multiplier="64:89" id="p50-Jn-g5R"/>
+                                                                    <constraint firstAttribute="width" secondItem="9Vu-dc-RlD" secondAttribute="height" multiplier="64:89" id="Yrt-rU-avO"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="fVZ-Y7-UBH"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ngo-dZ-yoH">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qnO-HR-M6v">
                                                                 <rect key="frame" x="123.00000000000001" y="0.0" width="35.666666666666671" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="E8D-Bb-wvO"/>
-                                                                    <constraint firstAttribute="width" secondItem="Ngo-dZ-yoH" secondAttribute="height" multiplier="64:89" id="af8-zx-ozt"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="SJk-Eh-wdh"/>
+                                                                    <constraint firstAttribute="width" secondItem="qnO-HR-M6v" secondAttribute="height" multiplier="64:89" id="hbc-cO-amG"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ZV-tr-Muh">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Suh-yk-mqY">
                                                                 <rect key="frame" x="163.66666666666666" y="0.0" width="36" height="50"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="RpC-6m-aUM"/>
-                                                                    <constraint firstAttribute="width" secondItem="6ZV-tr-Muh" secondAttribute="height" multiplier="64:89" id="r0Z-n8-1my"/>
+                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="2yQ-HH-NhR"/>
+                                                                    <constraint firstAttribute="width" secondItem="Suh-yk-mqY" secondAttribute="height" multiplier="64:89" id="3rn-2k-lna"/>
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4op-go-qpu" userLabel="Score">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OoP-Qg-Sbw" userLabel="Score">
                                                         <rect key="frame" x="209.66666666666666" y="0.0" width="125.33333333333334" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -1062,10 +1062,10 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Qmx-d3-ljV" firstAttribute="leading" secondItem="n3C-9w-UJN" secondAttribute="leading" id="4R2-oT-hlc"/>
-                                            <constraint firstItem="Qmx-d3-ljV" firstAttribute="trailing" secondItem="n3C-9w-UJN" secondAttribute="trailing" id="JT6-ig-ZLm"/>
-                                            <constraint firstItem="4gy-oz-X1E" firstAttribute="trailing" secondItem="n3C-9w-UJN" secondAttribute="trailing" id="O5u-md-alz"/>
-                                            <constraint firstItem="4gy-oz-X1E" firstAttribute="leading" secondItem="n3C-9w-UJN" secondAttribute="leading" id="akm-Wo-zwh"/>
+                                            <constraint firstItem="6nx-JQ-U5h" firstAttribute="trailing" secondItem="Qpr-V8-nxQ" secondAttribute="trailing" id="KnL-j3-yhx"/>
+                                            <constraint firstItem="dAT-pw-Oys" firstAttribute="leading" secondItem="Qpr-V8-nxQ" secondAttribute="leading" id="amM-em-dUs"/>
+                                            <constraint firstItem="dAT-pw-Oys" firstAttribute="trailing" secondItem="Qpr-V8-nxQ" secondAttribute="trailing" id="azq-d2-nH2"/>
+                                            <constraint firstItem="6nx-JQ-U5h" firstAttribute="leading" secondItem="Qpr-V8-nxQ" secondAttribute="leading" id="liP-pq-op6"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -1085,7 +1085,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n4h-05-zI6">
                                                 <rect key="frame" x="0.0" y="0.0" width="148" height="32"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Quit"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="No"/>
                                                 <connections>
                                                     <action selector="quit:" destination="M56-5n-2pX" eventType="touchUpInside" id="F1G-Mh-jcj"/>
                                                 </connections>
@@ -1093,7 +1093,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nU3-Fm-wpL">
                                                 <rect key="frame" x="187" y="0.0" width="148" height="32"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Continue"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Yes"/>
                                                 <connections>
                                                     <action selector="play:" destination="M56-5n-2pX" eventType="touchUpInside" id="dFu-wx-Cxg"/>
                                                 </connections>
@@ -1121,47 +1121,55 @@
                     <connections>
                         <outlet property="endLabel" destination="cSJ-nW-0jK" id="8t3-lN-X8J"/>
                         <outlet property="playButton" destination="nU3-Fm-wpL" id="ksa-fW-M3j"/>
-                        <outlet property="winnerLabel" destination="qcy-I0-y1P" id="KO5-4h-HDV"/>
-                        <outletCollection property="playerIDs" destination="CVL-l1-T7R" collectionClass="NSMutableArray" id="8Vr-TF-BZJ"/>
-                        <outletCollection property="playerIDs" destination="Ye3-UJ-33y" collectionClass="NSMutableArray" id="MIt-EQ-bUo"/>
-                        <outletCollection property="playerIDs" destination="LnD-pL-PCz" collectionClass="NSMutableArray" id="44F-MP-ZVf"/>
-                        <outletCollection property="playerIDs" destination="B1T-ub-eZm" collectionClass="NSMutableArray" id="chX-Td-Cyn"/>
-                        <outletCollection property="playerIDs" destination="Mef-Cw-8se" collectionClass="NSMutableArray" id="sKO-R7-H7H"/>
-                        <outletCollection property="playerPoints" destination="c5i-VF-A2B" collectionClass="NSMutableArray" id="Ifs-zu-snR"/>
-                        <outletCollection property="playerPoints" destination="gMw-2L-3LS" collectionClass="NSMutableArray" id="EwA-ge-MqQ"/>
-                        <outletCollection property="playerPoints" destination="pG5-KG-lao" collectionClass="NSMutableArray" id="kxf-GL-gT5"/>
-                        <outletCollection property="playerPoints" destination="sgg-Dp-Rch" collectionClass="NSMutableArray" id="h3w-7U-iae"/>
-                        <outletCollection property="playerPoints" destination="oja-Ww-cHV" collectionClass="NSMutableArray" id="6Ip-WF-g21"/>
-                        <outletCollection property="playerScore" destination="veQ-H8-Pc6" collectionClass="NSMutableArray" id="SWO-E9-Jl5"/>
-                        <outletCollection property="playerScore" destination="DFX-em-w6I" collectionClass="NSMutableArray" id="FKa-e2-T2G"/>
-                        <outletCollection property="playerScore" destination="qgj-xC-FOY" collectionClass="NSMutableArray" id="Nee-7I-eA3"/>
-                        <outletCollection property="playerScore" destination="mit-h0-JyX" collectionClass="NSMutableArray" id="TI3-7n-3cp"/>
-                        <outletCollection property="playerScore" destination="4op-go-qpu" collectionClass="NSMutableArray" id="zLY-w1-5Ca"/>
-                        <outletCollection property="cards1" destination="rHL-mB-Jl5" collectionClass="NSMutableArray" id="0Jq-U2-S9v"/>
-                        <outletCollection property="cards1" destination="QcC-Bz-vIq" collectionClass="NSMutableArray" id="qTG-X3-cK4"/>
-                        <outletCollection property="cards1" destination="cAY-db-2I3" collectionClass="NSMutableArray" id="ri4-Mw-PVw"/>
-                        <outletCollection property="cards1" destination="uBS-ke-XQJ" collectionClass="NSMutableArray" id="J4f-1T-zsK"/>
-                        <outletCollection property="cards1" destination="at0-7M-PTz" collectionClass="NSMutableArray" id="oSb-58-ghN"/>
-                        <outletCollection property="cards2" destination="jIc-gO-hCa" collectionClass="NSMutableArray" id="CiH-Gx-0cH"/>
-                        <outletCollection property="cards2" destination="0Ad-tA-tAQ" collectionClass="NSMutableArray" id="Pil-k5-MD7"/>
-                        <outletCollection property="cards2" destination="eZN-yG-bLF" collectionClass="NSMutableArray" id="0Es-bp-KJc"/>
-                        <outletCollection property="cards2" destination="c4n-CH-Ox0" collectionClass="NSMutableArray" id="VJP-5H-dA7"/>
-                        <outletCollection property="cards2" destination="ji0-7J-thu" collectionClass="NSMutableArray" id="gMx-XG-6iu"/>
-                        <outletCollection property="cards3" destination="ZI7-RP-wC5" collectionClass="NSMutableArray" id="Ttg-f9-BBn"/>
-                        <outletCollection property="cards3" destination="3bw-bN-bNj" collectionClass="NSMutableArray" id="yJx-uw-Bf0"/>
-                        <outletCollection property="cards3" destination="u8b-Nt-LsT" collectionClass="NSMutableArray" id="cj3-41-zJ6"/>
-                        <outletCollection property="cards3" destination="8H3-Bg-MDp" collectionClass="NSMutableArray" id="Sdq-Mp-W4o"/>
-                        <outletCollection property="cards3" destination="3wW-mb-EsJ" collectionClass="NSMutableArray" id="LPh-vw-j6f"/>
-                        <outletCollection property="cards4" destination="UK7-ZD-khs" collectionClass="NSMutableArray" id="TkI-Xu-AZx"/>
-                        <outletCollection property="cards4" destination="Qxa-ad-ktK" collectionClass="NSMutableArray" id="rc9-8N-mrG"/>
-                        <outletCollection property="cards4" destination="q5n-MZ-rwr" collectionClass="NSMutableArray" id="rae-7J-DF6"/>
-                        <outletCollection property="cards4" destination="hKK-uc-AUg" collectionClass="NSMutableArray" id="LdC-lh-JfL"/>
-                        <outletCollection property="cards4" destination="Yt3-gN-YLg" collectionClass="NSMutableArray" id="IAF-Wc-6yx"/>
-                        <outletCollection property="cards5" destination="y3w-He-757" collectionClass="NSMutableArray" id="9wi-1e-8Qx"/>
-                        <outletCollection property="cards5" destination="Ybt-DU-sm8" collectionClass="NSMutableArray" id="roK-X3-zBD"/>
-                        <outletCollection property="cards5" destination="LZl-Nh-Oqo" collectionClass="NSMutableArray" id="pwq-AH-kHN"/>
-                        <outletCollection property="cards5" destination="Ngo-dZ-yoH" collectionClass="NSMutableArray" id="wAo-0X-UR6"/>
-                        <outletCollection property="cards5" destination="6ZV-tr-Muh" collectionClass="NSMutableArray" id="NT7-ue-zxa"/>
+                        <outlet property="quitButton" destination="n4h-05-zI6" id="WRW-o5-3QM"/>
+                        <outletCollection property="playerIDs" destination="CVL-l1-T7R" collectionClass="NSMutableArray" id="fqd-a6-xYO"/>
+                        <outletCollection property="playerIDs" destination="ED2-BU-t2W" collectionClass="NSMutableArray" id="57P-Oj-GE2"/>
+                        <outletCollection property="playerIDs" destination="dDO-h8-7Ci" collectionClass="NSMutableArray" id="SCj-1Z-9sr"/>
+                        <outletCollection property="playerIDs" destination="BwI-dV-HEq" collectionClass="NSMutableArray" id="6ON-zd-RiA"/>
+                        <outletCollection property="playerIDs" destination="Joi-vP-oe4" collectionClass="NSMutableArray" id="Jng-az-avS"/>
+                        <outletCollection property="playerIDs" destination="xPD-WU-c1s" collectionClass="NSMutableArray" id="aHk-ww-7x2"/>
+                        <outletCollection property="playerPoints" destination="c5i-VF-A2B" collectionClass="NSMutableArray" id="HuH-PG-9Tq"/>
+                        <outletCollection property="playerPoints" destination="Me0-P4-oQG" collectionClass="NSMutableArray" id="cog-Pb-9nJ"/>
+                        <outletCollection property="playerPoints" destination="RPd-Li-ExG" collectionClass="NSMutableArray" id="tcS-aP-OrZ"/>
+                        <outletCollection property="playerPoints" destination="CoO-6b-fzc" collectionClass="NSMutableArray" id="4ab-4X-eZs"/>
+                        <outletCollection property="playerPoints" destination="mUK-i7-1KQ" collectionClass="NSMutableArray" id="4YU-lK-Vek"/>
+                        <outletCollection property="playerPoints" destination="WED-uY-BfA" collectionClass="NSMutableArray" id="5UW-we-T0l"/>
+                        <outletCollection property="playerScore" destination="veQ-H8-Pc6" collectionClass="NSMutableArray" id="eAc-f7-nCE"/>
+                        <outletCollection property="playerScore" destination="R0m-6c-avr" collectionClass="NSMutableArray" id="gbs-BQ-cSh"/>
+                        <outletCollection property="playerScore" destination="K8a-iN-eze" collectionClass="NSMutableArray" id="wbw-wd-ZxC"/>
+                        <outletCollection property="playerScore" destination="bB9-Tg-DfU" collectionClass="NSMutableArray" id="hty-es-b44"/>
+                        <outletCollection property="playerScore" destination="xfV-Sq-we8" collectionClass="NSMutableArray" id="Ftj-tU-11f"/>
+                        <outletCollection property="playerScore" destination="OoP-Qg-Sbw" collectionClass="NSMutableArray" id="ozj-2d-SVT"/>
+                        <outletCollection property="cards1" destination="rHL-mB-Jl5" collectionClass="NSMutableArray" id="DTj-fT-Y4r"/>
+                        <outletCollection property="cards1" destination="QcC-Bz-vIq" collectionClass="NSMutableArray" id="8J6-r0-yXT"/>
+                        <outletCollection property="cards1" destination="cAY-db-2I3" collectionClass="NSMutableArray" id="vsV-aF-UPS"/>
+                        <outletCollection property="cards1" destination="uBS-ke-XQJ" collectionClass="NSMutableArray" id="7Ms-vC-CqH"/>
+                        <outletCollection property="cards1" destination="at0-7M-PTz" collectionClass="NSMutableArray" id="GVd-tN-JwD"/>
+                        <outletCollection property="cards2" destination="j08-ni-sli" collectionClass="NSMutableArray" id="Bpr-iu-3Ar"/>
+                        <outletCollection property="cards2" destination="7ab-xx-h2a" collectionClass="NSMutableArray" id="eTQ-hE-ksn"/>
+                        <outletCollection property="cards2" destination="9vU-zc-Oqm" collectionClass="NSMutableArray" id="oOr-Hr-KZd"/>
+                        <outletCollection property="cards2" destination="iW6-CE-1j0" collectionClass="NSMutableArray" id="Ej0-Xb-Ph0"/>
+                        <outletCollection property="cards2" destination="ek1-Hy-vYO" collectionClass="NSMutableArray" id="hUF-Py-5ge"/>
+                        <outletCollection property="cards3" destination="h7S-Rr-XEn" collectionClass="NSMutableArray" id="lCm-Tj-5MT"/>
+                        <outletCollection property="cards3" destination="ivz-6j-KLk" collectionClass="NSMutableArray" id="hS7-Xk-gHq"/>
+                        <outletCollection property="cards3" destination="OB1-Xh-Lfx" collectionClass="NSMutableArray" id="XhY-Sm-5pO"/>
+                        <outletCollection property="cards3" destination="fCi-co-9n6" collectionClass="NSMutableArray" id="YAr-Wr-IK0"/>
+                        <outletCollection property="cards3" destination="yzo-IX-uY5" collectionClass="NSMutableArray" id="3EZ-ze-xaT"/>
+                        <outletCollection property="cards4" destination="CIB-ci-JaM" collectionClass="NSMutableArray" id="qrq-vW-Vz8"/>
+                        <outletCollection property="cards4" destination="r82-vC-u51" collectionClass="NSMutableArray" id="fQW-5g-S6T"/>
+                        <outletCollection property="cards4" destination="czJ-pW-NP4" collectionClass="NSMutableArray" id="Yib-jr-2Un"/>
+                        <outletCollection property="cards4" destination="oZK-ee-88L" collectionClass="NSMutableArray" id="gah-gS-xkZ"/>
+                        <outletCollection property="cards4" destination="SXh-bQ-Raq" collectionClass="NSMutableArray" id="KWK-jZ-Rw8"/>
+                        <outletCollection property="cards5" destination="1zY-3T-XN1" collectionClass="NSMutableArray" id="NTb-cu-aRa"/>
+                        <outletCollection property="cards5" destination="2df-2H-PB9" collectionClass="NSMutableArray" id="Kwb-cd-uya"/>
+                        <outletCollection property="cards5" destination="CgL-es-nIA" collectionClass="NSMutableArray" id="JX9-BN-yeO"/>
+                        <outletCollection property="cards5" destination="IF3-iA-tLP" collectionClass="NSMutableArray" id="JDI-r0-PfE"/>
+                        <outletCollection property="cards5" destination="w4Q-vQ-9HZ" collectionClass="NSMutableArray" id="rc2-Ac-NA9"/>
+                        <outletCollection property="cards6" destination="aXH-Un-o3e" collectionClass="NSMutableArray" id="iwB-hf-R3T"/>
+                        <outletCollection property="cards6" destination="Ki0-5M-mOc" collectionClass="NSMutableArray" id="pjk-jF-WCq"/>
+                        <outletCollection property="cards6" destination="9Vu-dc-RlD" collectionClass="NSMutableArray" id="1sz-gW-r6L"/>
+                        <outletCollection property="cards6" destination="qnO-HR-M6v" collectionClass="NSMutableArray" id="6jO-cF-ErH"/>
+                        <outletCollection property="cards6" destination="Suh-yk-mqY" collectionClass="NSMutableArray" id="ZEY-ik-Vb0"/>
                         <segue destination="B3C-4V-jZU" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="iRr-Ra-DTS"/>
                         <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="backToGameSegue" modalPresentationStyle="overCurrentContext" id="r8X-wQ-4AQ"/>
                         <segue destination="tc0-NO-ycV" kind="presentation" identifier="backToMainSegue" modalPresentationStyle="overCurrentContext" id="TCa-Jb-oMc"/>
@@ -1174,9 +1182,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QwQ-TG-PXd"/>
+        <segue reference="r8X-wQ-4AQ"/>
         <segue reference="s22-Bn-U35"/>
-        <segue reference="WOn-YX-ZXF"/>
+        <segue reference="TCa-Jb-oMc"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>
