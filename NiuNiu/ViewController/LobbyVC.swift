@@ -186,9 +186,9 @@ class LobbyVC: UIViewController {
 // MARK: UITableViewDataSource implementation
 extension LobbyVC: UITableViewDataSource {
     
-    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Players in the lobby"
-    }
+//    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Players in the lobby"
+//    }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.lobby.count

@@ -23,6 +23,9 @@ class SettingsVC: UIViewController {
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
         self.usernameTextField.delegate = self
         
         let username = UserDefaults.standard.string(forKey: "username")

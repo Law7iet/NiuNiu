@@ -137,9 +137,9 @@ extension SeacherVC: UITableViewDataSource {
 // MARK: UITableViewDelegate implementation
 extension SeacherVC: UITableViewDelegate {
     
-    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Available hosts"
-    }
+//    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Available hosts"
+//    }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.hosts[indexPath.row]
