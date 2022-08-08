@@ -35,6 +35,11 @@ class LobbyVC: UIViewController {
     }
     
     func setupLobby() {
+        // Navigation bar
+        self.playButton.tintColor = UIColor(named: "Orange")
+        self.playButton.setAttributedTitle(NSAttributedString(string: "Play", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 20)!]), for: UIControl.State.normal)
+        
+        // Lobby
         if self.server == nil {
             // Get the clients that are already connected
             var preLobby: [MCPeerID] = self.client.session.connectedPeers
@@ -197,7 +202,7 @@ extension LobbyVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.getPeersName(from: self.lobby)[indexPath.row]
+        content.attributedText = NSAttributedString(string: Utils.getPeersName(from: self.lobby)[indexPath.row], attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!])
         cell.contentConfiguration = content
         return cell
     }

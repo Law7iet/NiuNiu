@@ -10,11 +10,11 @@ import UIKit
 
 class Settings {
     
-    static var username: String = UserDefaults.standard.string(forKey: "username") ?? UIDevice.current.name
-    static var numberOfPlayers: Int = getInteger(forKey: "numberOfPlayers") ?? 6
-    static var points: Int = getInteger(forKey: "points") ?? 50
+    static var username: String { UserDefaults.standard.string(forKey: "username") ?? UIDevice.current.name }
+    static var numberOfPlayers: Int { getInteger(forKey: "numberOfPlayers") ?? 6 }
+    static var points: Int { getInteger(forKey: "points") ?? 50 }
     
-    static var timerLong: Int = getInteger(forKey: "timer") ?? 30
+    static var timerLong: Int { getInteger(forKey: "timer") ?? 30 }
     static let timerShort = 2
     static let pendingTimer = 2.5
     static let timerOffset = 1

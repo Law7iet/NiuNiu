@@ -85,7 +85,7 @@ class GameVC: UIViewController {
                 self.betSlider.maximumValue = Float(self.player.points)
             } else {
                 // Setup the other players
-                self.playersButtons[index].setTitle(player.id, for: UIControl.State.normal)
+                self.playersButtons[index].setAttributedTitle(NSAttributedString(string: player.id, attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                 self.playersButtons[index].isEnabled = true
                 index += 1
             }
@@ -254,7 +254,7 @@ class GameVC: UIViewController {
                 message: Message(.check, players: [self.player])
             )
         case .cards:
-            self.actionButton.setTitle("Cards picked", for: UIControl.State.normal)
+            self.actionButton.setAttributedTitle(NSAttributedString(string: "Cards picked", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
             for btn in self.cardsButtons {
                 btn.isEnabled = false
             }
@@ -273,7 +273,7 @@ class GameVC: UIViewController {
     @IBAction func changeSliderValue(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         if self.player.status == .bet {
-            self.actionButton.setTitle("Bet (\(currentValue))", for: UIControl.State.normal)
+            self.actionButton.setAttributedTitle(NSAttributedString(string: "Bet (\(currentValue))", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
         }
     }
     
@@ -391,7 +391,7 @@ extension GameVC: ClientGameDelegate {
                 // Change UI
                 self.statusLabel.text = "Start Bet!"
                 self.timerLabel.text = String(self.time)
-                self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
+                self.actionButton.setAttributedTitle(NSAttributedString(string: "Bet (0)", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                 self.setupUserButton(withSlider: true, turnOn: true)
                 // Set timer
                 var timerCounter = 0
@@ -439,11 +439,11 @@ extension GameVC: ClientGameDelegate {
                     if diff < self.player.points {
                         // Check
                         self.player.status = .check
-                        self.actionButton.setTitle("Check +\(diff)", for: UIControl.State.normal)
+                        self.actionButton.setAttributedTitle(NSAttributedString(string: "Check +\(diff)", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                     } else {
                         // All-in
                         self.player.status = .allIn
-                        self.actionButton.setTitle("All-in", for: UIControl.State.normal)
+                        self.actionButton.setAttributedTitle(NSAttributedString(string: "All-in", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                     }
                     // Change UI
                     self.setupUserButton(withSlider: false, turnOn: true)
@@ -488,7 +488,7 @@ extension GameVC: ClientGameDelegate {
                 // Change UI
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(self.time)
-                self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
+                self.actionButton.setAttributedTitle(NSAttributedString(string: "Pick cards", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                 self.setupUserButton(withSlider: false, turnOn: true)
                 self.checkPickedCards()
                 // Set timer
