@@ -39,7 +39,11 @@ class MainVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let name = UIDevice.current.name + " #" + self.getRandomID()
+        var username = UserDefaults.standard.string(forKey: "username")
+        if username == nil {
+            username = UIDevice.current.name
+        }
+        let name = username! + " #" + self.getRandomID()
         if let lobbyVC = segue.destination as? LobbyVC {
             lobbyVC.server = Server(peerID: MCPeerID(displayName: name))
             lobbyVC.client = Client(peerID: MCPeerID(displayName: name))

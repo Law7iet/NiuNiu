@@ -16,6 +16,7 @@ class GameVC: UIViewController {
     var player: Player!
     var players: [Player]!
     
+    var time = 0
     var maxBid = 0
     var totalBid = 0
     var isClicked = false
@@ -174,6 +175,7 @@ class GameVC: UIViewController {
             endVC.client = self.client
             endVC.players = self.players
             endVC.prize = self.totalBid
+            endVC.time = self.time
         }
     }
     
@@ -352,13 +354,14 @@ extension GameVC: ClientGameDelegate {
         case .startMatch:
             DispatchQueue.main.async {
                 // Initialization of data
+                self.time = message.amount!
                 self.maxBid = 0
                 self.totalBid = 0
                 self.players = message.players!
                 self.setupPlayers()
                 // Initialization of UI
                 self.statusLabel.text = "The game will start soon"
-                self.timerLabel.text = String(Utils.timerShort)
+                self.timerLabel.text = String(Settings.timerShort)
                 // TODO: change action, fold and slider visibility?
                 for btn in self.playersButtons + self.cardsButtons {
                     btn.isHidden = true
@@ -367,8 +370,8 @@ extension GameVC: ClientGameDelegate {
                 var timerCounter = 0
                 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
-                    self.timerLabel.text = String(Utils.timerShort - timerCounter)
-                    if timerCounter == Utils.timerShort {
+                    self.timerLabel.text = String(Settings.timerShort - timerCounter)
+                    if timerCounter == Settings.timerShort {
                         timer.invalidate()
                         // Change UI
                         self.statusLabel.text = "Match started!"
@@ -387,15 +390,15 @@ extension GameVC: ClientGameDelegate {
                 self.isClicked = false
                 // Change UI
                 self.statusLabel.text = "Start Bet!"
-                self.timerLabel.text = String(Utils.timerLong)
+                self.timerLabel.text = String(self.time)
                 self.actionButton.setTitle("Bet (0)", for: UIControl.State.normal)
                 self.setupUserButton(withSlider: true, turnOn: true)
                 // Set timer
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
-                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
-                    if timerCounter == Utils.timerLong {
+                    self.timerLabel.text = String(self.time - timerCounter)
+                    if timerCounter == self.time {
                         timer.invalidate()
                         // Change UI
                         self.statusLabel.text = "Stop Bet!"
@@ -426,7 +429,7 @@ extension GameVC: ClientGameDelegate {
             DispatchQueue.main.async {
                 // Change UI
                 self.statusLabel.text = "Start Check!"
-                self.timerLabel.text = String(Utils.timerLong)
+                self.timerLabel.text = String(self.time)
                 // Change data
                 self.maxBid = message.amount!
                 self.isClicked = false
@@ -449,8 +452,8 @@ extension GameVC: ClientGameDelegate {
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
-                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
-                    if timerCounter == Utils.timerLong {
+                    self.timerLabel.text = String(self.time - timerCounter)
+                    if timerCounter == self.time {
                         timer.invalidate()
                         // Change UI
                         self.statusLabel.text = "Stop Check!"
@@ -484,7 +487,7 @@ extension GameVC: ClientGameDelegate {
                 self.isClicked = false
                 // Change UI
                 self.statusLabel.text = "Start pick cards!"
-                self.timerLabel.text = String(Utils.timerLong)
+                self.timerLabel.text = String(self.time)
                 self.actionButton.setTitle("Pick cards", for: UIControl.State.normal)
                 self.setupUserButton(withSlider: false, turnOn: true)
                 self.checkPickedCards()
@@ -492,8 +495,8 @@ extension GameVC: ClientGameDelegate {
                 var timerCounter = 0
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                     timerCounter += 1
-                    self.timerLabel.text = String(Utils.timerLong - timerCounter)
-                    if timerCounter == Utils.timerLong {
+                    self.timerLabel.text = String(self.time - timerCounter)
+                    if timerCounter == self.time {
                         timer.invalidate()
                         // Change UI
                         self.statusLabel.text = "Stop Cards!"

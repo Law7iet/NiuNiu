@@ -18,18 +18,15 @@ enum MessageEnum: Codable {
     case startCards
     case stopCards
     case endMatch
-    case endGame
-
+    
     // Game utility
-    case timer
     case resPlayer
     
     // Connections
-//    case closeLobby
     case closeSession
 
     // MARK: Send from client
-    // Game actions
+    // Player actions
     case bet
     case check
     case cards

@@ -2,15 +2,13 @@
 
 ## TODO
 
-- Settings
-
 ## DOING
 
 ## CHECK
 
-
 ## DONE
 
+- Settings
 - Gestione fine match/fine partita
 - startPickCard allow fold
 - Nessun vincitore

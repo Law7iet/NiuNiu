@@ -127,7 +127,7 @@ extension SeacherVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.getNames(fromPeerIDs: self.hosts)[indexPath.row]
+        content.text = Utils.getPeersName(from: self.hosts)[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }

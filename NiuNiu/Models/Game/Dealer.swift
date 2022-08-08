@@ -39,8 +39,8 @@ class Dealer {
         self.totalBid = 0
         
         // Game Settings
-        self.time = time ?? Utils.timerLong
-        self.points = points ?? Utils.points
+        self.time = time ?? Settings.timerLong
+        self.points = points ?? Settings.points
         
         // Data Structures
         self.server = server
@@ -102,7 +102,7 @@ class Dealer {
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
-            message: Message(.startMatch, players: self.players)
+            message: Message(.startMatch, amount: Settings.timerLong, players: self.players)
         )
     }
     
@@ -226,15 +226,15 @@ class Dealer {
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             timerCounter += 1
             switch timerCounter {
-            case Utils.timerShort + Utils.timerOffset:
+            case Settings.timerShort + Settings.timerOffset:
                 self.startBet()
-            case Utils.timerShort + 2 * Utils.timerOffset + 1 * Utils.timerLong:
+            case Settings.timerShort + 2 * Settings.timerOffset + 1 * Settings.timerLong:
                 self.stopBet()
                 self.startCheck()
-            case Utils.timerShort + 3 * Utils.timerOffset + 2 * Utils.timerLong:
+            case Settings.timerShort + 3 * Settings.timerOffset + 2 * Settings.timerLong:
                 self.stopCheck()
                 self.startCards()
-            case Utils.timerShort + 3 * Utils.timerOffset + 3 * Utils.timerLong:
+            case Settings.timerShort + 3 * Settings.timerOffset + 3 * Settings.timerLong:
                 self.stopCards()
                 self.endMatch()
             default:

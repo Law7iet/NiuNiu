@@ -9,24 +9,17 @@ import UIKit
 import MultipeerConnectivity
 
 class Utils {
-    // Debug
-    static let numberOfPlayers = 6
-    static let pendingTimer = 2.5
     
-    // Game setting
-    static let timerOffset = 1
-    static let timerShort = 2
-    static let timerLong = 10
-    static let points = 100
-    
-    // Card setting
+    // MARK: Card setting
     static let cornerRadius = CGFloat(5.0)
     static let cornerRadiusSmall = CGFloat(3.0)
-    // borderWitdh it's equal to: 1.85% of the card's height
-    static func borderWidth(withHeight height: CGFloat) -> CGFloat {
-        return height * 1.85 / 100
-    }
 
+    /// The border's width of a card is equal to 1.85% of the card's height.
+    /// - Parameter height: the card's height
+    /// - Returns: the border width
+    static func borderWidth(withHeight height: CGFloat) -> CGFloat { return height * 1.85 / 100 }
+
+    // MARK: Supporting functions
     static func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
         for player in players {
             if player.id == playerName {
@@ -36,7 +29,7 @@ class Utils {
         return nil
     }
     
-    static func getNames(fromPeerIDs peerIDs: [MCPeerID]) -> [String] {
+    static func getPeersName(from peerIDs: [MCPeerID]) -> [String] {
         var array = [String]()
         for peerID in peerIDs {
             array.append(peerID.displayName)

@@ -82,7 +82,7 @@ extension Server: MCNearbyServiceAdvertiserDelegate {
     
     // Receive connection
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        if self.session.connectedPeers.count < Utils.numberOfPlayers {
+        if self.session.connectedPeers.count < Settings.numberOfPlayers {
             invitationHandler(true, self.session)
         } else {
             invitationHandler(false, nil)

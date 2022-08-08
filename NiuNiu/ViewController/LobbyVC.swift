@@ -59,14 +59,14 @@ class LobbyVC: UIViewController {
     
     func update() {
         // UI
-        self.playersCounterLabel.text = "\(self.lobby.count) of \(Utils.numberOfPlayers) players found"
+        self.playersCounterLabel.text = "\(self.lobby.count) of \(Settings.numberOfPlayers) players found"
         if self.lobby.count > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
         } else if self.lobby.count < 2 && self.playButton.isEnabled {
             self.playButton.isEnabled = false
         }
         // Advertiser
-        if self.lobby.count == Utils.numberOfPlayers {
+        if self.lobby.count == Settings.numberOfPlayers {
             self.server?.stopAdvertising()
         } else {
             self.server?.startAdvertising()
@@ -147,7 +147,7 @@ class LobbyVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let gameVC = segue.destination as! GameVC
         if self.server != nil {
-            gameVC.dealer = Dealer(server: self.server!, time: Utils.timerLong, points: Utils.points)
+            gameVC.dealer = Dealer(server: self.server!, time: Settings.timerLong, points: Settings.points)
         }
         gameVC.client = self.client
         // Close browsing or advertising tasks
@@ -160,7 +160,7 @@ class LobbyVC: UIViewController {
     @IBAction func play(_ sender: Any) {
         self.server?.sendMessage(
             to: self.server!.connectedPeers,
-            message: Message(.startGame, amount: Utils.points)
+            message: Message(.startGame, amount: Settings.points)
         )
         // Start the game
         self.performSegue(withIdentifier: "showGameSegue", sender: nil)
@@ -197,7 +197,7 @@ extension LobbyVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = Utils.getNames(fromPeerIDs: self.lobby)[indexPath.row]
+        content.text = Utils.getPeersName(from: self.lobby)[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }
