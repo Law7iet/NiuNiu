@@ -39,10 +39,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="4B2-4h-2XB">
-                                <rect key="frame" x="102" y="338.66666666666669" width="171" height="189.00000000000006"/>
+                                <rect key="frame" x="115.33333333333333" y="374" width="144.66666666666669" height="118"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s5-rA-oWu">
-                                        <rect key="frame" x="0.0" y="0.0" width="171" height="47"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="144.66666666666666" height="47"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="47" id="N3G-vl-4AG"/>
                                         </constraints>
@@ -53,7 +53,7 @@
                                         </buttonConfiguration>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCW-WP-O99">
-                                        <rect key="frame" x="0.0" y="71" width="171" height="47"/>
+                                        <rect key="frame" x="0.0" y="71" width="144.66666666666666" height="47"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="47" id="5L6-4s-aL1"/>
                                         </constraints>
@@ -65,17 +65,6 @@
                                         <connections>
                                             <segue destination="5eS-ZO-W7S" kind="show" id="c76-yW-K0u"/>
                                         </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QsP-Zt-Nom">
-                                        <rect key="frame" x="0.0" y="142" width="171" height="47"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="47" id="v6b-5Z-uKP"/>
-                                        </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" imagePlacement="trailing" title="How to play" imagePadding="10" buttonSize="large">
-                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
-                                            <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
-                                        </buttonConfiguration>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -286,7 +275,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pcq-K6-xF0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3808.8000000000002" y="-254.18719211822662"/>
+            <point key="canvasLocation" x="2766" y="1216"/>
         </scene>
         <!--Search-->
         <scene sceneID="2qi-MI-e10">
@@ -348,7 +337,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B60-W0-L7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2765.5999999999999" y="1270.6146926536733"/>
+            <point key="canvasLocation" x="3713" y="853"/>
         </scene>
         <!--Lobby-->
         <scene sceneID="Rmk-u6-yu6">
@@ -433,7 +422,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fl6-TB-WyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3688.8000000000002" y="1271.5142428785607"/>
+            <point key="canvasLocation" x="4671" y="467"/>
         </scene>
         <!--GameVC-->
         <scene sceneID="mGO-UT-MzH">
@@ -547,17 +536,17 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="J1o-V2-anF" userLabel="Status Stack View">
-                                <rect key="frame" x="113.66666666666669" y="359.33333333333331" width="148" height="22"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="J1o-V2-anF" userLabel="Status Stack View">
+                                <rect key="frame" x="144.66666666666666" y="359.33333333333331" width="85.666666666666657" height="22"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Status" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8nw-Ef-sKa">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8nw-Ef-sKa">
                                         <rect key="frame" x="0.0" y="0.0" width="54" height="22"/>
                                         <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
                                         <color key="textColor" name="Orange"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UmH-Yt-AeE" userLabel="Timer">
-                                        <rect key="frame" x="93.999999999999986" y="0.0" width="54.000000000000014" height="22"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UmH-Yt-AeE" userLabel="Timer">
+                                        <rect key="frame" x="74" y="0.0" width="11.666666666666671" height="22"/>
                                         <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
                                         <color key="textColor" name="Orange"/>
                                         <nil key="highlightedColor"/>
@@ -739,7 +728,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afo-So-4E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="7xU-sw-sAn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4662" y="1273"/>
+            <point key="canvasLocation" x="5567" y="-290"/>
         </scene>
         <!--EndVC-->
         <scene sceneID="bnI-ME-eq5">
@@ -1285,7 +1274,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="RDG-Yn-mCs" userLabel="Final Stack View">
                                 <rect key="frame" x="20" y="695.66666666666663" width="335" height="62.333333333333371"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to continue to play?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSJ-nW-0jK">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to continue playing?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSJ-nW-0jK">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="18.666666666666668"/>
                                         <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
                                         <color key="textColor" name="Orange"/>
@@ -1394,19 +1383,17 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2i-yk-wLJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="B3C-4V-jZU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5489" y="1271"/>
+            <point key="canvasLocation" x="6394" y="-293"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="g6j-AK-1PK"/>
-        <segue reference="r8X-wQ-4AQ"/>
+        <segue reference="QwQ-TG-PXd"/>
         <segue reference="s22-Bn-U35"/>
         <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="Orange"/>
     <resources>
         <image name="LogoHorizontalTransparent" width="1848" height="626"/>
-        <image name="book" catalog="system" width="128" height="99"/>
         <image name="gamecontroller" catalog="system" width="128" height="80"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="line.3.horizontal" catalog="system" width="128" height="64"/>
@@ -1415,13 +1402,13 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Background 2">
-            <color red="0.94795106052099565" green="0.94673624741103057" blue="0.96795600652694702" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.94800001382827759" green="0.94700002670288086" blue="0.96799999475479126" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="Background 3">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Orange">
-            <color red="0.90196073060000004" green="0.60000002379999995" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.90200001001358032" green="0.60000002384185791" blue="0.36100000143051147" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

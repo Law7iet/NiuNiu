@@ -6,10 +6,6 @@
 
 ## CHECK
 
-- Quando un client esce dalla lobby, riceve troppe notifiche
-- Client quando clicca no in endvc il timer non si ferma
-- Layout dello status in gamevc
-
 ## DONE
 
 - Settings

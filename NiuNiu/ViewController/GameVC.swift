@@ -181,7 +181,7 @@ class GameVC: UIViewController {
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
-        let player = Utils.findPlayer(byName: sender.currentTitle!, from: self.players)!
+        let player = Utils.findPlayer(byName: sender.currentAttributedTitle!.string, from: self.players)!
         self.userData = UIAlertController(
             title: player.id,
             message: "Fetching data...\n\n",

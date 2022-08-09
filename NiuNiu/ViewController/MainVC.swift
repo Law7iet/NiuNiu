@@ -52,7 +52,5 @@ class MainVC: UIViewController {
         }
     }
     
-    @IBAction func unwindToMainVC(segue: UIStoryboardSegue) {}
-    
 }
 

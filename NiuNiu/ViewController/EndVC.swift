@@ -117,6 +117,7 @@ class EndVC: UIViewController {
                         self.performSegue(withIdentifier: "backToGameSegue", sender: self)
                     } else {
                         // Data
+                        self.timer?.invalidate()
                         self.clickedPlayBtn = false
                         self.isGameOver = true
                         // UI
@@ -184,12 +185,14 @@ class EndVC: UIViewController {
                 style: .destructive,
                 handler: { action in
                     // Data
+                    self.timer?.invalidate()
                     self.clickedPlayBtn = false
                     self.isGameOver = true
                     // UI
                     self.endLabel.text = "Game over"
                     self.quitButton.setTitle("Quit", for: UIControl.State.normal)
                     self.playButton.isEnabled = false
+                    self.timer?.invalidate()
                     // Disconnection
                     self.client.disconnect()
                     self.dealer?.server.disconnect()

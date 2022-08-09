@@ -137,10 +137,6 @@ extension SeacherVC: UITableViewDataSource {
 // MARK: UITableViewDelegate implementation
 extension SeacherVC: UITableViewDelegate {
     
-//    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Available hosts"
-//    }
-    
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.hosts[indexPath.row]
         let alert = UIAlertController(
@@ -187,14 +183,6 @@ extension SeacherVC: ClientSearchDelegate {
     func didHostReject(_ peerID: MCPeerID) {
         // Remove the potential server
         self.client.serverPeerID = nil
-        let alert = Utils.getOneButtonAlert(
-            title: "Error",
-            message: "Can't join in the lobby",
-            action: nil
-        )
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
-        }
     }
 
 }

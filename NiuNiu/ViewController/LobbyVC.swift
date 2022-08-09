@@ -14,6 +14,7 @@ class LobbyVC: UIViewController {
     var server: Server?
     var client: Client!
     var lobby: [MCPeerID]!
+    var forcedQuit: Bool!
 
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
@@ -38,7 +39,6 @@ class LobbyVC: UIViewController {
         // Navigation bar
         self.playButton.tintColor = UIColor(named: "Orange")
         self.playButton.setAttributedTitle(NSAttributedString(string: "Play", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 20)!]), for: UIControl.State.normal)
-        
         // Lobby
         if self.server == nil {
             // Get the clients that are already connected
@@ -52,6 +52,8 @@ class LobbyVC: UIViewController {
         } else {
             self.lobby = [MCPeerID]()
         }
+        // Data
+        self.forcedQuit = true
     }
     
     func setupClient() {
@@ -135,8 +137,11 @@ class LobbyVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.client.disconnect()
-        self.server?.disconnect()
+        if self.isMovingFromParent {
+            self.client.disconnect()
+            self.server?.disconnect()
+            self.forcedQuit = false
+        }
         print("LobbyVC willDisappear")
     }
     
@@ -190,10 +195,6 @@ class LobbyVC: UIViewController {
 
 // MARK: UITableViewDataSource implementation
 extension LobbyVC: UITableViewDataSource {
-    
-//    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Players in the lobby"
-//    }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.lobby.count
@@ -281,7 +282,9 @@ extension LobbyVC: ClientLobbyDelegate {
                 self.removePlayerInTableView(peerID: peerID)
             }
         } else {
-            self.showExitAlert(withMessage: "The lobby has been closed")
+            if self.forcedQuit == true {
+                self.showExitAlert(withMessage: "The lobby has been closed")
+            }
         }
     }
     
