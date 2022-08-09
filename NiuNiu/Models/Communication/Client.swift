@@ -11,8 +11,7 @@ import MultipeerConnectivity
 protocol ClientSearchDelegate {
     func didFindHost(with peerID: MCPeerID)
     func didLoseHost(with peerID: MCPeerID)
-    func didHostAccept(_ peerID: MCPeerID)
-    func didHostReject(_ peerID: MCPeerID)
+    func didHostAccept(_ peerID: MCPeerID, maxPlayers: Int)
 }
 
 protocol ClientLobbyDelegate {
@@ -129,15 +128,11 @@ extension Client: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             self.lobbyDelegate?.didConnect(with: peerID)
-            if peerID == self.serverPeerID {
-                self.searchDelegate?.didHostAccept(peerID)
-            }
         case MCSessionState.notConnected:
             self.lobbyDelegate?.didDisconnect(with: peerID)
             self.gameDelegate?.didDisconnect(with: peerID)
             self.endDelegate?.didDisconnect(with: peerID)
             if peerID == self.serverPeerID {
-                self.searchDelegate?.didHostReject(peerID)
                 self.serverPeerID = nil
             }
         default:
@@ -148,9 +143,13 @@ extension Client: MCSessionDelegate {
     // Receive data
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         let message = Message(data: data)
-        if message.type != .error {
-            self.gameDelegate?.didReceiveMessage(from: peerID, messageData: data)
+        if message.type == .maxPlayers {
+            // Init message from server
+            self.serverPeerID = peerID
+            self.searchDelegate?.didHostAccept(peerID, maxPlayers: message.amount!)
+        } else if message.type != .error {
             self.lobbyDelegate?.didReceiveMessage(from: peerID, messageData: data)
+            self.gameDelegate?.didReceiveMessage(from: peerID, messageData: data)
         } else {
             print("Client.session - message.type == .error from \(peerID.displayName)")
         }

@@ -15,6 +15,7 @@ class LobbyVC: UIViewController {
     var client: Client!
     var lobby: [MCPeerID]!
     var forcedQuit: Bool!
+    var maxPlayers: Int!
 
     @IBOutlet weak var playersTableView: UITableView!
     @IBOutlet weak var playersCounterLabel: UILabel!
@@ -51,6 +52,7 @@ class LobbyVC: UIViewController {
             self.playButton.isHidden = true
         } else {
             self.lobby = [MCPeerID]()
+            self.maxPlayers = Settings.numberOfPlayers
         }
         // Data
         self.forcedQuit = true
@@ -66,7 +68,7 @@ class LobbyVC: UIViewController {
     
     func update() {
         // UI
-        self.playersCounterLabel.text = "\(self.lobby.count) of \(Settings.numberOfPlayers) players found"
+        self.playersCounterLabel.text = "\(self.lobby.count) of \(self.maxPlayers!) players found"
         if self.lobby.count > 1 && !self.playButton.isEnabled {
             self.playButton.isEnabled = true
         } else if self.lobby.count < 2 && self.playButton.isEnabled {
@@ -116,6 +118,7 @@ class LobbyVC: UIViewController {
         self.setupTableView()
         self.setupLobby()
         self.setupObservers()
+        self.update()
         print("LobbyVC didLoad")
     }
     
@@ -261,8 +264,8 @@ extension LobbyVC: ClientSearchDelegate {
     }
     
     func didLoseHost(with peerID: MCPeerID) {}
-    func didHostAccept(_ peerID: MCPeerID) {}
-    func didHostReject(_ peerID: MCPeerID) {}
+    func didHostAccept(_ peerID: MCPeerID, maxPlayers: Int) {}
+    
 }
 
 // MARK: ClientLobbyDelegate implementation

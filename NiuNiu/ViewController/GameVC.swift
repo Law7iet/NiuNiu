@@ -140,9 +140,6 @@ class GameVC: UIViewController {
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
-        
-        self.dealer?.play()
-        
         // Hide UI
         for btn in self.playersButtons + self.cardsButtons {
             btn.isHidden = true
@@ -156,6 +153,7 @@ class GameVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.dealer?.play()
         print("GameVC didAppear")
     }
     
@@ -362,7 +360,7 @@ extension GameVC: ClientGameDelegate {
                 // Initialization of UI
                 self.statusLabel.text = "The game will start soon"
                 self.timerLabel.text = String(Settings.timerShort)
-                // TODO: change action, fold and slider visibility?
+                self.betSlider.maximumValue = Float(self.player.points)
                 for btn in self.playersButtons + self.cardsButtons {
                     btn.isHidden = true
                 }

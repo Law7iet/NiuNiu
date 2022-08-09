@@ -12,6 +12,7 @@ class SeacherVC: UIViewController {
     // MARK: Properties
     var client: Client!
     var hosts: [MCPeerID]!
+    var maxPlayers: Int?
     
     @IBOutlet weak var hostsTableView: UITableView!
     
@@ -95,6 +96,7 @@ class SeacherVC: UIViewController {
         // Setup the LobbyVC
         let lobbyVC = segue.destination as! LobbyVC
         lobbyVC.client = self.client
+        lobbyVC.maxPlayers = self.maxPlayers
     }
     
     // MARK: Notification
@@ -148,8 +150,6 @@ extension SeacherVC: UITableViewDelegate {
             title: "Yes",
             style: .default,
             handler: { [self] (action: UIAlertAction) in
-                // Mark the potential server
-                self.client.serverPeerID = user
                 // Request to join in the server
                 self.client.connect(to: user)
             }
@@ -174,15 +174,11 @@ extension SeacherVC: ClientSearchDelegate {
         self.removeHostInTableView(peerID: with)
     }
     
-    func didHostAccept(_ peerID: MCPeerID) {
+    func didHostAccept(_ peerID: MCPeerID, maxPlayers: Int) {
+        self.maxPlayers = maxPlayers
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
         }
-    }
-    
-    func didHostReject(_ peerID: MCPeerID) {
-        // Remove the potential server
-        self.client.serverPeerID = nil
     }
 
 }

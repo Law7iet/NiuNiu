@@ -8,6 +8,7 @@
 
 ## DONE
 
+- first time connection send numbers of players in lobby allowed
 - Settings
 - Gestione fine match/fine partita
 - startPickCard allow fold

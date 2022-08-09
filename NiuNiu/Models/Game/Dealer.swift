@@ -99,6 +99,12 @@ class Dealer {
             // Set the players' next status
             player.status = .bet
         }
+        
+        print("StartMatch getAvailableMCPeerIDs")
+        for x in self.getAvailableMCPeerIDs() {
+            print(x.displayName)
+        }
+        
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -221,6 +227,17 @@ class Dealer {
     }
     
     func play() {
+        
+        print("Server connected peers")
+        for x in self.server.connectedPeers {
+            print(x.displayName)
+        }
+        print("Server players")
+        for x in self.players {
+            print(x)
+        }
+                
+        
         self.startMatch()
         var timerCounter = 0
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in

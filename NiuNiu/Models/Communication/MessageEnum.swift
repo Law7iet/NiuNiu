@@ -20,6 +20,7 @@ enum MessageEnum: Codable {
     case endMatch
     
     // Game utility
+    case maxPlayers
     case resPlayer
     
     // Connections

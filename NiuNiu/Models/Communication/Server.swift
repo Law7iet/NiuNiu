@@ -98,6 +98,7 @@ extension Server: MCSessionDelegate {
         switch state {
         case MCSessionState.connected:
             print("Server connected with \(peerID.displayName)")
+            self.sendMessage(to: [peerID], message: Message(.maxPlayers, amount: Settings.numberOfPlayers))
         case MCSessionState.connecting:
             print("Server connecting with \(peerID.displayName)")
         case MCSessionState.notConnected:

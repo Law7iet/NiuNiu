@@ -15,7 +15,7 @@ class Settings {
     static var points: Int { getInteger(forKey: "points") ?? 50 }
     
     static var timerLong: Int { getInteger(forKey: "timer") ?? 30 }
-    static let timerShort = 2
+    static let timerShort = 3
     static let pendingTimer = 2.5
     static let timerOffset = 1
     

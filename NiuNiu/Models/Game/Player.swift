@@ -24,11 +24,13 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// A string that describes the player
     var description: String {
         var cardsDescription = ""
-        for index in 0 ... 4 {
-            if self.pickedCards[index] == true {
-                cardsDescription = "- [\(self.cards[index].description)]\n" + cardsDescription
-            } else {
-                cardsDescription = cardsDescription + "- \(self.cards[index].description)\n"
+        if !self.cards.isEmpty {
+            for index in 0 ... 4 {
+                if self.pickedCards[index] == true {
+                    cardsDescription = "- [\(self.cards[index].description)]\n" + cardsDescription
+                } else {
+                    cardsDescription = cardsDescription + "- \(self.cards[index].description)\n"
+                }
             }
         }
         
