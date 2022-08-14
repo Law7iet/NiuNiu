@@ -217,7 +217,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="lYa-hy-c39" userLabel="Players Stack View">
                                         <rect key="frame" x="0.0" y="347" width="335" height="68"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of players: 6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-Po-igd" userLabel="Players Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of players: 5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sg0-Po-igd" userLabel="Players Label">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="22"/>
                                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
                                                 <color key="textColor" name="Orange"/>
@@ -235,13 +235,13 @@
                                                         <color key="textColor" name="Orange"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="6" minValue="2" maxValue="6" translatesAutoresizingMaskIntoConstraints="NO" id="FhS-9F-PdS" userLabel="Players Horizontal Slider">
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="2" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="FhS-9F-PdS" userLabel="Players Horizontal Slider">
                                                         <rect key="frame" x="38" y="0.0" width="259" height="31"/>
                                                         <connections>
                                                             <action selector="changePlayersSlider:" destination="5eS-ZO-W7S" eventType="valueChanged" id="tXh-1A-Ss5"/>
                                                         </connections>
                                                     </slider>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXL-Fc-Mqg" userLabel="Players Max Label">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXL-Fc-Mqg" userLabel="Players Max Label">
                                                         <rect key="frame" x="305" y="0.0" width="30" height="30"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="3JG-SD-U8R"/>
@@ -462,7 +462,7 @@
                                 </buttonConfiguration>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AMA-AH-YMe" userLabel="Players Stack View">
-                                <rect key="frame" x="20" y="125.00000000000001" width="335" height="203.33333333333337"/>
+                                <rect key="frame" x="20" y="124.99999999999999" width="335" height="160.66666666666663"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lz9-dP-0wj" userLabel="Player 1 Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="99" height="32.666666666666664"/>
@@ -528,26 +528,10 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="N5n-ig-omR" userLabel="Player 5 Stack View">
-                                        <rect key="frame" x="0.0" y="170.66666666666669" width="99" height="32.666666666666657"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Vq-Phq" userLabel="Name">
-                                                <rect key="frame" x="0.0" y="0.0" width="99" height="32.666666666666664"/>
-                                                <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="person" catalog="system" title="Empty" imagePadding="10">
-                                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
-                                                </buttonConfiguration>
-                                                <connections>
-                                                    <action selector="clickPlayer:" destination="UtJ-hQ-SXl" eventType="touchUpInside" id="TWr-3i-h20"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="J1o-V2-anF" userLabel="Status Stack View">
-                                <rect key="frame" x="51.666666666666657" y="359.33333333333331" width="271.66666666666674" height="50"/>
+                                <rect key="frame" x="51.666666666666657" y="316.66666666666669" width="271.66666666666674" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="The game will start soon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8nw-Ef-sKa">
                                         <rect key="frame" x="0.0" y="14" width="201.66666666666666" height="22"/>
@@ -724,7 +708,6 @@
                         <outletCollection property="playersButtons" destination="J0Z-Hf-JP9" collectionClass="NSMutableArray" id="NPX-dm-udC"/>
                         <outletCollection property="playersButtons" destination="t0S-gr-Awo" collectionClass="NSMutableArray" id="m4h-rO-QXS"/>
                         <outletCollection property="playersButtons" destination="xGp-fj-Bzv" collectionClass="NSMutableArray" id="Lpo-oy-tK9"/>
-                        <outletCollection property="playersButtons" destination="lap-Vq-Phq" collectionClass="NSMutableArray" id="tzt-Gy-aKx"/>
                         <outletCollection property="cardsButtons" destination="SA1-kT-qx8" collectionClass="NSMutableArray" id="DRV-Ch-Qo3"/>
                         <outletCollection property="cardsButtons" destination="O9N-uy-h78" collectionClass="NSMutableArray" id="qgi-xR-Tw8"/>
                         <outletCollection property="cardsButtons" destination="epA-Eo-AcY" collectionClass="NSMutableArray" id="6WD-z9-LUo"/>
@@ -749,7 +732,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="JFi-dC-P1O" userLabel="Players View">
-                                <rect key="frame" x="20" y="64" width="335" height="554"/>
+                                <rect key="frame" x="20" y="63.999999999999972" width="335" height="465.33333333333326"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scoreboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qcy-I0-y1P">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="22"/>
@@ -1192,93 +1175,6 @@
                                             <constraint firstItem="hf5-xJ-CX8" firstAttribute="leading" secondItem="mjl-vx-DSf" secondAttribute="leading" id="uJq-Cw-kd5"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qpr-V8-nxQ" userLabel="Player 6 Stack View">
-                                        <rect key="frame" x="0.0" y="475.33333333333343" width="335" height="78.666666666666686"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="dAT-pw-Oys" userLabel="User Stack View">
-                                                <rect key="frame" x="0.0" y="0.0" width="335" height="18.666666666666668"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPD-WU-c1s" userLabel="Name">
-                                                        <rect key="frame" x="0.0" y="0.0" width="195" height="18.666666666666668"/>
-                                                        <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
-                                                        <color key="textColor" name="Orange"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WED-uY-BfA" userLabel="Points">
-                                                        <rect key="frame" x="205" y="0.0" width="130" height="18.666666666666668"/>
-                                                        <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
-                                                        <color key="textColor" name="Orange"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="xPD-WU-c1s" firstAttribute="width" secondItem="WED-uY-BfA" secondAttribute="width" multiplier="1.5" id="wpY-WG-dhI"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6nx-JQ-U5h" userLabel="Data Stack View">
-                                                <rect key="frame" x="0.0" y="28.666666666666629" width="335" height="50"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="U5j-lu-Q2f" userLabel="Cards View">
-                                                        <rect key="frame" x="0.0" y="0.0" width="199.66666666666666" height="50"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXH-Un-o3e">
-                                                                <rect key="frame" x="0.0" y="0.0" width="36" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="aXH-Un-o3e" secondAttribute="height" multiplier="64:89" id="PTG-bc-nVp"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="qMI-4c-D1y"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ki0-5M-mOc">
-                                                                <rect key="frame" x="41" y="0.0" width="36" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="Ki0-5M-mOc" secondAttribute="height" multiplier="64:89" id="NoS-m2-jzf"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="eXn-eL-lt5"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Vu-dc-RlD">
-                                                                <rect key="frame" x="82" y="0.0" width="36" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="9Vu-dc-RlD" secondAttribute="height" multiplier="64:89" id="Yrt-rU-avO"/>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="fVZ-Y7-UBH"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qnO-HR-M6v">
-                                                                <rect key="frame" x="123.00000000000001" y="0.0" width="35.666666666666671" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="SJk-Eh-wdh"/>
-                                                                    <constraint firstAttribute="width" secondItem="qnO-HR-M6v" secondAttribute="height" multiplier="64:89" id="hbc-cO-amG"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Suh-yk-mqY">
-                                                                <rect key="frame" x="163.66666666666666" y="0.0" width="36" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="2yQ-HH-NhR"/>
-                                                                    <constraint firstAttribute="width" secondItem="Suh-yk-mqY" secondAttribute="height" multiplier="64:89" id="3rn-2k-lna"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OoP-Qg-Sbw" userLabel="Score">
-                                                        <rect key="frame" x="209.66666666666666" y="0.0" width="125.33333333333334" height="50"/>
-                                                        <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
-                                                        <color key="textColor" name="Orange"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="6nx-JQ-U5h" firstAttribute="trailing" secondItem="Qpr-V8-nxQ" secondAttribute="trailing" id="KnL-j3-yhx"/>
-                                            <constraint firstItem="dAT-pw-Oys" firstAttribute="leading" secondItem="Qpr-V8-nxQ" secondAttribute="leading" id="amM-em-dUs"/>
-                                            <constraint firstItem="dAT-pw-Oys" firstAttribute="trailing" secondItem="Qpr-V8-nxQ" secondAttribute="trailing" id="azq-d2-nH2"/>
-                                            <constraint firstItem="6nx-JQ-U5h" firstAttribute="leading" secondItem="Qpr-V8-nxQ" secondAttribute="leading" id="liP-pq-op6"/>
-                                        </constraints>
-                                    </stackView>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="RDG-Yn-mCs" userLabel="Final Stack View">
@@ -1342,19 +1238,16 @@
                         <outletCollection property="playerIDs" destination="dDO-h8-7Ci" collectionClass="NSMutableArray" id="SCj-1Z-9sr"/>
                         <outletCollection property="playerIDs" destination="BwI-dV-HEq" collectionClass="NSMutableArray" id="6ON-zd-RiA"/>
                         <outletCollection property="playerIDs" destination="Joi-vP-oe4" collectionClass="NSMutableArray" id="Jng-az-avS"/>
-                        <outletCollection property="playerIDs" destination="xPD-WU-c1s" collectionClass="NSMutableArray" id="aHk-ww-7x2"/>
                         <outletCollection property="playerPoints" destination="c5i-VF-A2B" collectionClass="NSMutableArray" id="HuH-PG-9Tq"/>
                         <outletCollection property="playerPoints" destination="Me0-P4-oQG" collectionClass="NSMutableArray" id="cog-Pb-9nJ"/>
                         <outletCollection property="playerPoints" destination="RPd-Li-ExG" collectionClass="NSMutableArray" id="tcS-aP-OrZ"/>
                         <outletCollection property="playerPoints" destination="CoO-6b-fzc" collectionClass="NSMutableArray" id="4ab-4X-eZs"/>
                         <outletCollection property="playerPoints" destination="mUK-i7-1KQ" collectionClass="NSMutableArray" id="4YU-lK-Vek"/>
-                        <outletCollection property="playerPoints" destination="WED-uY-BfA" collectionClass="NSMutableArray" id="5UW-we-T0l"/>
                         <outletCollection property="playerScore" destination="veQ-H8-Pc6" collectionClass="NSMutableArray" id="eAc-f7-nCE"/>
                         <outletCollection property="playerScore" destination="R0m-6c-avr" collectionClass="NSMutableArray" id="gbs-BQ-cSh"/>
                         <outletCollection property="playerScore" destination="K8a-iN-eze" collectionClass="NSMutableArray" id="wbw-wd-ZxC"/>
                         <outletCollection property="playerScore" destination="bB9-Tg-DfU" collectionClass="NSMutableArray" id="hty-es-b44"/>
                         <outletCollection property="playerScore" destination="xfV-Sq-we8" collectionClass="NSMutableArray" id="Ftj-tU-11f"/>
-                        <outletCollection property="playerScore" destination="OoP-Qg-Sbw" collectionClass="NSMutableArray" id="ozj-2d-SVT"/>
                         <outletCollection property="cards1" destination="rHL-mB-Jl5" collectionClass="NSMutableArray" id="DTj-fT-Y4r"/>
                         <outletCollection property="cards1" destination="QcC-Bz-vIq" collectionClass="NSMutableArray" id="8J6-r0-yXT"/>
                         <outletCollection property="cards1" destination="cAY-db-2I3" collectionClass="NSMutableArray" id="vsV-aF-UPS"/>
@@ -1380,11 +1273,6 @@
                         <outletCollection property="cards5" destination="CgL-es-nIA" collectionClass="NSMutableArray" id="JX9-BN-yeO"/>
                         <outletCollection property="cards5" destination="IF3-iA-tLP" collectionClass="NSMutableArray" id="JDI-r0-PfE"/>
                         <outletCollection property="cards5" destination="w4Q-vQ-9HZ" collectionClass="NSMutableArray" id="rc2-Ac-NA9"/>
-                        <outletCollection property="cards6" destination="aXH-Un-o3e" collectionClass="NSMutableArray" id="iwB-hf-R3T"/>
-                        <outletCollection property="cards6" destination="Ki0-5M-mOc" collectionClass="NSMutableArray" id="pjk-jF-WCq"/>
-                        <outletCollection property="cards6" destination="9Vu-dc-RlD" collectionClass="NSMutableArray" id="1sz-gW-r6L"/>
-                        <outletCollection property="cards6" destination="qnO-HR-M6v" collectionClass="NSMutableArray" id="6jO-cF-ErH"/>
-                        <outletCollection property="cards6" destination="Suh-yk-mqY" collectionClass="NSMutableArray" id="ZEY-ik-Vb0"/>
                         <segue destination="B3C-4V-jZU" kind="unwind" identifier="unwindToMainVC" unwindAction="unwindToMainVCWithSegue:" id="iRr-Ra-DTS"/>
                         <segue destination="UtJ-hQ-SXl" kind="presentation" identifier="backToGameSegue" modalPresentationStyle="overCurrentContext" id="r8X-wQ-4AQ"/>
                         <segue destination="tc0-NO-ycV" kind="presentation" identifier="backToMainSegue" modalPresentationStyle="overCurrentContext" id="TCa-Jb-oMc"/>
@@ -1397,9 +1285,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QwQ-TG-PXd"/>
-        <segue reference="U82-HS-8Oy"/>
-        <segue reference="WOn-YX-ZXF"/>
+        <segue reference="r8X-wQ-4AQ"/>
+        <segue reference="s22-Bn-U35"/>
+        <segue reference="TCa-Jb-oMc"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="Orange"/>
     <resources>

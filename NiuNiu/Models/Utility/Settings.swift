@@ -11,7 +11,7 @@ import UIKit
 class Settings {
     
     static var username: String { UserDefaults.standard.string(forKey: "username") ?? UIDevice.current.name }
-    static var numberOfPlayers: Int { getInteger(forKey: "numberOfPlayers") ?? 6 }
+    static var numberOfPlayers: Int { getInteger(forKey: "numberOfPlayers") ?? 5 }
     static var points: Int { getInteger(forKey: "points") ?? 50 }
     
     static var timerLong: Int { getInteger(forKey: "timer") ?? 30 }
