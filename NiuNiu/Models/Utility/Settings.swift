@@ -13,11 +13,16 @@ class Settings {
     static var username: String { UserDefaults.standard.string(forKey: "username") ?? UIDevice.current.name }
     static var numberOfPlayers: Int { getInteger(forKey: "numberOfPlayers") ?? 5 }
     static var points: Int { getInteger(forKey: "points") ?? 50 }
-    
     static var timerLong: Int { getInteger(forKey: "timer") ?? 30 }
+    
     static let timerShort = 3
-    static let pendingTimer = 2.5
     static let timerOffset = 1
+    
+    // Time values
+    static let timeStartBet =   timerShort + (1 * timerOffset) + (0 * timerLong)
+    static let timeStartCheck = timerShort + (2 * timerOffset) + (1 * timerLong)
+    static let timeStartCards = timerShort + (3 * timerOffset) + (2 * timerLong)
+    static let timeStartEnd =   timerShort + (4 * timerOffset) + (3 * timerLong)
     
     static func getInteger(forKey key: String) -> Int? {
         let x = UserDefaults.standard.integer(forKey: key)

@@ -59,7 +59,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// Change the player's status, bid and reduce his points
     /// - Parameter amount: the player bid
     func bet(amount: Int) {
-        self.status = .bet
+        self.status = .didBet
         self.bid = amount
         self.points -= amount
     }
@@ -67,16 +67,21 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// Change the player's status, increase his bid and reduce his points
     /// - Parameter amount: the amount to increase/decrease
     func check(amount: Int) {
-        self.status = .check
+        self.status = .didCheck
         self.bid += amount
         self.points -= amount
     }
     
     /// Change the player's status, change his bid with his points and set to 0 his points
     func allIn() {
-        self.status = .allIn
+        self.status = .didAllIn
         self.bid += self.points
         self.points = 0
+    }
+    
+    /// Change the player's status
+    func fold() {
+        self.status = .fold
     }
     
     /// Change the players' cards and initialize the properties related with the cards
@@ -97,7 +102,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// - Parameter tieBreakerCard: the card used if there's a tie
     /// - Parameter score: the score
     func chooseCards(cards: [Card], pickedCards: [Bool], numberOfPickedCards: Int, tieBreakerCard: Card?, score: ScoreEnum) {
-        self.status = .cards
+        self.status = .didCards
         self.cards = cards
         self.pickedCards = pickedCards
         self.numberOfPickedCards = numberOfPickedCards

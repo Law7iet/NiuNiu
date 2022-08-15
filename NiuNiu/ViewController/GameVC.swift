@@ -81,8 +81,9 @@ class GameVC: UIViewController {
                 // Setup himself labels
                 self.playerLabel.text = self.player.id
                 self.pointsLabel.text = "Points: \(self.player.points)"
-                self.betSlider.minimumValue = 0.0
+                self.betSlider.minimumValue = 1.0
                 self.betSlider.maximumValue = Float(self.player.points)
+                self.betSlider.value = 1.0
             } else {
                 // Setup the other players
                 self.playersButtons[index].setAttributedTitle(NSAttributedString(string: player.id, attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
@@ -136,7 +137,6 @@ class GameVC: UIViewController {
     
     // MARK: Methods
     override func viewDidLoad() {
-        print("GameVC didLoad")
         super.viewDidLoad()
         self.setupMenu()
         self.client.gameDelegate = self
@@ -145,28 +145,17 @@ class GameVC: UIViewController {
             btn.isHidden = true
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("GameVC willAppear")
-    }
-    
+        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.dealer?.play()
-        print("GameVC didAppear")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("GameVC willDisappear")
+        self.dealer?.timer?.invalidate()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("GameVC didDisappear")
-    }
-    
+        
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let endVC = segue.destination as? EndVC {
             endVC.dealer = self.dealer
@@ -229,6 +218,7 @@ class GameVC: UIViewController {
             if bid == 0 {
                 self.fold()
             } else {
+                self.player.status = .didBet
                 self.player.bid = bid
                 self.player.points = self.player.points - bid
                 self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
@@ -238,6 +228,7 @@ class GameVC: UIViewController {
             }
         case .check:
             let diff = self.maxBid - self.player.bid
+            self.player.status = .didCheck
             self.player.bid = diff
             self.player.points = self.player.points - diff
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
@@ -245,6 +236,7 @@ class GameVC: UIViewController {
                 message: Message(.check, players: [self.player])
             )
         case .allIn:
+            self.player.status = .didAllIn
             self.player.bid += self.player.points
             self.player.points = 0
             self.pointsLabel.text = "Points: 0"
@@ -252,6 +244,7 @@ class GameVC: UIViewController {
                 message: Message(.check, players: [self.player])
             )
         case .cards:
+            self.player.status = .didCards
             self.actionButton.setAttributedTitle(NSAttributedString(string: "Cards picked", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
             for btn in self.cardsButtons {
                 btn.isEnabled = false
@@ -277,6 +270,7 @@ class GameVC: UIViewController {
     
 }
 
+// MARK: ClientGameDelegate implementation
 extension GameVC: ClientGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {

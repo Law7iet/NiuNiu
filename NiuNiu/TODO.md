@@ -2,7 +2,14 @@
 
 ## TODO
 
-Il server skippa il timer se tutti hanno fatto.
+Statistiche:
+- partite giocate
+- partite vinte
+- percentuale di partite vinte
+- round giocati
+- round vinti
+- percentuale di round vinti
+- punti vinti
 
 ## DOING
 

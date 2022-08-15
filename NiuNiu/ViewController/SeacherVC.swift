@@ -37,14 +37,7 @@ class SeacherVC: UIViewController {
         self.hostsTableView.delegate = self
     }
     
-    func setupViewWillAppear() {
-        // Client delegate
-        self.client.searchDelegate = self
-        // Refresh the list of hosts
-        self.hosts = [MCPeerID]()
-        self.hostsTableView.reloadData()
-    }
-    
+    // MARK: Edit table view
     func addHostInTableView(peerID: MCPeerID) {
         self.hosts.append(peerID)
         let indexPath = IndexPath(row: self.hosts.count - 1, section: 0)
@@ -59,35 +52,41 @@ class SeacherVC: UIViewController {
         }
     }
     
+    // MARK: Notification
+    @objc func appMovedToBackground() {
+        if Utils.getCurrentVC() is SeacherVC {
+            self.client.stopBrowsing()
+            self.hosts.removeAll()
+            self.hostsTableView.reloadData()
+        }
+    }
+    
+    @objc func appMovedToForeground() {
+        if Utils.getCurrentVC() is SeacherVC {
+            self.client.startBrowsing()
+        }
+    }
+    
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
         self.setupObservers()
-        print("SearcherVC didLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupViewWillAppear()
+        // Refresh the list of hosts
+        self.hosts = [MCPeerID]()
+        self.hostsTableView.reloadData()
+        // Client
+        self.client.searchDelegate = self
         self.client.startBrowsing()
-        print("SearcherVC willAppear")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("SearcherVC didAppear")
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print("SearcherVC willDisappear")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.client.stopBrowsing()
-        print("SearcherVC didDisappear")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,24 +96,6 @@ class SeacherVC: UIViewController {
         let lobbyVC = segue.destination as! LobbyVC
         lobbyVC.client = self.client
         lobbyVC.maxPlayers = self.maxPlayers
-    }
-    
-    // MARK: Notification
-    @objc func appMovedToBackground() {
-        if Utils.getCurrentVC() is SeacherVC {
-            self.client.stopBrowsing()
-            self.hosts.removeAll()
-            self.hostsTableView.reloadData()
-            print("SearcherVC background")
-
-        }
-    }
-    
-    @objc func appMovedToForeground() {
-        if Utils.getCurrentVC() is SeacherVC {
-            self.client.startBrowsing()
-            print("SearcherVC foreground")
-        }
     }
     
 }
@@ -149,14 +130,18 @@ extension SeacherVC: UITableViewDelegate {
         alert.addAction(UIAlertAction(
             title: "Yes",
             style: .default,
-            handler: { [self] (action: UIAlertAction) in
+            handler: { (action: UIAlertAction) in
                 // Request to join in the server
                 self.client.connect(to: user)
+                tableView.deselectRow(at: indexPath, animated: true)
             }
         ))
         alert.addAction(UIAlertAction(
             title: "No",
-            style: .destructive
+            style: .destructive,
+            handler: { (action: UIAlertAction) in
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         ))
         present(alert, animated: true, completion: nil)
     }

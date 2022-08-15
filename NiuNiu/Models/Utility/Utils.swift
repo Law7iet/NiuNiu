@@ -37,12 +37,6 @@ class Utils {
         return array
     }
     
-    static func getOneButtonAlert(title: String, message: String, action: ((UIAlertAction) -> Void)?) -> UIAlertController {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: action))
-        return alert
-    }
-    
     static func getCurrentVC() -> UIViewController? {
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene

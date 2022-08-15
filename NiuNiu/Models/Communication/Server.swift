@@ -73,7 +73,7 @@ class Server: NSObject {
                 print(error)
             }
         } else {
-            print("Server.sendMessage - data == nil")
+            print("Server.sendMessage - empty data")
         }
     }
 }

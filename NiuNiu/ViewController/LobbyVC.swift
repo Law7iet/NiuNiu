@@ -66,6 +66,25 @@ class LobbyVC: UIViewController {
         }
     }
     
+    func showExitAlert(withMessage message: String) {
+        self.client.disconnect()
+        if self.server == nil {
+            let alert = UIAlertController(
+                title: "Exit from lobby",
+                message: message,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "Ok", style: .default) { (alertAction: UIAlertAction) in
+                self.navigationController?.popViewController(animated: true)
+            })
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
+        }
+    }
+    
+    // MARK: Edit table view
+    
     func update() {
         // UI
         self.playersCounterLabel.text = "\(self.lobby.count) of \(self.maxPlayers!) players found"
@@ -81,7 +100,7 @@ class LobbyVC: UIViewController {
             self.server?.startAdvertising()
         }
     }
-        
+    
     func addPlayerInTableView(peerID: MCPeerID) {
         let indexPath = IndexPath(row: self.lobby.count, section: 0)
         self.lobby.append(peerID)
@@ -98,16 +117,16 @@ class LobbyVC: UIViewController {
         }
     }
     
-    func showExitAlert(withMessage message: String) {
-        self.client.disconnect()
-        if self.server == nil {
-            let alert = Utils.getOneButtonAlert(
-                title: "Exit from lobby",
-                message: message) { (alertAction: UIAlertAction) in
-                    self.navigationController?.popViewController(animated: true)
+    // MARK: Notification
+    @objc func appMovedToForeground() {
+        if Utils.getCurrentVC() is LobbyVC {
+            if self.client.session.connectedPeers.count == 0 {
+                if self.server == nil {
+                    self.showExitAlert(withMessage: "The lobby has been closed")
+                } else {
+                    self.server!.disconnect()
+                    self.showExitAlert(withMessage: "Lost connection with the clients")
                 }
-            DispatchQueue.main.async {
-                self.present(alert, animated: true)
             }
         }
     }
@@ -119,14 +138,12 @@ class LobbyVC: UIViewController {
         self.setupLobby()
         self.setupObservers()
         self.update()
-        print("LobbyVC didLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupLobby()
         self.setupClient()
-        print("LobbyVC willAppear")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -135,7 +152,6 @@ class LobbyVC: UIViewController {
         if server != nil {
             self.client.startBrowsing()
         }
-        print("LobbyVC didAppear")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -145,7 +161,6 @@ class LobbyVC: UIViewController {
             self.server?.disconnect()
             self.forcedQuit = false
         }
-        print("LobbyVC willDisappear")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -154,7 +169,6 @@ class LobbyVC: UIViewController {
         if server != nil {
             self.client.stopBrowsing()
         }
-        print("LobbyVC didDisappear")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -177,21 +191,6 @@ class LobbyVC: UIViewController {
         )
         // Start the game
         self.performSegue(withIdentifier: "showGameSegue", sender: nil)
-    }
-    
-    // MARK: Notification
-    @objc func appMovedToForeground() {
-        if Utils.getCurrentVC() is LobbyVC {
-            if self.client.session.connectedPeers.count == 0 {
-                if self.server == nil {
-                    self.showExitAlert(withMessage: "The lobby has been closed")
-                } else {
-                    self.server!.disconnect()
-                    self.showExitAlert(withMessage: "Lost connection with the clients")
-                }
-            }
-            print("LobbyVC foreground")
-        }
     }
 
 }
@@ -234,6 +233,7 @@ extension LobbyVC: UITableViewDelegate {
                 action = { (alertAction: UIAlertAction) in
                     let msg = Message(.closeSession)
                     self.server?.sendMessage(to: [user], message: msg)
+                    tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
             
@@ -245,7 +245,10 @@ extension LobbyVC: UITableViewDelegate {
             ))
             alert.addAction(UIAlertAction(
                 title: "No",
-                style: .cancel
+                style: .cancel,
+                handler: { (action: UIAlertAction) in
+                    tableView.deselectRow(at: indexPath, animated: true)
+                }
             ))
             present(alert, animated: true, completion: nil)
         }

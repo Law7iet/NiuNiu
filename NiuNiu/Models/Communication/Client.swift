@@ -74,7 +74,7 @@ class Client: NSObject {
             peerID,
             to: self.session,
             withContext: nil,
-            timeout: Settings.pendingTimer
+            timeout: Double(Settings.timerShort)
         )
     }
     

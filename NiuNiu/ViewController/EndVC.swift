@@ -1,5 +1,5 @@
 //
-//  EndViewController.swift
+//  EndVC.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 23/07/22.
@@ -30,8 +30,7 @@ class EndVC: UIViewController {
     @IBOutlet var cards3: [UIButton]!
     @IBOutlet var cards4: [UIButton]!
     @IBOutlet var cards5: [UIButton]!
-    @IBOutlet var cards6: [UIButton]!
-    lazy var playerCards = [cards1, cards2, cards3, cards4, cards5, cards6]
+    lazy var playerCards = [cards1, cards2, cards3, cards4, cards5]
     
     @IBOutlet weak var endLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
@@ -137,29 +136,12 @@ class EndVC: UIViewController {
                     timerCounter += 1
                 }
             }
-
         }
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("EndVC willAppear")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("EndVC didAppear")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("EndVC willDisappear")
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("EndVC didDisappear")
+        self.timer?.invalidate()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -202,9 +184,6 @@ class EndVC: UIViewController {
             ))
             self.present(alert, animated: true)
         } else {
-            // TODO: No need
-//            self.dealer?.server.disconnect()
-//            self.client.disconnect()
             self.performSegue(withIdentifier: "backToMainSegue", sender: self)
         }
     }
@@ -216,6 +195,7 @@ class EndVC: UIViewController {
 
 }
 
+// MARK: ClientEndDelegate implementation
 extension EndVC: ClientEndDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {

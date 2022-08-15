@@ -11,6 +11,12 @@ enum PlayerEnum: Codable {
     case check
     case allIn
     case cards
+    
+    case didBet
+    case didCheck
+    case didAllIn
+    case didCards
+    
     case fold
     case disconnected
     case winner
@@ -23,6 +29,10 @@ enum PlayerEnum: Codable {
         case .check: return "check"
         case .allIn: return "allIn"
         case .cards: return "cards"
+        case .didBet: return "didBet"
+        case .didCheck: return "didCheck"
+        case .didCards: return "didCards"
+        case .didAllIn: return "didAllIn"
         case .fold: return "fold"
         case .disconnected: return "disconnected"
         case .winner: return "winner"
