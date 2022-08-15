@@ -389,7 +389,7 @@ extension GameVC: ClientGameDelegate {
                 // Change UI
                 self.statusLabel.text = "Start Bet!"
                 self.timerLabel.text = String(self.time)
-                self.actionButton.setAttributedTitle(NSAttributedString(string: "Bet (0)", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
+                self.actionButton.setAttributedTitle(NSAttributedString(string: "Bet (1)", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
                 self.setupUserButton(withSlider: true, turnOn: true)
                 // Set timer
                 var timerCounter = 0

@@ -67,25 +67,38 @@ class SettingsVC: UIViewController {
     @IBAction func changeTimerSlider(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         self.timerLabel.text = "Timer: \(currentValue)"
-        UserDefaults.standard.set(currentValue, forKey: "timer")
     }
     
     @IBAction func changePointsSlider(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         self.pointsLabel.text = "Points: \(currentValue)"
-        UserDefaults.standard.set(currentValue, forKey: "points")
     }
 
     @IBAction func changePlayersSlider(_ sender: UISlider) {
         let currentValue = Int(sender.value)
         self.playersLabel.text = "Number of players: \(currentValue)"
-        UserDefaults.standard.set(currentValue, forKey: "numberOfPlayers")
+    }
+    
+    @IBAction func clickSave(_ sender: Any) {
+        // Username
+        var username = self.usernameTextField.text!
+        if username.isEmpty || username.trimmingCharacters(in: .whitespaces).isEmpty {
+            username = UIDevice.current.name
+        } else {
+            username = username.trimmingCharacters(in: .whitespaces)
+        }
+        UserDefaults.standard.set(username, forKey: "username")
+        // Timer, points and number of players
+        UserDefaults.standard.set(self.timerSlider.value, forKey: "timer")
+        UserDefaults.standard.set(self.pointsSlider.value, forKey: "points")
+        UserDefaults.standard.set(self.playersSlider.value, forKey: "numberOfPlayers")
+        // Turn back
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
 extension SettingsVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        UserDefaults.standard.set(textField.text!, forKey: "username")
         textField.resignFirstResponder()
         return true
     }

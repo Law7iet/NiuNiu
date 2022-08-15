@@ -78,13 +78,15 @@ class EndVC: UIViewController {
             self.playerIDs[playerIndex].text = player.id
             if player.status == .winner {
                 self.playerPoints[playerIndex].text = "Points: \(player.points - self.prize) + \(self.prize!)"
+                self.playerScore[playerIndex].text = "Winner: \(player.score.description)"
             } else {
                 self.playerPoints[playerIndex].text = "Points: \(player.points)"
+                self.playerScore[playerIndex].text = "\(player.score.description)"
             }
             switch player.status {
             case .fold: self.playerScore[playerIndex].text = "Fold"
             case .disconnected: self.playerScore[playerIndex].text = "Disconnected"
-            default: self.playerScore[playerIndex].text = player.score.description
+            default: break
             }
             self.setupCard(buttons: self.playerCards[playerIndex]!, cards: player.cards, pickedCards: player.pickedCards)
             playerIndex += 1
