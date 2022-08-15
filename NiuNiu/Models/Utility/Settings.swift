@@ -33,4 +33,11 @@ class Settings {
         }
     }
     
+    static func saveSettings(username: String, timer: Int, points: Int, numberOfPlayers: Int) {
+        UserDefaults.standard.set(username, forKey: "username")
+        UserDefaults.standard.set(timer, forKey: "timer")
+        UserDefaults.standard.set(points, forKey: "points")
+        UserDefaults.standard.set(numberOfPlayers, forKey: "numberOfPlayers")
+    }
+    
 }

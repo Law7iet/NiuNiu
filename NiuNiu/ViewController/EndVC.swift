@@ -37,6 +37,18 @@ class EndVC: UIViewController {
     @IBOutlet weak var quitButton: UIButton!
     
     // MARK: Supporting functions
+    func setupStatistics() {
+        Statistics.increaseRoundsPlayed()
+        for player in self.players {
+            if player.status == .winner {
+                if player.id == self.client.peerID.displayName {
+                    Statistics.increaseRoundsWon()
+                    Statistics.addPointsGained(points: self.prize)
+                }
+            }
+        }
+    }
+    
     func setupViewDidLoad() {
         // Delegate
         self.client.endDelegate = self
@@ -92,22 +104,33 @@ class EndVC: UIViewController {
         }
     }
     
+    func endGame() {
+        // Statistics
+        Statistics.increaseGamesPlayed()
+        if self.client.peerID.displayName == self.players[0].id {
+            // The player is the winner of the game
+            Statistics.increaseGamesWon()
+        }
+        // UI
+        self.endLabel.text = "Game over"
+        self.changeEndLabel = false
+        self.quitButton.setTitle("Quit", for: UIControl.State.normal)
+        self.playButton.isEnabled = false
+        // Disconnection
+        self.client.disconnect()
+        self.dealer?.server.disconnect()
+    }
+    
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupViewDidLoad()
         self.setupPlayersUI()
+        self.setupStatistics()
 
         // Setup endLabel and buttons
         if self.isGameOver == true {
-            // UI
-            self.endLabel.text = "Game over"
-            self.changeEndLabel = false
-            self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-            self.playButton.isEnabled = false
-            // Disconnection
-            self.client.disconnect()
-            self.dealer?.server.disconnect()
+            self.endGame()
         } else {
             var timerCounter = 0
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
@@ -121,13 +144,7 @@ class EndVC: UIViewController {
                         self.timer?.invalidate()
                         self.clickedPlayBtn = false
                         self.isGameOver = true
-                        // UI
-                        self.endLabel.text = "Game over"
-                        self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-                        self.playButton.isEnabled = false
-                        // Disconnection
-                        self.client.disconnect()
-                        self.dealer?.server.disconnect()
+                        self.endGame()
                     }
                 } else {
                     if self.changeEndLabel {
@@ -152,7 +169,7 @@ class EndVC: UIViewController {
     }
     
     // MARK: Actions
-    @IBAction func quit(_ sender: Any) {
+    @IBAction func clickQuit(_ sender: Any) {
         if isGameOver == false {
             let message = self.dealer != nil ? "If you quit the game, the game will end. Are you sure to quit?" : "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
             let alert = UIAlertController(
@@ -172,14 +189,7 @@ class EndVC: UIViewController {
                     self.timer?.invalidate()
                     self.clickedPlayBtn = false
                     self.isGameOver = true
-                    // UI
-                    self.endLabel.text = "Game over"
-                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-                    self.playButton.isEnabled = false
-                    self.timer?.invalidate()
-                    // Disconnection
-                    self.client.disconnect()
-                    self.dealer?.server.disconnect()
+                    self.endGame()
                 }
             ))
             self.present(alert, animated: true)
@@ -188,7 +198,7 @@ class EndVC: UIViewController {
         }
     }
     
-    @IBAction func play(_ sender: Any) {
+    @IBAction func clickPlay(_ sender: Any) {
         self.clickedPlayBtn = true
         self.playButton.isEnabled = false
     }
@@ -216,13 +226,7 @@ extension EndVC: ClientEndDelegate {
                     self.timer?.invalidate()
                     self.clickedPlayBtn = false
                     self.isGameOver = true
-                    // UI
-                    self.endLabel.text = "Game over"
-                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-                    self.playButton.isEnabled = false
-                    // Disconnection
-                    self.client.disconnect()
-                    self.dealer?.server.disconnect()
+                    self.endGame()
                     self.present(alert, animated: true)
                 }
             } else if peerID == self.client.serverPeerID {
@@ -252,13 +256,7 @@ extension EndVC: ClientEndDelegate {
                     self.timer?.invalidate()
                     self.clickedPlayBtn = false
                     self.isGameOver = true
-                    // UI
-                    self.endLabel.text = "Game over"
-                    self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-                    self.playButton.isEnabled = false
-                    // Disconnection
-                    self.client.disconnect()
-                    self.dealer?.server.disconnect()
+                    self.endGame()
                     self.present(alert, animated: true)
                 }
             }

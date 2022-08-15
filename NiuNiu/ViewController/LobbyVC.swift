@@ -184,7 +184,7 @@ class LobbyVC: UIViewController {
     }
     
     // MARK: Actions
-    @IBAction func play(_ sender: Any) {
+    @IBAction func clickPlay(_ sender: Any) {
         self.server?.sendMessage(
             to: self.server!.connectedPeers,
             message: Message(.startGame, amount: Settings.points)

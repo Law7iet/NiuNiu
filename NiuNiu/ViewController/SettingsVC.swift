@@ -25,42 +25,14 @@ class SettingsVC: UIViewController {
         super.viewDidLoad()
         
         self.usernameTextField.delegate = self
-        
-        let username = UserDefaults.standard.string(forKey: "username")
-        let timer = UserDefaults.standard.integer(forKey: "timer")
-        let points = UserDefaults.standard.integer(forKey: "points")
-        let players = UserDefaults.standard.integer(forKey: "numberOfPlayers")
-        
-        if username != nil {
-            self.usernameTextField.text = username
-        } else {
-            usernameTextField.text = UIDevice.current.name
-        }
-        
-        if timer != 0 {
-            self.timerLabel.text = "Timer: \(timer)"
-            self.timerSlider.setValue(Float(timer), animated: true)
-        } else {
-            self.timerLabel.text = "Timer: 20"
-            self.timerSlider.setValue(20.0, animated: true)
-        }
 
-        if points != 0 {
-            self.pointsLabel.text = "Points: \(points)"
-            self.pointsSlider.setValue(Float(points), animated: true)
-        } else {
-            self.pointsLabel.text = "Points: 50"
-            self.pointsSlider.setValue(50.0, animated: true)
-        }
-        
-        if players != 0 {
-            self.playersLabel.text = "Number of players: \(players)"
-            self.playersSlider.setValue(Float(players), animated: true)
-        } else {
-            self.playersLabel.text = "Number of players: 6"
-            self.playersSlider.setValue(6.0, animated: true)
-        }
-        
+        self.usernameTextField.text = Settings.username
+        self.timerLabel.text = "Timer: \(Settings.timerLong)"
+        self.timerSlider.setValue(Float(Settings.timerLong), animated: true)
+        self.pointsLabel.text = "Points: \(Settings.points)"
+        self.pointsSlider.setValue(Float(Settings.points), animated: true)
+        self.playersLabel.text = "Number of players: \(Settings.numberOfPlayers)"
+        self.playersSlider.setValue(Float(Settings.numberOfPlayers), animated: true)
     }
     
     // MARK: Actions
@@ -87,11 +59,12 @@ class SettingsVC: UIViewController {
         } else {
             username = username.trimmingCharacters(in: .whitespaces)
         }
-        UserDefaults.standard.set(username, forKey: "username")
-        // Timer, points and number of players
-        UserDefaults.standard.set(self.timerSlider.value, forKey: "timer")
-        UserDefaults.standard.set(self.pointsSlider.value, forKey: "points")
-        UserDefaults.standard.set(self.playersSlider.value, forKey: "numberOfPlayers")
+        Settings.saveSettings(
+            username: username,
+            timer: Int(self.timerSlider.value),
+            points: Int(self.pointsSlider.value),
+            numberOfPlayers: Int(self.playersSlider.value)
+        )
         // Turn back
         self.navigationController?.popViewController(animated: true)
     }

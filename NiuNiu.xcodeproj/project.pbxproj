@@ -10,6 +10,8 @@
 		6A1192512875D53A00699FC6 /* MessageEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1192502875D53A00699FC6 /* MessageEnum.swift */; };
 		6A1953042882A1B100BF2A31 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1953032882A1B100BF2A31 /* Player.swift */; };
 		6A1953442882CD7800BF2A31 /* ScoreEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1953432882CD7800BF2A31 /* ScoreEnum.swift */; };
+		6A2AC1FD28AA9B2F009BF81F /* StatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2AC1FC28AA9B2F009BF81F /* StatsVC.swift */; };
+		6A2AC20128AAA23E009BF81F /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2AC20028AAA23E009BF81F /* Statistics.swift */; };
 		6A305902284E2FB100913DBD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305901284E2FB100913DBD /* AppDelegate.swift */; };
 		6A305904284E2FB100913DBD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305903284E2FB100913DBD /* SceneDelegate.swift */; };
 		6A305906284E2FB100913DBD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A305905284E2FB100913DBD /* MainVC.swift */; };
@@ -59,6 +61,8 @@
 		6A1192522875DBAB00699FC6 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		6A1953032882A1B100BF2A31 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		6A1953432882CD7800BF2A31 /* ScoreEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEnum.swift; sourceTree = "<group>"; };
+		6A2AC1FC28AA9B2F009BF81F /* StatsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsVC.swift; sourceTree = "<group>"; };
+		6A2AC20028AAA23E009BF81F /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
 		6A3058FE284E2FB100913DBD /* NiuNiu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiuNiu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A305901284E2FB100913DBD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A305903284E2FB100913DBD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -175,6 +179,7 @@
 			children = (
 				6A305905284E2FB100913DBD /* MainVC.swift */,
 				6AF941F328A0440100F007A9 /* SettingsVC.swift */,
+				6A2AC1FC28AA9B2F009BF81F /* StatsVC.swift */,
 				6A3B3B2C286F14F900E43530 /* SeacherVC.swift */,
 				6A6AE91C286DEC460067EE2D /* LobbyVC.swift */,
 				6AE46351288D8C6A004025E5 /* GameVC.swift */,
@@ -223,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				6ABAA99028A0E8C70015A241 /* Settings.swift */,
+				6A2AC20028AAA23E009BF81F /* Statistics.swift */,
 				6A6EAE36288B012700A89421 /* Utils.swift */,
 			);
 			path = Utility;
@@ -367,6 +373,7 @@
 				6A6EAE37288B012700A89421 /* Utils.swift in Sources */,
 				6A364733288A92A4001EF1D5 /* PlayerEnum.swift in Sources */,
 				6AE46352288D8C6A004025E5 /* GameVC.swift in Sources */,
+				6A2AC20128AAA23E009BF81F /* Statistics.swift in Sources */,
 				6ABAA99128A0E8C70015A241 /* Settings.swift in Sources */,
 				6A305902284E2FB100913DBD /* AppDelegate.swift in Sources */,
 				6A3B3B2D286F14F900E43530 /* SeacherVC.swift in Sources */,
@@ -376,6 +383,7 @@
 				6A64740B28797F23000D6EC0 /* Client.swift in Sources */,
 				6A305904284E2FB100913DBD /* SceneDelegate.swift in Sources */,
 				6A4D0240287D6E14003B2D7B /* Deck.swift in Sources */,
+				6A2AC1FD28AA9B2F009BF81F /* StatsVC.swift in Sources */,
 				6AA2360A2876AB450000F47E /* Message.swift in Sources */,
 				6A1192512875D53A00699FC6 /* MessageEnum.swift in Sources */,
 				6A94FB0D288C4C0000C76513 /* EndVC.swift in Sources */,

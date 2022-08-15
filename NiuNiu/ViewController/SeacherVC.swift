@@ -143,7 +143,7 @@ extension SeacherVC: UITableViewDelegate {
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         ))
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
