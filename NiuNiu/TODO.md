@@ -2,6 +2,9 @@
 
 ## TODO
 
+Si skippa le fasi di end (non va bene)
+Skip check se tutti hanno lo stesso 
+
 ## DOING
 
 ## CHECK

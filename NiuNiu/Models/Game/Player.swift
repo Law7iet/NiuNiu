@@ -74,7 +74,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
     
     /// Change the player's status, change his bid with his points and set to 0 his points
     func allIn() {
-        self.status = .didAllIn
+        self.status = .didCheck
         self.bid += self.points
         self.points = 0
     }

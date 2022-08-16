@@ -115,6 +115,7 @@ class EndVC: UIViewController {
         self.endLabel.text = "Game over"
         self.changeEndLabel = false
         self.quitButton.setTitle("Quit", for: UIControl.State.normal)
+        self.quitButton.setAttributedTitle(NSAttributedString(string: "Quit", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
         self.playButton.isEnabled = false
         // Disconnection
         self.client.disconnect()

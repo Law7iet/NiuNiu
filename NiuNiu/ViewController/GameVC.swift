@@ -232,7 +232,7 @@ class GameVC: UIViewController {
                 message: Message(.check, players: [self.player])
             )
         case .allIn:
-            self.player.status = .didAllIn
+            self.player.status = .check
             self.player.bid += self.player.points
             self.player.points = 0
             self.pointsLabel.text = "Points: 0"

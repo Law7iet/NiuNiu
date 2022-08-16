@@ -20,8 +20,7 @@ class Dealer {
     /// The dictionary that matches the player's name with their MCPeerID
     var playerDict = [String: MCPeerID]()
     
-    // Game data
-    var leader: Player?
+    var isPassedByStopCards: Bool
     var totalBid: Int
     var maxBid: Int
     
@@ -36,7 +35,7 @@ class Dealer {
     // MARK: Methods
     init(server: Server, time: Int?, points: Int?) {
         // Game data
-        self.leader = nil
+        self.isPassedByStopCards = false
         self.maxBid = 0
         self.totalBid = 0
         
@@ -85,27 +84,8 @@ class Dealer {
         }
     }
     
-    /// Check if the players status are equals to the status passed by input.
-    /// If a player's status is disconnected or fold, it continue the control.
-    /// If the check status is check, it includes the allIn status.
-    /// - Parameter status: the status
-    /// - Returns: a boolean value
-    func checkPlayersStatus(status: PlayerEnum) -> Bool {
-        for player in self.players {
-            if player.status == .disconnected || player.status == .fold {
-                continue
-            } else {
-                if player.status == status || status == .didCheck && player.status == .didAllIn {
-                    continue
-                }
-            }
-            return false
-        }
-        return true
-    }
-    
     // MARK: Game functions
-    func startMatch() {
+    func startMatch(forced: Bool) {
         self.removePlayers()
         // Initialization of data
         self.maxBid = 0
@@ -119,7 +99,6 @@ class Dealer {
             // Set the players' next status
             player.status = .bet
         }
-                
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -128,6 +107,7 @@ class Dealer {
     }
     
     func startBet() {
+        print("Function startBet")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -135,7 +115,8 @@ class Dealer {
         )
     }
     
-    func stopBet() {
+    func stopBet(forced flag: Bool) {
+        print("Function stopBet")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -145,21 +126,28 @@ class Dealer {
         // Change the status to the players who didn't bet
         for player in self.players {
             if player.bid > 0 && player.status == .didBet {
-                if player.bid > self.maxBid {
-                    self.maxBid = player.bid
-                    self.leader = player
-                }
                 // Set the players' next status
                 player.status = .check
-            } else if player.status != .disconnected {
+                // Increase total bid and compute the highest bid
+                self.totalBid += player.bid
+                if player.bid > self.maxBid {
+                    self.maxBid = player.bid
+                }
+            } else if player.status != .disconnected && !flag {
                 // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
         }
-        self.leader!.status = .didCheck
+        // Compute the leader or leaders
+        for player in players {
+            if player.bid == self.maxBid {
+                player.status = .didCheck
+            }
+        }
     }
     
     func startCheck() {
+        print("Function stopCheck")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -167,7 +155,8 @@ class Dealer {
         )
     }
     
-    func stopCheck() {
+    func stopCheck(forced flag: Bool) {
+        print("Function stopCheck")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -175,12 +164,13 @@ class Dealer {
         )
         // Compute the total bid
         // Change the status to the players who didn't check
+        self.totalBid = 0
         for player in self.players {
-            if (player.status == .didCheck && player.bid == self.maxBid) || (player.status == .didAllIn) {
+            if player.status == .didCheck {
                 self.totalBid += player.bid
                 // Set the player's next status
                 player.status = .cards
-            } else if player.status != .disconnected {
+            } else if player.status != .disconnected && !flag {
                 // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
@@ -188,6 +178,7 @@ class Dealer {
     }
     
     func startCards() {
+        print("Function startCards")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -195,7 +186,8 @@ class Dealer {
         )
     }
     
-    func stopCards() {
+    func stopCards(forced: Bool) {
+        print("Function stopCards")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -203,30 +195,44 @@ class Dealer {
         )
         // Change status to the players whose didn't choose their cards
         for player in self.players {
-            if player.score == .none && player.status != .disconnected {
+            if player.score == .none && player.status != .disconnected && !forced {
                 // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
         }
+        // Flag used to compute the winner
+        self.isPassedByStopCards = true
     }
     
     func endMatch() {
+        print("Function endMatch")
         // Compute the winner
         var winner: Player? = nil
-        for player in self.players {
-            if winner == nil {
-                if player.status != .fold && player.status != .disconnected {
-                    winner = player
-                }
-            } else {
-                if player.score > winner!.score {
-                    winner = player
-                } else if player.score == winner!.score {
-                    // Tie breaker
-                    if player.tieBreakerCard! > winner!.tieBreakerCard! {
+        if self.isPassedByStopCards == true {
+            for player in self.players {
+                if winner == nil {
+                    if player.status != .fold && player.status != .disconnected {
                         winner = player
                     }
+                } else {
+                    if player.score > winner!.score {
+                        winner = player
+                    } else if player.score == winner!.score {
+                        // Tie breaker
+                        if player.tieBreakerCard! > winner!.tieBreakerCard! {
+                            winner = player
+                        }
+                    }
                 }
+            }
+        } else {
+            // Should be only one player that status is not fold or disconnected
+            for player in self.players {
+                if player.status != .disconnected && player.status != .fold {
+                    print("Winner: \(player.id) con \(player.points)")
+                    winner = player
+                }
+                    
             }
         }
         if winner != nil {
@@ -244,30 +250,29 @@ class Dealer {
     }
     
     func play() {
-        self.startMatch()
+        self.startMatch(forced: false)
         self.timerCounter = 0
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             self.timerCounter += 1
-            print(self.timerCounter)
             switch self.timerCounter {
             case Settings.timeStartBet:
                 print("StartBet")
                 self.startBet()
             case Settings.timeStopBet:
                 print("StopBet")
-                self.stopBet()
+                self.stopBet(forced: false)
             case Settings.timeStartCheck:
                 print("StartCheck")
                 self.startCheck()
             case Settings.timeStopCheck:
                 print("StopCheck")
-                self.stopCheck()
+                self.stopCheck(forced: false)
             case Settings.timeStartCards:
                 print("StartCards")
                 self.startCards()
             case Settings.timeStopCards:
                 print("StopCards")
-                self.stopCards()
+                self.stopCards(forced: false)
             case Settings.timeStartEnd:
                 print("StartEnd")
                 self.endMatch()
@@ -300,25 +305,15 @@ extension Dealer: ServerGameDelegate {
                 // MARK: Fold
                 case .fold:
                     player.fold()
-                    if self.checkPlayersStatus(status: .fold) == true {
-                        self.timerCounter = Settings.timeStartEnd - 1
-                    }
                 // MARK: Bet
                 case .bet:
                     player.bet(amount: user.bid)
-                    if self.checkPlayersStatus(status: .didBet) == true {
-                        self.timerCounter = Settings.timeStartCheck - 1
-                    }
-                    
                 // MARK: Check
                 case .check:
-                    switch user.status {
-                    case .didCheck: player.check(amount: user.bid)
-                    case .didAllIn: player.allIn()
-                    default: break
-                    }
-                    if self.checkPlayersStatus(status: .didCheck) == true {
-                        self.timerCounter = Settings.timeStartCards - 1
+                    if user.bid + player.bid == maxBid {
+                        player.check(amount: user.bid)
+                    } else {
+                        player.allIn()
                     }
                 // MARK: Cards
                 case .cards:
@@ -329,9 +324,6 @@ extension Dealer: ServerGameDelegate {
                         tieBreakerCard: user.tieBreakerCard,
                         score: user.score
                     )
-                    if self.checkPlayersStatus(status: .didCards) == true {
-                        self.timerCounter = Settings.timeStartEnd - 1
-                    }
                 // MARK: Request Player Data
                 case .reqPlayer:
                     let player = Utils.findPlayer(byName: user.id,from: self.players)
@@ -341,6 +333,43 @@ extension Dealer: ServerGameDelegate {
                 default:
                     print("Dealer.didReceiveMessage - Unexpected message type: \(message.type)")
                 }
+                
+                // Check if should skip the game status
+                var nextStep: Int
+                var currentStatus: PlayerEnum
+                var callback: (Bool) -> Void
+                if self.timerCounter < Settings.timeStopBet {
+                    nextStep = Settings.timeStopBet - 1
+                    currentStatus = .didBet
+                    callback = self.stopBet
+                } else if self.timerCounter < Settings.timeStopCheck {
+                    nextStep = Settings.timeStopCheck - 1
+                    currentStatus = .didCheck
+                    callback = self.stopCheck
+                } else {
+                    nextStep = Settings.timeStopCards - 1
+                    currentStatus = .didCards
+                    callback = self.stopCards
+                }
+                
+                var foldedCounter = 0
+                var playedCounter = 0
+                for player in self.players {
+                    if player.status == .fold || player.status == .disconnected {
+                        foldedCounter += 1
+                    } else if player.status == currentStatus {
+                        playedCounter += 1
+                    }
+                }
+                if foldedCounter >= self.players.count - 1 {
+                    // Go to endMatch
+                    callback(true)
+                    self.timerCounter = Settings.timeStartEnd - 1
+                } else if foldedCounter + playedCounter == self.players.count {
+                    // Go to next step
+                    self.timerCounter = nextStep
+                }
+
             }
         } else {
            print("Dealer.didReceiveMessage - Unexpected sender: \(peerID.displayName)")
