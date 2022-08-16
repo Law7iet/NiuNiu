@@ -17,6 +17,7 @@ class Settings {
     
     static let timerShort = 3
     static let timerOffset = 1
+    static let timerEnd = 15
     
     // Time values
     static let timeStartBet =   timerShort + (1 * timerOffset) + (0 * timerLong)

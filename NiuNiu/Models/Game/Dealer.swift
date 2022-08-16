@@ -139,10 +139,16 @@ class Dealer {
             }
         }
         // Compute the leader or leaders
+        var notAllChecked = false
         for player in players {
             if player.bid == self.maxBid {
                 player.status = .didCheck
+            } else {
+                notAllChecked = true
             }
+        }
+        if notAllChecked == false {
+            self.timerCounter = Settings.timeStartCards - 1
         }
     }
     
@@ -186,7 +192,7 @@ class Dealer {
         )
     }
     
-    func stopCards(forced: Bool) {
+    func stopCards(forced flag: Bool) {
         print("Function stopCards")
         // Send message
         self.server.sendMessage(
@@ -195,7 +201,7 @@ class Dealer {
         )
         // Change status to the players whose didn't choose their cards
         for player in self.players {
-            if player.score == .none && player.status != .disconnected && !forced {
+            if player.score == .none && player.status != .disconnected && !flag {
                 // Change to fold only if the players is not disconnected
                 player.status = .fold
             }
@@ -334,10 +340,11 @@ extension Dealer: ServerGameDelegate {
                     print("Dealer.didReceiveMessage - Unexpected message type: \(message.type)")
                 }
                 
-                // Check if should skip the game status
+                // MARK: Check if should skip the game status
+                // Compute the next game status and the current game status
                 var nextStep: Int
                 var currentStatus: PlayerEnum
-                var callback: (Bool) -> Void
+                var callback: ((Bool) -> Void)?
                 if self.timerCounter < Settings.timeStopBet {
                     nextStep = Settings.timeStopBet - 1
                     currentStatus = .didBet
@@ -346,12 +353,16 @@ extension Dealer: ServerGameDelegate {
                     nextStep = Settings.timeStopCheck - 1
                     currentStatus = .didCheck
                     callback = self.stopCheck
-                } else {
+                } else if self.timerCounter < Settings.timeStopCards {
                     nextStep = Settings.timeStopCards - 1
                     currentStatus = .didCards
                     callback = self.stopCards
+                } else {
+                    nextStep = Settings.timeStartEnd - 1
+                    currentStatus = .none
+                    callback = nil
                 }
-                
+                // Count active players and not active players
                 var foldedCounter = 0
                 var playedCounter = 0
                 for player in self.players {
@@ -361,15 +372,15 @@ extension Dealer: ServerGameDelegate {
                         playedCounter += 1
                     }
                 }
+                // Compute
                 if foldedCounter >= self.players.count - 1 {
                     // Go to endMatch
-                    callback(true)
+                    callback?(true)
                     self.timerCounter = Settings.timeStartEnd - 1
                 } else if foldedCounter + playedCounter == self.players.count {
                     // Go to next step
                     self.timerCounter = nextStep
                 }
-
             }
         } else {
            print("Dealer.didReceiveMessage - Unexpected sender: \(peerID.displayName)")

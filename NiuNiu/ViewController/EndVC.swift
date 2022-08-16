@@ -14,7 +14,6 @@ class EndVC: UIViewController {
     var client: Client!
     var players: [Player]!
     var prize: Int!
-    var time: Int!
     
     var timer: Timer?
     var clickedPlayBtn = false
@@ -135,7 +134,7 @@ class EndVC: UIViewController {
         } else {
             var timerCounter = 0
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
-                if timerCounter >= self.time {
+                if timerCounter >= Settings.timerEnd {
                     timer.invalidate()
                     if self.clickedPlayBtn {
                         // UI
@@ -149,7 +148,7 @@ class EndVC: UIViewController {
                     }
                 } else {
                     if self.changeEndLabel {
-                        self.endLabel.text = "Next match will start in \(self.time - timerCounter) seconds"
+                        self.endLabel.text = "Next match will start in \(Settings.timerEnd - timerCounter) seconds"
                     }
                     timerCounter += 1
                 }

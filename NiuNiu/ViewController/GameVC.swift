@@ -158,7 +158,6 @@ class GameVC: UIViewController {
             endVC.client = self.client
             endVC.players = self.players
             endVC.prize = self.totalBid
-            endVC.time = self.time
         }
     }
     
