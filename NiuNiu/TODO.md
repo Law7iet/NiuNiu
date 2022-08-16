@@ -2,6 +2,12 @@
 
 ## TODO
 
+## DOING
+
+## CHECK
+
+## DONE
+
 Statistiche:
 - partite giocate
 - partite vinte
@@ -10,12 +16,6 @@ Statistiche:
 - round vinti
 - percentuale di round vinti
 - punti vinti
-
-## DOING
-
-## CHECK
-
-## DONE
 
 ## REMEMBER
 

@@ -150,13 +150,9 @@ class GameVC: UIViewController {
         super.viewDidAppear(animated)
         self.dealer?.play()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.dealer?.timer?.invalidate()
-    }
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.dealer?.timer?.invalidate()
         if let endVC = segue.destination as? EndVC {
             endVC.dealer = self.dealer
             endVC.client = self.client

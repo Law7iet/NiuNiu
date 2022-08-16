@@ -20,8 +20,11 @@ class Settings {
     
     // Time values
     static let timeStartBet =   timerShort + (1 * timerOffset) + (0 * timerLong)
+    static let timeStopBet =    timerShort + (2 * timerOffset) + (1 * timerLong) - 1
     static let timeStartCheck = timerShort + (2 * timerOffset) + (1 * timerLong)
+    static let timeStopCheck =  timerShort + (2 * timerOffset) + (2 * timerLong) - 1
     static let timeStartCards = timerShort + (3 * timerOffset) + (2 * timerLong)
+    static let timeStopCards =  timerShort + (3 * timerOffset) + (3 * timerLong) - 1
     static let timeStartEnd =   timerShort + (4 * timerOffset) + (3 * timerLong)
     
     static func getInteger(forKey key: String) -> Int? {

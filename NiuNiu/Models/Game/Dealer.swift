@@ -248,17 +248,28 @@ class Dealer {
         self.timerCounter = 0
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             self.timerCounter += 1
+            print(self.timerCounter)
             switch self.timerCounter {
             case Settings.timeStartBet:
+                print("StartBet")
                 self.startBet()
-            case Settings.timeStartCheck:
+            case Settings.timeStopBet:
+                print("StopBet")
                 self.stopBet()
+            case Settings.timeStartCheck:
+                print("StartCheck")
                 self.startCheck()
-            case Settings.timeStartCards:
+            case Settings.timeStopCheck:
+                print("StopCheck")
                 self.stopCheck()
+            case Settings.timeStartCards:
+                print("StartCards")
                 self.startCards()
-            case Settings.timeStartEnd:
+            case Settings.timeStopCards:
+                print("StopCards")
                 self.stopCards()
+            case Settings.timeStartEnd:
+                print("StartEnd")
                 self.endMatch()
             default:
                 break
