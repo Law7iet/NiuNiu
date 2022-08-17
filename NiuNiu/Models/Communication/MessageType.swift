@@ -1,11 +1,11 @@
 //
-//  GameEnum.swift
+//  MessageType.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 06/07/22.
 //
 
-enum MessageEnum: Codable {
+enum MessageType: Codable {
     
     // MARK: Send from server
     // Game status
@@ -38,4 +38,5 @@ enum MessageEnum: Codable {
     case none
     case error
     case test
+    
 }

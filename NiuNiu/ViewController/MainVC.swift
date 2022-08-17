@@ -11,7 +11,7 @@ import MultipeerConnectivity
 class MainVC: UIViewController {
     
     // MARK: Properties
-    @IBOutlet weak var playBtn: UIButton!
+    @IBOutlet weak var playButton: UIButton!
     
     
     // MARK: Supporting functions
@@ -28,8 +28,8 @@ class MainVC: UIViewController {
             self.performSegue(withIdentifier: "showSearcherSegue", sender: nil)
         }
         let menu = UIMenu(title: "Play", options: .displayInline, children: [hostBtn, joinBtn])
-        self.playBtn.showsMenuAsPrimaryAction = true
-        self.playBtn.menu = menu
+        self.playButton.showsMenuAsPrimaryAction = true
+        self.playButton.menu = menu
     }
     
     // MARK: Methods

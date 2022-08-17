@@ -2,6 +2,8 @@
 
 ## TODO
 
+Notifica quando un giocatore effettua un'azione
+
 ## DOING
 
 ## CHECK

@@ -11,38 +11,31 @@ class Dealer {
     
     // MARK: Properties
     // Data structures
-    /// The class that communicates with clients
+    /// The class that communicates with clients.
     var server: Server
-    /// The cards
+    /// The cards.
     var deck: Deck
-    /// The players in the lobby
+    /// The players in the lobby.
     var players: [Player]
-    /// The dictionary that matches the player's name with their MCPeerID
+    /// The dictionary that matches the player's name with their `MCPeerID`.
     var playerDict = [String: MCPeerID]()
-    
-    var isPassedByStopCards: Bool
-    var totalBid: Int
-    var maxBid: Int
     
     // Game Settings
     var time: Int
     var points: Int
     
     // Others
+    var isPassedByStopCards: Bool
+    var totalBid: Int
+    var maxBid: Int
     var timerCounter: Int
     var timer: Timer?
     
     // MARK: Methods
     init(server: Server, time: Int?, points: Int?) {
-        // Game data
-        self.isPassedByStopCards = false
-        self.maxBid = 0
-        self.totalBid = 0
-        
         // Game Settings
         self.time = time ?? Settings.timerLong
         self.points = points ?? Settings.points
-        
         // Data Structures
         self.server = server
         self.deck = Deck()
@@ -51,17 +44,19 @@ class Dealer {
             players.append(Player(id: peerID.displayName, points: points))
             self.playerDict[peerID.displayName] = peerID
         }
-        
         // Others
+        self.isPassedByStopCards = false
+        self.maxBid = 0
+        self.totalBid = 0
         self.timerCounter = 0
         self.server.gameDelegate = self
     }
     
     // MARK: Supporting functions
-    /// Get an array of MCPeerID of the players in the class with .fold or .disconnected status.
-    /// The MCPeerID is taken from the playerDict, using the players' id.
+    /// Get an array of `MCPeerID` of the players in the class with `.fold` or `.disconnected` status.
+    /// The `MCPeerID` is taken from the `playerDict`, using the players' id.
     /// This is the list of the players that the Server has to send a message.
-    /// - Returns: The array of MCPeerID
+    /// - Returns: The array of `MCPeerID`
     func getAvailableMCPeerIDs() -> [MCPeerID] {
         var peerList = [MCPeerID]()
         for player in self.players {
@@ -72,7 +67,7 @@ class Dealer {
         return peerList
     }
     
-    /// Remove the players with status .disconnected or with points equals to 0.
+    /// Remove the players with status `.disconnected` or with points equals to 0.
     /// This is must called before and match.
     func removePlayers() {
         for player in self.players {
@@ -85,7 +80,10 @@ class Dealer {
     }
     
     // MARK: Game functions
-    func startMatch(forced: Bool) {
+    /// Setups the data and send a message to notify the clients.
+    /// The data to setup are: the clients to remove from the previous round, the internal data and the players
+    func startMatch() {
+        print("startMatch()")
         self.removePlayers()
         // Initialization of data
         self.maxBid = 0
@@ -106,8 +104,9 @@ class Dealer {
         )
     }
     
+    /// Send a message to notify the active players of the begining of the bet.
     func startBet() {
-        print("Function startBet")
+        print("startBet()")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -115,8 +114,13 @@ class Dealer {
         )
     }
     
+    /// Send a message to notify the active players of the ending of the bet.
+    /// It computes the highest bid, the total bid and the leaders.
+    /// The leaders are the players whose bid is equal to the highest bid.
+    /// If it'snt forced, it convert the player who didn't bet to `.fold` status.
+    /// - Parameter flag: it states if the function is not called by the `play()` function.
     func stopBet(forced flag: Bool) {
-        print("Function stopBet")
+        print("stopBet(forced: \(flag))")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -138,22 +142,24 @@ class Dealer {
                 player.status = .fold
             }
         }
-        // Compute the leader or leaders
-        var notAllChecked = false
+        // Compute and change the leader or leaders' status
+        var notAllLeaders = false
         for player in players {
             if player.bid == self.maxBid {
                 player.status = .didCheck
             } else {
-                notAllChecked = true
+                notAllLeaders = true
             }
         }
-        if notAllChecked == false {
-            self.timerCounter = Settings.timeStartCards - 1
+        // If all are leader it skips to the pick cards status
+        if notAllLeaders == false {
+            self.timerCounter = Utils.timeStartCards - 1
         }
     }
     
+    /// Send a message to notify the active players of the begining of the check.
     func startCheck() {
-        print("Function stopCheck")
+        print("startCheck()")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -161,8 +167,11 @@ class Dealer {
         )
     }
     
+    /// Send a message to notify the active players of the ending of the check. and computes the total bid.
+    /// If it'snt forced, it convert the player who didn't check to `.fold` status.
+    /// - Parameter flag: it states if the function is not called by the `play()` function.
     func stopCheck(forced flag: Bool) {
-        print("Function stopCheck")
+        print("stopCheck(forced: \(flag)")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -183,6 +192,7 @@ class Dealer {
         }
     }
     
+    /// Send a message to notify the active players of the begining of the cards.
     func startCards() {
         print("Function startCards")
         // Send message
@@ -192,6 +202,9 @@ class Dealer {
         )
     }
     
+    /// Send a message to notify the clients of the ending of the cards.
+    /// If it'snt forced, it convert the player who didn't choose their cards to `.fold` status.
+    /// - Parameter flag: it states if the function is not called by the `play()` function.
     func stopCards(forced flag: Bool) {
         print("Function stopCards")
         // Send message
@@ -210,8 +223,9 @@ class Dealer {
         self.isPassedByStopCards = true
     }
     
+    /// Compute the winner, sort the players for the scoreboard and send a message to the all the players the end of the round.
     func endMatch() {
-        print("Function endMatch")
+        print("endMatch()")
         // Compute the winner
         var winner: Player? = nil
         if self.isPassedByStopCards == true {
@@ -235,7 +249,6 @@ class Dealer {
             // Should be only one player that status is not fold or disconnected
             for player in self.players {
                 if player.status != .disconnected && player.status != .fold {
-                    print("Winner: \(player.id) con \(player.points)")
                     winner = player
                 }
                     
@@ -255,31 +268,32 @@ class Dealer {
         )
     }
     
+    /// Start a round.
     func play() {
-        self.startMatch(forced: false)
+        self.startMatch()
         self.timerCounter = 0
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
             self.timerCounter += 1
             switch self.timerCounter {
-            case Settings.timeStartBet:
+            case Utils.timeStartBet:
                 print("StartBet")
                 self.startBet()
-            case Settings.timeStopBet:
+            case Utils.timeStopBet:
                 print("StopBet")
                 self.stopBet(forced: false)
-            case Settings.timeStartCheck:
+            case Utils.timeStartCheck:
                 print("StartCheck")
                 self.startCheck()
-            case Settings.timeStopCheck:
+            case Utils.timeStopCheck:
                 print("StopCheck")
                 self.stopCheck(forced: false)
-            case Settings.timeStartCards:
+            case Utils.timeStartCards:
                 print("StartCards")
                 self.startCards()
-            case Settings.timeStopCards:
+            case Utils.timeStopCards:
                 print("StopCards")
                 self.stopCards(forced: false)
-            case Settings.timeStartEnd:
+            case Utils.timeStartEnd:
                 print("StartEnd")
                 self.endMatch()
             default:
@@ -293,6 +307,8 @@ class Dealer {
 // MARK: HostManagerDelegate implementation
 extension Dealer: ServerGameDelegate {
     
+    /// It is called when a peer is disconnected.
+    /// - Parameter peerID: the disconnected peer
     func didDisconnect(with peerID: MCPeerID) {
         // Remove from players and the dictionary the disconnected player
         if let player = Utils.findPlayer(byName: peerID.displayName, from: self.players) {
@@ -300,8 +316,15 @@ extension Dealer: ServerGameDelegate {
         }
     }
     
+    /// It is called when it receives a message from the client.
+    /// The message is managed by its type.
+    /// - Parameters:
+    ///   - peerID: the sender.
+    ///   - messageData: the message.
     func didReceiveMessage(from peerID: MCPeerID, messageData: Data) {
+        // It should be called by a players in the data
         if let player = Utils.findPlayer(byName: peerID.displayName, from: self.players) {
+            // It should have a non-empty message
             let message = Message(data: messageData)
             if message.type != .fold && message.players?[0] == nil {
                 print("Dealer.didReceiverMessage - Missing players in message")
@@ -343,22 +366,22 @@ extension Dealer: ServerGameDelegate {
                 // MARK: Check if should skip the game status
                 // Compute the next game status and the current game status
                 var nextStep: Int
-                var currentStatus: PlayerEnum
+                var currentStatus: PlayerStatus
                 var callback: ((Bool) -> Void)?
-                if self.timerCounter < Settings.timeStopBet {
-                    nextStep = Settings.timeStopBet - 1
+                if self.timerCounter < Utils.timeStopBet {
+                    nextStep = Utils.timeStopBet - 1
                     currentStatus = .didBet
                     callback = self.stopBet
-                } else if self.timerCounter < Settings.timeStopCheck {
-                    nextStep = Settings.timeStopCheck - 1
+                } else if self.timerCounter < Utils.timeStopCheck {
+                    nextStep = Utils.timeStopCheck - 1
                     currentStatus = .didCheck
                     callback = self.stopCheck
-                } else if self.timerCounter < Settings.timeStopCards {
-                    nextStep = Settings.timeStopCards - 1
+                } else if self.timerCounter < Utils.timeStopCards {
+                    nextStep = Utils.timeStopCards - 1
                     currentStatus = .didCards
                     callback = self.stopCards
                 } else {
-                    nextStep = Settings.timeStartEnd - 1
+                    nextStep = Utils.timeStartEnd - 1
                     currentStatus = .none
                     callback = nil
                 }
@@ -376,7 +399,7 @@ extension Dealer: ServerGameDelegate {
                 if foldedCounter >= self.players.count - 1 {
                     // Go to endMatch
                     callback?(true)
-                    self.timerCounter = Settings.timeStartEnd - 1
+                    self.timerCounter = Utils.timeStartEnd - 1
                 } else if foldedCounter + playedCounter == self.players.count {
                     // Go to next step
                     self.timerCounter = nextStep

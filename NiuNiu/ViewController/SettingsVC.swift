@@ -19,13 +19,7 @@ class SettingsVC: UIViewController {
     @IBOutlet weak var playersSlider: UISlider!
     
     // MARK: Supporting functions
-    
-    // MARK: Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.usernameTextField.delegate = self
-
+    func setupUI() {
         self.usernameTextField.text = Settings.username
         self.timerLabel.text = "Timer: \(Settings.timerLong)"
         self.timerSlider.setValue(Float(Settings.timerLong), animated: true)
@@ -35,24 +29,28 @@ class SettingsVC: UIViewController {
         self.playersSlider.setValue(Float(Settings.numberOfPlayers), animated: true)
     }
     
+    // MARK: Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.usernameTextField.delegate = self
+        self.setupUI()
+    }
+    
     // MARK: Actions
     @IBAction func changeTimerSlider(_ sender: UISlider) {
-        let currentValue = Int(sender.value)
-        self.timerLabel.text = "Timer: \(currentValue)"
+        self.timerLabel.text = "Timer: \(Int(sender.value))"
     }
     
     @IBAction func changePointsSlider(_ sender: UISlider) {
-        let currentValue = Int(sender.value)
-        self.pointsLabel.text = "Points: \(currentValue)"
+        self.pointsLabel.text = "Points: \(Int(sender.value))"
     }
 
     @IBAction func changePlayersSlider(_ sender: UISlider) {
-        let currentValue = Int(sender.value)
-        self.playersLabel.text = "Number of players: \(currentValue)"
+        self.playersLabel.text = "Number of players: \(Int(sender.value))"
     }
     
     @IBAction func clickSave(_ sender: Any) {
-        // Username
+        // Compute the username
         var username = self.usernameTextField.text!
         if username.isEmpty || username.trimmingCharacters(in: .whitespaces).isEmpty {
             username = UIDevice.current.name
@@ -71,8 +69,10 @@ class SettingsVC: UIViewController {
 }
 
 extension SettingsVC: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
 }

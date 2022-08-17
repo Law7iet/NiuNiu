@@ -11,17 +11,16 @@ class Player: Codable, Comparable, CustomStringConvertible {
     
     // MARK: Properties
     var id: String
-    var status: PlayerEnum
+    var status: PlayerStatus
     var points: Int
     var bid: Int
     var cards: [Card]
     var pickedCards: [Bool]
     var numberOfPickedCards: Int
     var tieBreakerCard: Card?
-    var score: ScoreEnum
+    var score: Score
     
-    // MARK: For debug
-    /// A string that describes the player
+    /// A string that describes the player.
     var description: String {
         var cardsDescription = ""
         if !self.cards.isEmpty {
@@ -101,7 +100,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// - Parameter numberOfPickedCards: the number of picked cards
     /// - Parameter tieBreakerCard: the card used if there's a tie
     /// - Parameter score: the score
-    func chooseCards(cards: [Card], pickedCards: [Bool], numberOfPickedCards: Int, tieBreakerCard: Card?, score: ScoreEnum) {
+    func chooseCards(cards: [Card], pickedCards: [Bool], numberOfPickedCards: Int, tieBreakerCard: Card?, score: Score) {
         self.status = .didCards
         self.cards = cards
         self.pickedCards = pickedCards
@@ -110,7 +109,10 @@ class Player: Codable, Comparable, CustomStringConvertible {
         self.score = score
     }
     
-    func pickCard(atIndex index: Int) {
+    /// Click a card states by the index passed by parameter; it can be a selection or a deselection of the card.
+    /// It also compute the player's score.
+    /// - Parameter index: the index of the card in the array.
+    func clickCard(atIndex index: Int) {
         // Change pickedCards and numberOfPickedCards
         if self.pickedCards[index] == false {
             self.pickedCards[index] = true
@@ -123,7 +125,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
         // Compute the score and the tie breaker card
         if self.numberOfPickedCards == 1 {
             let index = self.pickedCards.firstIndex(of: true)!
-            self.score = ScoreEnum(rawValue: self.cards[index].rank.value)!
+            self.score = Score(rawValue: self.cards[index].rank.value)!
             self.tieBreakerCard = self.cards[index]
         } else if self.numberOfPickedCards == 3 {
             // Compute the sum of the cards
@@ -150,7 +152,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
                 if totalTwo % 10 == 0 {
                     self.score = .niuNiu
                 } else {
-                    self.score =  ScoreEnum(rawValue: ((totalTwo % 10) + 20))!
+                    self.score =  Score(rawValue: ((totalTwo % 10) + 20))!
                 }
             } else {
                 // Error: picked cards not allowed

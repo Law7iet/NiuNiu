@@ -134,7 +134,7 @@ class EndVC: UIViewController {
         } else {
             var timerCounter = 0
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
-                if timerCounter >= Settings.timerEnd {
+                if timerCounter >= Utils.timerMedium {
                     timer.invalidate()
                     if self.clickedPlayBtn {
                         // UI
@@ -148,7 +148,7 @@ class EndVC: UIViewController {
                     }
                 } else {
                     if self.changeEndLabel {
-                        self.endLabel.text = "Next match will start in \(Settings.timerEnd - timerCounter) seconds"
+                        self.endLabel.text = "Next match will start in \(Utils.timerMedium - timerCounter) seconds"
                     }
                     timerCounter += 1
                 }
@@ -179,8 +179,8 @@ class EndVC: UIViewController {
             )
             alert.addAction(UIAlertAction(
                 title: "No",
-                style: .default)
-            )
+                style: .default
+            ))
             alert.addAction(UIAlertAction(
                 title: "Yes",
                 style: .destructive,

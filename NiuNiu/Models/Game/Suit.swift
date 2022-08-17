@@ -1,18 +1,18 @@
 //
-//  SuitEnum.swift
+//  Suit.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 07/07/22.
 //
 
-enum SuitEnum: Int, CaseIterable, Codable, Comparable {
+enum Suit: Int, CaseIterable, Codable, Comparable {
     
     case hearts = 1
     case diamonds = 2
     case clubs = 3
     case spades = 4
     
-    /// A string that describes the suit value
+    /// A string that describes the suit value.
     var description: String {
         switch self {
         case .hearts: return "hearts"
@@ -22,7 +22,7 @@ enum SuitEnum: Int, CaseIterable, Codable, Comparable {
         }
     }
     
-    static func < (lhs: SuitEnum, rhs: SuitEnum) -> Bool {
+    static func < (lhs: Suit, rhs: Suit) -> Bool {
         return lhs.rawValue > rhs.rawValue
     }
     

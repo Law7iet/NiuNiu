@@ -1,11 +1,11 @@
 //
-//  ScoreEnum.swift
+//  Score.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 16/07/22.
 //
 
-enum ScoreEnum: Int, Codable, Comparable  {
+enum Score: Int, Codable, Comparable  {
 
     // No value
     case none = 0
@@ -35,7 +35,7 @@ enum ScoreEnum: Int, Codable, Comparable  {
     case niuNine = 29
     case niuNiu = 30
     
-    /// A string that describes the score value
+    /// A string that describes the score value.
     var description: String {
         switch self {
         case .none: return "Zero"
@@ -65,7 +65,7 @@ enum ScoreEnum: Int, Codable, Comparable  {
         }
     }
 
-    static func < (lhs: ScoreEnum, rhs: ScoreEnum) -> Bool {
+    static func < (lhs: Score, rhs: Score) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
     

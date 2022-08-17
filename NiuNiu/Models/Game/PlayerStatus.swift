@@ -1,11 +1,11 @@
 //
-//  PlayerEnum.swift
+//  PlayerStatus.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 22/07/22.
 //
 
-enum PlayerEnum: Codable {
+enum PlayerStatus: Codable {
 
     case bet
     case check
@@ -21,7 +21,7 @@ enum PlayerEnum: Codable {
     case winner
     case none
     
-    // MARK: For debug
+    /// A string that describes the player enum
     var description: String {
         switch self {
         case .bet: return "bet"

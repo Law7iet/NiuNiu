@@ -39,7 +39,15 @@ class LobbyVC: UIViewController {
     func setupLobby() {
         // Navigation bar
         self.playButton.tintColor = UIColor(named: "Orange")
-        self.playButton.setAttributedTitle(NSAttributedString(string: "Play", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 20)!]), for: UIControl.State.normal)
+        self.playButton.setAttributedTitle(
+            NSAttributedString(
+                string: "Play",
+                attributes: [NSAttributedString.Key.font: UIFont(
+                    name: "Marker Felt Thin",
+                    size: 20)!
+                ]),
+            for: UIControl.State.normal
+        )
         // Lobby
         if self.server == nil {
             // Get the clients that are already connected
@@ -47,7 +55,7 @@ class LobbyVC: UIViewController {
             // Remove the host
             let index = preLobby.firstIndex(of: self.client.serverPeerID!)!
             preLobby.remove(at: index)
-            
+            // Update the lobby
             self.lobby = preLobby + [self.client.peerID]
             self.playButton.isHidden = true
         } else {
@@ -74,9 +82,13 @@ class LobbyVC: UIViewController {
                 message: message,
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: "Ok", style: .default) { (alertAction: UIAlertAction) in
-                self.navigationController?.popViewController(animated: true)
-            })
+            alert.addAction(UIAlertAction(
+                title: "Ok",
+                style: .default,
+                handler: { (alertAction: UIAlertAction) in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            ))
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
             }
@@ -205,7 +217,13 @@ extension LobbyVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.attributedText = NSAttributedString(string: Utils.getPeersName(from: self.lobby)[indexPath.row], attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!])
+        content.attributedText = NSAttributedString(
+            string: Utils.getPeersName(from: self.lobby)[indexPath.row],
+            attributes: [NSAttributedString.Key.font: UIFont(
+                name: "Marker Felt Thin",
+                size: 17
+            )!]
+        )
         cell.contentConfiguration = content
         return cell
     }

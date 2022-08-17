@@ -60,24 +60,28 @@ class Client: NSObject {
     }
     
     // MARK: Browser's methods
+    /// It opens the client's browser
     func startBrowsing() {
         self.browser.startBrowsingForPeers()
     }
     
+    /// It closes the client's browser
     func stopBrowsing() {
         self.browser.stopBrowsingForPeers()
     }
 
     // MARK: Session's methods
+    /// It requests the connection to the server
     func connect(to peerID: MCPeerID) {
         self.browser.invitePeer(
             peerID,
             to: self.session,
             withContext: nil,
-            timeout: Double(Settings.timerShort)
+            timeout: Double(Utils.timerShort)
         )
     }
-    
+
+    /// It disconnects the client with the other peers
     func disconnect() {
         self.session.disconnect()
     }
@@ -155,7 +159,6 @@ extension Client: MCSessionDelegate {
         }
     }
     
-    // Not used
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {}
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {}

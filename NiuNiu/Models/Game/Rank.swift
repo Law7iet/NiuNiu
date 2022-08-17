@@ -1,11 +1,11 @@
 //
-//  RankEnum.swift
+//  Rank.swift
 //  NiuNiu
 //
 //  Created by Han Chu on 07/07/22.
 //
 
-enum RankEnum: Int, CaseIterable, Codable, Comparable {
+enum Rank: Int, CaseIterable, Codable, Comparable {
     
     case ace = 1
     case two = 2
@@ -21,7 +21,7 @@ enum RankEnum: Int, CaseIterable, Codable, Comparable {
     case queen = 12
     case king = 13
     
-    /// The integer value of the enum during the score calculation
+    /// The integer value of the enum during the score calculation.
     var value: Int {
         switch self {
         case .ace: return 1
@@ -40,7 +40,7 @@ enum RankEnum: Int, CaseIterable, Codable, Comparable {
         }
     }
     
-    static func < (lhs: RankEnum, rhs: RankEnum) -> Bool {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
     

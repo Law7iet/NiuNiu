@@ -9,25 +9,27 @@ import MultipeerConnectivity
 
 class Message: Codable {
     
-    var type: MessageEnum
+    // MARK: Properties
+    var type: MessageType
     var amount: Int?
     var players: [Player]?
     
-    init(_ type: MessageEnum) {
+    // MARK: Methods
+    init(_ type: MessageType) {
         self.type = type
     }
     
-    init(_ type: MessageEnum, amount: Int) {
+    init(_ type: MessageType, amount: Int) {
         self.type = type
         self.amount = amount
     }
     
-    init(_ type: MessageEnum, players: [Player]) {
+    init(_ type: MessageType, players: [Player]) {
         self.type = type
         self.players = players
     }
     
-    init(_ type: MessageEnum, amount: Int?, players: [Player]?) {
+    init(_ type: MessageType, amount: Int?, players: [Player]?) {
         self.type = type
         self.amount = amount
         self.players = players
@@ -44,6 +46,8 @@ class Message: Codable {
         }
     }
     
+    /// Convert the message to `Data`.
+    /// - Returns: the message in `Data` type.
     func convertToData() -> Data? {
         let object = Message(
             self.type,

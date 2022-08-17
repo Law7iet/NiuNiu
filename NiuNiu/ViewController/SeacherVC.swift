@@ -79,7 +79,7 @@ class SeacherVC: UIViewController {
         // Refresh the list of hosts
         self.hosts = [MCPeerID]()
         self.hostsTableView.reloadData()
-        // Client
+        // Client stuffs
         self.client.searchDelegate = self
         self.client.startBrowsing()
     }
@@ -92,7 +92,7 @@ class SeacherVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Clear client's search delegate
         self.client.searchDelegate = nil
-        // Setup the LobbyVC
+        // Setup the data for LobbyVC
         let lobbyVC = segue.destination as! LobbyVC
         lobbyVC.client = self.client
         lobbyVC.maxPlayers = self.maxPlayers
@@ -110,7 +110,13 @@ extension SeacherVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.attributedText = NSAttributedString(string: Utils.getPeersName(from: self.hosts)[indexPath.row], attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!])
+        content.attributedText = NSAttributedString(
+            string: Utils.getPeersName(from: self.hosts)[indexPath.row],
+            attributes: [NSAttributedString.Key.font: UIFont(
+                name: "Marker Felt Thin",
+                size: 17
+            )!]
+        )
         cell.contentConfiguration = content
         return cell
     }

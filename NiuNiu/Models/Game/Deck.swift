@@ -7,24 +7,27 @@
 
 class Deck {
     
+    // Properties
     var cards: [Card]
     
+    // Methods
     init() {
         // Deck
         self.cards = [Card]()
-        for suit in SuitEnum.allCases {
-            for rank in RankEnum.allCases {
+        for suit in Suit.allCases {
+            for rank in Rank.allCases {
                 cards.append(Card(rank: rank, suit: suit))
             }
         }
     }
     
+    /// Shuffle the deck.
     func shuffle() {
         self.cards.shuffle()
     }
     
-    /// Returns 5 cards form the deck
-    /// - Returns: The 5 cards
+    /// Returns 5 cards form the deck.
+    /// - Returns: The 5 cards.
     func getCards() -> [Card] {
         var myCards = [Card]()
         for _ in 1...5 {

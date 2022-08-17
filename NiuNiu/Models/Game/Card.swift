@@ -7,8 +7,9 @@
 
 struct Card: Codable, Comparable, CustomStringConvertible {
     
-    var rank: RankEnum
-    var suit: SuitEnum
+    // MARK: Properties
+    var rank: Rank
+    var suit: Suit
     
     /// A string that describes the card value
     var description: String {
@@ -20,7 +21,8 @@ struct Card: Codable, Comparable, CustomStringConvertible {
         return "\(self.rank.rawValue)_of_\(suit.description)"
     }
     
-    init(rank x: RankEnum, suit y: SuitEnum) {
+    // MARK: Methods
+    init(rank x: Rank, suit y: Suit) {
         rank = x
         suit = y
     }

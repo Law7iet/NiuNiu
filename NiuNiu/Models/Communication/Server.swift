@@ -43,15 +43,18 @@ class Server: NSObject {
     }
     
     // MARK: Advertise's methods
+    /// It opens the server's advertiser
     func startAdvertising() {
         self.advertiser.startAdvertisingPeer()
     }
     
+    /// It closes the server's advertiser
     func stopAdvertising() {
         self.advertiser.stopAdvertisingPeer()
     }
     
     // MARK: Session's methods
+    /// It disconnects the server with the clients
     func disconnect() {
         self.session.disconnect()
     }
@@ -114,7 +117,6 @@ extension Server: MCSessionDelegate {
         self.gameDelegate?.didReceiveMessage(from: peerID, messageData: data)
     }
     
-    // Not used
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {}
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {}
