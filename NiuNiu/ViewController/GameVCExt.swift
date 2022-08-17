@@ -298,14 +298,55 @@ extension GameVC: ClientGameDelegate {
                 self.players = message.players!
                 self.performSegue(withIdentifier: "showEndSegue", sender: nil)
             }
-        // MARK: Response from the server
+        // MARK: resPlayer
         case .resPlayer:
+            // Update the UI
             DispatchQueue.main.async {
                 self.userData?.message = "Points: \(message.players![0].points)\nBid: \(message.players![0].bid)"
                 self.userDataSpinner?.stopAnimating()
             }
+        // MARK: notify
+        case .notify:
+            if let player = message.players?[0] {
+                if player.id != self.client.peerID.displayName {
+                    DispatchQueue.main.async {
+                        // Find the player's index
+                        for index in 0 ..< 4 {
+                            // Compute the message
+                            if self.playersButtons[index].currentAttributedTitle?.string == player.id {
+                                var message = ""
+                                switch player.status {
+                                case .didBet: message = "Bet \(player.bid)"
+                                case .didCheck: message = "Checked"
+                                case .didCards: message = "Choosen cards"
+                                default: break
+                                }
+                                self.playersLabel[index].attributedText = NSAttributedString(
+                                    string: message,
+                                    attributes: [NSAttributedString.Key.font: UIFont(
+                                        name: "Marker Felt Thin",
+                                        size: 17
+                                    )!]
+                                )
+                                // Animation
+                                UIView.transition(with: self.playersLabel[index], duration: 0.5, options: .transitionCrossDissolve) {
+                                    self.playersLabel[index].isHidden = false
+                                }
+                                Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
+                                    UIView.transition(with: self.playersLabel[index], duration: 0.5, options: .transitionCrossDissolve) {
+                                        self.playersLabel[index].isHidden = true
+                                    }
+                                    timer.invalidate()
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("ClientGameVC.didReceiveMessage - empty players")
+            }
         default:
-            print("ClientGameVC.didReceiveMessageFrom - message.type == \(message.type)")
+            print("ClientGameVC.didReceiveMessage - message.type == \(message.type)")
         }
     }
     

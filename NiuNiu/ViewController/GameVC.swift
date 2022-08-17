@@ -30,6 +30,7 @@ class GameVC: UIViewController {
     @IBOutlet weak var foldLabel: UILabel!
     @IBOutlet weak var playerLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
+    @IBOutlet var playersLabel: [UILabel]!
     
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet var playersButtons: [UIButton]!

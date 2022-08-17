@@ -194,7 +194,7 @@ class Dealer {
     
     /// Send a message to notify the active players of the begining of the cards.
     func startCards() {
-        print("Function startCards")
+        print("startCards()")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -206,7 +206,7 @@ class Dealer {
     /// If it'snt forced, it convert the player who didn't choose their cards to `.fold` status.
     /// - Parameter flag: it states if the function is not called by the `play()` function.
     func stopCards(forced flag: Bool) {
-        print("Function stopCards")
+        print("stopCards(forced: \(flag)")
         // Send message
         self.server.sendMessage(
             to: self.getAvailableMCPeerIDs(),
@@ -334,9 +334,17 @@ extension Dealer: ServerGameDelegate {
                 // MARK: Fold
                 case .fold:
                     player.fold()
+                    self.server.sendMessage(
+                        to: self.getAvailableMCPeerIDs(),
+                        message: Message(.notify, players: [player])
+                    )
                 // MARK: Bet
                 case .bet:
                     player.bet(amount: user.bid)
+                    self.server.sendMessage(
+                        to: self.getAvailableMCPeerIDs(),
+                        message: Message(.notify, players: [player])
+                    )
                 // MARK: Check
                 case .check:
                     if user.bid + player.bid == maxBid {
@@ -344,6 +352,10 @@ extension Dealer: ServerGameDelegate {
                     } else {
                         player.allIn()
                     }
+                    self.server.sendMessage(
+                        to: self.getAvailableMCPeerIDs(),
+                        message: Message(.notify, players: [player])
+                    )
                 // MARK: Cards
                 case .cards:
                     player.chooseCards(
@@ -353,11 +365,17 @@ extension Dealer: ServerGameDelegate {
                         tieBreakerCard: user.tieBreakerCard,
                         score: user.score
                     )
+                    self.server.sendMessage(
+                        to: self.getAvailableMCPeerIDs(),
+                        message: Message(.notify, players: [player])
+                    )
                 // MARK: Request Player Data
                 case .reqPlayer:
                     let player = Utils.findPlayer(byName: user.id,from: self.players)
                     if player != nil {
-                        self.server.sendMessage(to: [peerID], message: Message(.resPlayer, players: [player!]))
+                        self.server.sendMessage(
+                            to: [peerID],
+                            message: Message(.resPlayer, players: [player!]))
                     }
                 default:
                     print("Dealer.didReceiveMessage - Unexpected message type: \(message.type)")

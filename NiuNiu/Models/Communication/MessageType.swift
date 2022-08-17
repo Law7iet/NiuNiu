@@ -22,6 +22,7 @@ enum MessageType: Codable {
     // Game utility
     case maxPlayers
     case resPlayer
+    case notify
     
     // Connections
     case closeSession
