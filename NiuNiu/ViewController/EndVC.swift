@@ -118,13 +118,7 @@ class EndVC: UIViewController {
         self.changeEndLabel = false
         self.quitButton.setTitle("Quit", for: UIControl.State.normal)
         self.quitButton.setAttributedTitle(
-            NSAttributedString(
-                string: "Quit",
-                attributes: [NSAttributedString.Key.font: UIFont(
-                    name: "Marker Felt Thin",
-                    size: 17
-                )!]
-            ),
+            Utils.myString("Quit"),
             for: .normal)
         self.playButton.isEnabled = false
         // Disconnection

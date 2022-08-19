@@ -28,15 +28,9 @@ class Utils {
     static let confermClientLeftMessage =   "If you quit the game, you can't play until the game ends. Are you sure to quit?"
     static let hostLeftMessage =            "Lost connection with the server"
     static let clientLeftMessage =          "Lost connection with the clients"
-    
-    // MARK: Card setting
+    // Cards settings
     static let cornerRadius = CGFloat(5.0)
     static let cornerRadiusSmall = CGFloat(3.0)
-
-    /// The border's width of a card is equal to 1.85% of the card's height.
-    /// - Parameter height: the card's height.
-    /// - Returns: the border width.
-    static func borderWidth(withHeight height: CGFloat) -> CGFloat { return height * 1.85 / 100 }
 
     // MARK: Supporting functions
     /// Find a player by name from the array of `Player` passed by parameter.
@@ -63,6 +57,13 @@ class Utils {
         }
         return array
     }
+        
+    /// The border's width of a card is equal to 1.85% of the card's height.
+    /// - Parameter height: the card's height.
+    /// - Returns: the border width.
+    static func borderWidth(withHeight height: CGFloat) -> CGFloat {
+        return height * 1.85 / 100
+    }
     
     /// Get the view controller class which is currently visible.
     /// - Returns: the view controller.
@@ -72,6 +73,17 @@ class Utils {
         let window = windowScene?.windows.first
         return window?.visibleViewController
     }
+    
+    /// Return an attributed string with the custom font and the string passed by parameter
+    /// - Parameter msg: the string
+    /// - Returns: the attributed string
+    static func myString(_ msg: String) -> NSAttributedString {
+        NSAttributedString(
+            string: msg,
+            attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]
+        )
+    }
+
 }
 
 // MARK: This is an extension used to find the current view controller

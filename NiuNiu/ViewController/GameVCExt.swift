@@ -122,13 +122,7 @@ extension GameVC: ClientGameDelegate {
                 self.statusLabel.text = "Start Bet!"
                 self.timerLabel.text = String(self.time)
                 self.actionButton.setAttributedTitle(
-                    NSAttributedString(
-                        string: "Bet (1)",
-                        attributes: [NSAttributedString.Key.font: UIFont(
-                            name: "Marker Felt Thin",
-                            size: 17
-                        )!]
-                    ),
+                    Utils.myString("Bet (1)"),
                     for: .normal
                 )
                 self.setupUserButton(withSlider: true, turnOn: true)
@@ -175,26 +169,14 @@ extension GameVC: ClientGameDelegate {
                         // Check
                         self.player.status = .check
                         self.actionButton.setAttributedTitle(
-                            NSAttributedString(
-                                string: "Check +\(diff)",
-                                attributes: [NSAttributedString.Key.font: UIFont(
-                                    name: "Marker Felt Thin",
-                                    size: 17
-                                )!]
-                            ),
+                            Utils.myString("Check +\(diff)"),
                             for: .normal
                         )
                     } else {
                         // All-in
                         self.player.status = .allIn
                         self.actionButton.setAttributedTitle(
-                            NSAttributedString(
-                                string: "All-in",
-                                attributes: [NSAttributedString.Key.font: UIFont(
-                                    name: "Marker Felt Thin",
-                                    size: 17
-                                )!]
-                            ),
+                            Utils.myString("All-in"),
                             for: .normal
                         )
                     }
@@ -219,7 +201,7 @@ extension GameVC: ClientGameDelegate {
         case .stopCheck:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                if self.isClicked == false && (self.player.bid + self.player.fixBid) != self.maxBid && message.amount == 0 {
+                if self.isClicked == false && self.player.status != .didCheck && message.amount == 0 && self.player.bid != self.maxBid {
                     // The player didn't check
                     self.foldAction()
                 }
@@ -238,13 +220,7 @@ extension GameVC: ClientGameDelegate {
                 self.statusLabel.text = "Start pick cards!"
                 self.timerLabel.text = String(self.time)
                 self.actionButton.setAttributedTitle(
-                    NSAttributedString(
-                        string: "Pick cards",
-                        attributes: [NSAttributedString.Key.font: UIFont(
-                            name: "Marker Felt Thin",
-                            size: 17
-                        )!]
-                    ),
+                    Utils.myString("Pick cards"),
                     for: .normal
                 )
                 self.setupUserButton(withSlider: false, turnOn: true)

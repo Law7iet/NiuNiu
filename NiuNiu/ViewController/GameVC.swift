@@ -92,13 +92,7 @@ class GameVC: UIViewController {
             } else {
                 // Setup the other players
                 self.playersButtons[index].setAttributedTitle(
-                    NSAttributedString(
-                        string: player.id,
-                        attributes: [NSAttributedString.Key.font: UIFont(
-                            name: "Marker Felt Thin",
-                            size: 17
-                        )!]
-                    ),
+                    Utils.myString(player.id),
                     for: .normal
                 )
                 self.playersButtons[index].isEnabled = true
@@ -248,13 +242,7 @@ class GameVC: UIViewController {
                 score: self.player.score
             )
             self.actionButton.setAttributedTitle(
-                NSAttributedString(
-                    string: "Cards picked",
-                    attributes: [NSAttributedString.Key.font: UIFont(
-                        name: "Marker Felt Thin",
-                        size: 17
-                    )!]
-                ),
+                Utils.myString("Cards picked"),
                 for: .normal
             )
             for btn in self.cardsButtons {
@@ -271,16 +259,9 @@ class GameVC: UIViewController {
     }
     
     @IBAction func changeSliderValue(_ sender: UISlider) {
-        let currentValue = Int(sender.value)
         if self.player.status == .bet {
             self.actionButton.setAttributedTitle(
-                NSAttributedString(
-                    string: "Bet (\(currentValue))",
-                    attributes: [NSAttributedString.Key.font: UIFont(
-                        name: "Marker Felt Thin",
-                        size: 17
-                    )!]
-                ),
+                Utils.myString("Bet (\(Int(sender.value)))"),
                 for: .normal
             )
         }

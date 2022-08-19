@@ -68,18 +68,33 @@ class SettingsVC: UIViewController {
     }
     
     @IBAction func clickReset(_ sender: Any) {
-        let username = UIDevice.current.name
-        let timer = 20
-        let points = 50
-        let numberOfPlayers = 5
-        Settings.saveSettings(
-            username: username,
-            timer: timer,
-            points: points,
-            numberOfPlayers: numberOfPlayers
+        let alert = UIAlertController(
+            title: "Reset settings",
+            message: "Do you want to reset the data?",
+            preferredStyle: .alert
         )
-        // Turn back
-        self.navigationController?.popViewController(animated: true)
+        alert.addAction(UIAlertAction(
+            title: "Yes",
+            style: .destructive,
+            handler: { (action: UIAlertAction) in
+                let username = UIDevice.current.name
+                let timer = 20
+                let points = 50
+                let numberOfPlayers = 5
+                Settings.saveSettings(
+                    username: username,
+                    timer: timer,
+                    points: points,
+                    numberOfPlayers: numberOfPlayers
+                )
+                self.setupUI()
+            }
+        ))
+        alert.addAction(UIAlertAction(
+            title: "No",
+            style: .cancel
+        ))
+        self.present(alert, animated: true)
     }
     
 }

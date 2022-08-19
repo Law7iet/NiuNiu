@@ -210,13 +210,7 @@ extension LobbyVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.attributedText = NSAttributedString(
-            string: Utils.getPeersName(from: self.lobby)[indexPath.row],
-            attributes: [NSAttributedString.Key.font: UIFont(
-                name: "Marker Felt Thin",
-                size: 17
-            )!]
-        )
+        content.attributedText = Utils.myString(Utils.getPeersName(from: self.lobby)[indexPath.row])
         cell.contentConfiguration = content
         return cell
     }

@@ -110,13 +110,7 @@ extension SeacherVC: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = hostsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.attributedText = NSAttributedString(
-            string: Utils.getPeersName(from: self.hosts)[indexPath.row],
-            attributes: [NSAttributedString.Key.font: UIFont(
-                name: "Marker Felt Thin",
-                size: 17
-            )!]
-        )
+        content.attributedText = Utils.myString(Utils.getPeersName(from: self.hosts)[indexPath.row])
         cell.contentConfiguration = content
         return cell
     }
