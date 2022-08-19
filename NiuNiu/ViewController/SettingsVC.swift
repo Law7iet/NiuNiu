@@ -66,6 +66,22 @@ class SettingsVC: UIViewController {
         // Turn back
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func clickReset(_ sender: Any) {
+        let username = UIDevice.current.name
+        let timer = 20
+        let points = 50
+        let numberOfPlayers = 5
+        Settings.saveSettings(
+            username: username,
+            timer: timer,
+            points: points,
+            numberOfPlayers: numberOfPlayers
+        )
+        // Turn back
+        self.navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 extension SettingsVC: UITextFieldDelegate {

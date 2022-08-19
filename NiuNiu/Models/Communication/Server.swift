@@ -43,26 +43,26 @@ class Server: NSObject {
     }
     
     // MARK: Advertise's methods
-    /// It opens the server's advertiser
+    /// It opens the server's advertiser.
     func startAdvertising() {
         self.advertiser.startAdvertisingPeer()
     }
     
-    /// It closes the server's advertiser
+    /// It closes the server's advertiser.
     func stopAdvertising() {
         self.advertiser.stopAdvertisingPeer()
     }
     
     // MARK: Session's methods
-    /// It disconnects the server with the clients
+    /// It disconnects the server with the clients.
     func disconnect() {
         self.session.disconnect()
     }
     
-    /// Send a message to the users with MCPeerID passed by parameter.
+    /// Send a message to the users with `MCPeerID` passed by parameter.
     /// - Parameters:
-    ///   - users: The receivers' MCPeerID.
-    ///   - msg: The message.
+    ///   - users: the receivers' `MCPeerID`.
+    ///   - msg: the message.
     func sendMessage(to users: [MCPeerID], message msg: Message) {
         if let data = msg.convertToData() {
             do {
@@ -79,6 +79,27 @@ class Server: NSObject {
             print("Server.sendMessage - empty data")
         }
     }
+    
+    /// Send a message to the connected users.
+    /// - Parameters:
+    ///   - msg: the message.
+    func sendMessage(_ msg: Message) {
+        if let data = msg.convertToData() {
+            do {
+                try self.session.send(
+                    data,
+                    toPeers: self.connectedPeers,
+                    with: .reliable
+                )
+            } catch {
+                print("Server.sendMessage - self.session.send error")
+                print(error)
+            }
+        } else {
+            print("Server.sendMessage - empty data")
+        }
+    }
+    
 }
 
 extension Server: MCNearbyServiceAdvertiserDelegate {

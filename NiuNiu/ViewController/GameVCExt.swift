@@ -13,6 +13,15 @@ import MultipeerConnectivity
 extension GameVC: ClientGameDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
+        
+        let handler = { (action: UIAlertAction) in
+            self.forceEndVC = true
+            self.client.disconnect()
+            self.dealer?.timer?.invalidate()
+            self.dealer?.server.disconnect()
+            self.performSegue(withIdentifier: "showEndSegue", sender: Any?.self)
+        }
+        
         if self.client.session.connectedPeers.count == 1 {
             // Insufficient players in the lobby
             let alert = UIAlertController(
@@ -23,12 +32,7 @@ extension GameVC: ClientGameDelegate {
             alert.addAction(UIAlertAction(
                 title: "Ok",
                 style: .default,
-                handler: { (action) in
-                    self.client.disconnect()
-                    self.dealer?.timer?.invalidate()
-                    self.dealer?.server.disconnect()
-                    self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
-                }
+                handler: handler
             ))
             DispatchQueue.main.async {
                 self.present(alert, animated: true)
@@ -55,12 +59,7 @@ extension GameVC: ClientGameDelegate {
                 alert.addAction(UIAlertAction(
                     title: "Ok",
                     style: .default,
-                    handler: { (action) in
-                        self.client.disconnect()
-                        self.dealer?.timer?.invalidate()
-                        self.dealer?.server.disconnect()
-                        self.performSegue(withIdentifier: "backToMainSegue", sender: Any?.self)
-                    }
+                    handler: handler
                 ))
                 DispatchQueue.main.async {
                     self.present(alert, animated: true)
@@ -151,17 +150,10 @@ extension GameVC: ClientGameDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                var message: String
                 if self.isClicked == false || self.player.bid == 0 {
                     // The player didn't bet
-                    self.fold()
-                    message = "You didn't bet"
-                } else {
-                    message = "Stop bet"
+                    self.foldAction()
                 }
-                // Change UI
-                self.statusLabel.text = message
-                self.timerLabel.text = ""
                 self.setupUserButton(withSlider: true, turnOn: false)
             }
         // MARK: StartCheck
@@ -227,7 +219,7 @@ extension GameVC: ClientGameDelegate {
                 var message: String
                 if self.isClicked == false && self.player.bid != self.maxBid {
                     // The player didn't check
-                    self.fold()
+                    self.foldAction()
                     message = "You didn't check"
                 } else {
                     message = "Stop check"
@@ -281,7 +273,7 @@ extension GameVC: ClientGameDelegate {
                 self.timer?.invalidate()
                 if self.isClicked == false {
                     // The player didn't pick any cards
-                    self.fold()
+                    self.foldAction()
                 }
                 // Change UI
                 self.statusLabel.text = "Stop Cards!"

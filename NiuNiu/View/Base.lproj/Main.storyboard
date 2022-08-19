@@ -366,27 +366,42 @@
                                 </subviews>
                                 <color key="tintColor" name="Orange"/>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8d-cs-c9Y">
+                                <rect key="frame" x="167.5" y="702.5" width="79" height="47"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="47" id="a3k-kj-DKW"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Save" buttonSize="large">
+                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="clickSave:" destination="5eS-ZO-W7S" eventType="touchUpInside" id="ckE-50-bKt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AM1-oM-2bM"/>
                         <color key="backgroundColor" name="Background 2"/>
                         <color key="tintColor" name="Orange"/>
                         <constraints>
                             <constraint firstItem="wOk-XM-0HI" firstAttribute="trailing" secondItem="AM1-oM-2bM" secondAttribute="trailing" constant="-20" id="12I-h0-wom"/>
+                            <constraint firstItem="J8d-cs-c9Y" firstAttribute="centerX" secondItem="AM1-oM-2bM" secondAttribute="centerX" id="Mh1-LE-ccV"/>
+                            <constraint firstItem="wOk-XM-0HI" firstAttribute="bottom" secondItem="J8d-cs-c9Y" secondAttribute="top" constant="-20" id="Uhe-Jk-GvL"/>
                             <constraint firstItem="wOk-XM-0HI" firstAttribute="centerY" secondItem="AM1-oM-2bM" secondAttribute="centerY" id="uoQ-6l-mbd"/>
                             <constraint firstItem="wOk-XM-0HI" firstAttribute="leading" secondItem="AM1-oM-2bM" secondAttribute="leading" constant="20" id="yLo-9J-jCO"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="uZH-5O-aLS">
                         <barButtonItem key="rightBarButtonItem" style="done" id="R19-Di-WeP">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="uBo-ye-10g">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="uBo-ye-10g" userLabel="Reset">
                                 <rect key="frame" x="311" y="4" width="83" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Save">
+                                <buttonConfiguration key="configuration" style="plain" title="Reset">
                                     <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="clickSave:" destination="5eS-ZO-W7S" eventType="touchUpInside" id="mZv-rg-pzg"/>
+                                    <action selector="clickReset:" destination="5eS-ZO-W7S" eventType="touchUpInside" id="VpR-Kw-yTA"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -403,7 +418,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pcq-K6-xF0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2377" y="1262"/>
+            <point key="canvasLocation" x="2376.811594202899" y="1261.6071428571429"/>
         </scene>
         <!--Search-->
         <scene sceneID="2qi-MI-e10">
@@ -1434,9 +1449,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="g6j-AK-1PK"/>
         <segue reference="r8X-wQ-4AQ"/>
-        <segue reference="s22-Bn-U35"/>
+        <segue reference="U82-HS-8Oy"/>
         <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="Orange"/>

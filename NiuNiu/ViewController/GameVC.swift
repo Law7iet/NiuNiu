@@ -25,6 +25,8 @@ class GameVC: UIViewController {
     var userData: UIAlertController?
     var userDataSpinner: UIActivityIndicatorView?
     
+    var forceEndVC = false
+    
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var foldLabel: UILabel!
@@ -128,7 +130,7 @@ class GameVC: UIViewController {
         }
     }
     
-    func fold() {
+    func foldAction() {
         // Disable buttons
         self.setupUserButton(withSlider: true, turnOn: false)
         for btn in self.cardsButtons {
@@ -167,6 +169,7 @@ class GameVC: UIViewController {
             endVC.client = self.client
             endVC.players = self.players
             endVC.prize = self.totalBid
+            endVC.isForced = self.forceEndVC
         }
     }
     
@@ -220,7 +223,7 @@ class GameVC: UIViewController {
         case .bet:
             let bid = Int(self.betSlider.value)
             if bid == 0 {
-                self.fold()
+                self.foldAction()
             } else {
                 self.player.status = .didBet
                 self.player.bid = bid
@@ -271,7 +274,7 @@ class GameVC: UIViewController {
     }
     
     @IBAction func clickFold(_ sender: Any) {
-        self.fold()
+        self.foldAction()
     }
     
     @IBAction func changeSliderValue(_ sender: UISlider) {

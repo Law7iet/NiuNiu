@@ -7,10 +7,10 @@
 
 class Deck {
     
-    // Properties
+    // MARK: Properties
     var cards: [Card]
     
-    // Methods
+    // MARK: Methods
     init() {
         // Deck
         self.cards = [Card]()
@@ -19,16 +19,12 @@ class Deck {
                 cards.append(Card(rank: rank, suit: suit))
             }
         }
-    }
-    
-    /// Shuffle the deck.
-    func shuffle() {
         self.cards.shuffle()
     }
-    
+        
     /// Returns 5 cards form the deck.
     /// - Returns: The 5 cards.
-    func getCards() -> [Card] {
+    func getFiveCards() -> [Card] {
         var myCards = [Card]()
         for _ in 1...5 {
             myCards.append(self.cards.removeFirst())

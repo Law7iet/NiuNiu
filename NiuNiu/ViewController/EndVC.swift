@@ -14,6 +14,7 @@ class EndVC: UIViewController {
     var client: Client!
     var players: [Player]!
     var prize: Int!
+    var isForced: Bool!
     
     var timer: Timer?
     var clickedPlayBtn = false
@@ -91,12 +92,14 @@ class EndVC: UIViewController {
                 self.playerScore[playerIndex].text = "Winner: \(player.score.description)"
             } else {
                 self.playerPoints[playerIndex].text = "Points: \(player.points)"
-                self.playerScore[playerIndex].text = "\(player.score.description)"
+                self.playerScore[playerIndex].text = self.isForced ? "" : "\(player.score.description)"
             }
-            switch player.status {
-            case .fold: self.playerScore[playerIndex].text = "Fold"
-            case .disconnected: self.playerScore[playerIndex].text = "Disconnected"
-            default: break
+            if !self.isForced {
+                switch player.status {
+                case .fold: self.playerScore[playerIndex].text = "Fold"
+                case .disconnected: self.playerScore[playerIndex].text = "Disconnected"
+                default: break
+                }
             }
             self.setupCard(buttons: self.playerCards[playerIndex]!, cards: player.cards, pickedCards: player.pickedCards)
             playerIndex += 1
@@ -129,7 +132,7 @@ class EndVC: UIViewController {
         self.setupStatistics()
 
         // Setup endLabel and buttons
-        if self.isGameOver == true {
+        if self.isGameOver == true || self.isForced {
             self.endGame()
         } else {
             var timerCounter = 0

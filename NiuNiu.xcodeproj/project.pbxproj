@@ -145,12 +145,9 @@
 		6A305900284E2FB100913DBD /* NiuNiu */ = {
 			isa = PBXGroup;
 			children = (
-				6A305901284E2FB100913DBD /* AppDelegate.swift */,
-				6A305903284E2FB100913DBD /* SceneDelegate.swift */,
 				6A9E2DE8287475A200A0CD0F /* Models */,
+				6AD75E5728AE312E00E173A4 /* View */,
 				6A3B3B2E286F150400E43530 /* ViewController */,
-				6A305907284E2FB100913DBD /* Main.storyboard */,
-				6A30590C284E2FB300913DBD /* LaunchScreen.storyboard */,
 				6A30590A284E2FB300913DBD /* Assets.xcassets */,
 				6A30590F284E2FB300913DBD /* Info.plist */,
 				6A305931284E2FE500913DBD /* README.md */,
@@ -187,6 +184,7 @@
 				6AE46351288D8C6A004025E5 /* GameVC.swift */,
 				6A90402628ACDB1B00CD87FC /* GameVCExt.swift */,
 				6A94FB0C288C4C0000C76513 /* EndVC.swift */,
+				6AD75E5828AE313E00E173A4 /* Other */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -235,6 +233,24 @@
 				6A6EAE36288B012700A89421 /* Utils.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		6AD75E5728AE312E00E173A4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6A30590C284E2FB300913DBD /* LaunchScreen.storyboard */,
+				6A305907284E2FB100913DBD /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6AD75E5828AE313E00E173A4 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				6A305901284E2FB100913DBD /* AppDelegate.swift */,
+				6A305903284E2FB100913DBD /* SceneDelegate.swift */,
+			);
+			path = Other;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
