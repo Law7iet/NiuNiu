@@ -14,7 +14,6 @@ class EndVC: UIViewController {
     var client: Client!
     var players: [Player]!
     var prize: Int!
-    var isForced: Bool!
     
     var timer: Timer?
     var clickedPlayBtn = false
@@ -24,7 +23,8 @@ class EndVC: UIViewController {
     @IBOutlet var playerIDs: [UILabel]!
     @IBOutlet var playerPoints: [UILabel]!
     @IBOutlet var playerScore: [UILabel]!
-
+    @IBOutlet weak var titleLabel: UILabel!
+    
     @IBOutlet var cards1: [UIButton]!
     @IBOutlet var cards2: [UIButton]!
     @IBOutlet var cards3: [UIButton]!
@@ -92,14 +92,12 @@ class EndVC: UIViewController {
                 self.playerScore[playerIndex].text = "Winner: \(player.score.description)"
             } else {
                 self.playerPoints[playerIndex].text = "Points: \(player.points)"
-                self.playerScore[playerIndex].text = self.isForced ? "" : "\(player.score.description)"
+                self.playerScore[playerIndex].text = "\(player.score.description)"
             }
-            if !self.isForced {
-                switch player.status {
-                case .fold: self.playerScore[playerIndex].text = "Fold"
-                case .disconnected: self.playerScore[playerIndex].text = "Disconnected"
-                default: break
-                }
+            switch player.status {
+            case .fold: self.playerScore[playerIndex].text = "Fold"
+            case .disconnected: self.playerScore[playerIndex].text = "Disconnected"
+            default: break
             }
             self.setupCard(buttons: self.playerCards[playerIndex]!, cards: player.cards, pickedCards: player.pickedCards)
             playerIndex += 1
@@ -113,10 +111,25 @@ class EndVC: UIViewController {
             // The player is the winner of the game
             Statistics.increaseGamesWon()
         }
-        // UI
+        // Hide UI
+        for cards in self.playerCards {
+            for card in cards! {
+                card.isHidden = true
+            }
+            for scoreLabel in self.playerScore {
+                scoreLabel.isHidden = true
+            }
+        }
+        // Change UI
+        var index = 0
+        for player in self.players {
+            self.playerIDs[index].text = "\(index + 1). \(self.playerIDs[index].text!)"
+            self.playerPoints[index].text = "Points: \(player.points)"
+            index += 1
+        }
+        self.titleLabel.text = "Scoreboard"
         self.endLabel.text = "Game over"
         self.changeEndLabel = false
-        self.quitButton.setTitle("Quit", for: UIControl.State.normal)
         self.quitButton.setAttributedTitle(
             Utils.myString("Quit"),
             for: .normal)
@@ -134,7 +147,7 @@ class EndVC: UIViewController {
         self.setupStatistics()
 
         // Setup endLabel and buttons
-        if self.isGameOver == true || self.isForced {
+        if self.isGameOver == true {
             self.endGame()
         } else {
             var timerCounter = 0

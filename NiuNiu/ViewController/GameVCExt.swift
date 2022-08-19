@@ -15,7 +15,7 @@ extension GameVC: ClientGameDelegate {
     func didDisconnect(with peerID: MCPeerID) {
         
         let handler = { (action: UIAlertAction) in
-            self.forceEndVC = true
+            self.forceGameOver = true
             self.client.disconnect()
             self.dealer?.timer?.invalidate()
             self.dealer?.server.disconnect()

@@ -2,9 +2,6 @@
 
 ## TODO
 
-In endVC unire isForced e gameOver
-(quando si forza l'endVC se clicchi su QUit ti esce la notifica)
-
 ## DOING
 
 ## CHECK

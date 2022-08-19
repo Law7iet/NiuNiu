@@ -25,7 +25,7 @@ class GameVC: UIViewController {
     var userData: UIAlertController?
     var userDataSpinner: UIActivityIndicatorView?
     
-    var forceEndVC = false
+    var forceGameOver = false
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -164,7 +164,7 @@ class GameVC: UIViewController {
             endVC.client = self.client
             endVC.players = self.players
             endVC.prize = self.totalBid
-            endVC.isForced = self.forceEndVC
+            endVC.isGameOver = self.forceGameOver
         }
     }
     
