@@ -44,7 +44,7 @@ class GameVC: UIViewController {
     // MARK: Supporting functions
     func setupMenu() {
         let quitAction = UIAction(title: "Quit", image: UIImage(systemName: "rectangle.portrait.and.arrow.right")) { (action) in
-            let message = self.dealer != nil ? "If you quit the game, the game will end. Are you sure to quit?" : "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
+            let message = self.dealer != nil ? Utils.confermHostLeftMessage : Utils.confermClientLeftMessage
             let alert = UIAlertController(
                 title: "Quit the game",
                 message: message,
@@ -61,6 +61,8 @@ class GameVC: UIViewController {
                     // Notify and exit or close
                     self.dealer?.server.disconnect()
                     self.client.disconnect()
+                    // Stats
+                    Statistics.increaseGamesPlayed()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: self)
                 }
             ))
@@ -78,8 +80,8 @@ class GameVC: UIViewController {
                 self.player = player
                 for cardIndex in 0 ... 4 {
                     let image = UIImage(named: self.player.cards[cardIndex].fileName)
-                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: UIControl.State.normal)
-                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: UIControl.State.disabled)
+                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: .normal)
+                    self.cardsButtons[cardIndex].setBackgroundImage(image, for: .disabled)
                 }
                 // Setup himself labels
                 self.playerLabel.text = self.player.id
@@ -94,9 +96,10 @@ class GameVC: UIViewController {
                         string: player.id,
                         attributes: [NSAttributedString.Key.font: UIFont(
                             name: "Marker Felt Thin",
-                            size: 17)!]
+                            size: 17
+                        )!]
                     ),
-                    for: UIControl.State.normal
+                    for: .normal
                 )
                 self.playersButtons[index].isEnabled = true
                 index += 1
@@ -109,7 +112,7 @@ class GameVC: UIViewController {
             self.actionButton.isEnabled = true
             self.foldButton.isEnabled = true
             if flag {
-                self.betSlider.isEnabled = flag == true
+                self.betSlider.isEnabled = true
             }
         } else {
             self.actionButton.isEnabled = false
@@ -141,9 +144,7 @@ class GameVC: UIViewController {
         self.foldLabel.isHidden = false
         // Change data
         self.player.status = .fold
-        self.client.sendMessageToServer(
-            message: Message(.fold, players: [self.player])
-        )
+        self.client.sendMessageToServer(message: Message(.fold, players: [self.player]))
     }
     
     // MARK: Methods
@@ -176,24 +177,24 @@ class GameVC: UIViewController {
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
         let player = Utils.findPlayer(byName: sender.currentAttributedTitle!.string, from: self.players)!
+        // Setting the action sheet view
         self.userData = UIAlertController(
             title: player.id,
             message: "Fetching data...\n\n",
             preferredStyle: .actionSheet
         )
-        self.self.userData!.addAction(UIAlertAction(title: "Close", style: .default))
-        
-        self.userDataSpinner = UIActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 30, y: 60, width: 40, height: 40)
-        )
+        self.userData!.addAction(UIAlertAction(title: "Close", style: .cancel))
+        self.userDataSpinner = UIActivityIndicatorView(frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 30,
+            y: 60,
+            width: 40,
+            height: 40
+        ))
         self.userDataSpinner!.startAnimating();
         self.userData!.view.addSubview(self.userDataSpinner!)
-
         self.present(self.self.userData!, animated: true, completion: nil)
-        
-        self.client.sendMessageToServer(
-            message: Message(.reqPlayer, players: [player])
-        )
+        // Send request data
+        self.client.sendMessageToServer(message: Message(.reqPlayer, players: [player]))
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -215,43 +216,37 @@ class GameVC: UIViewController {
     }
 
     @IBAction func clickAction(_ sender: Any) {
-        
+        // Change data and UI
         self.isClicked = true
         self.setupUserButton(withSlider: true, turnOn: false)
-        
+        // Action
         switch self.player.status {
         case .bet:
             let bid = Int(self.betSlider.value)
             if bid == 0 {
                 self.foldAction()
             } else {
-                self.player.status = .didBet
-                self.player.bid = bid
-                self.player.points = self.player.points - bid
+                self.player.bet(amount: bid)
                 self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
-                self.client.sendMessageToServer(
-                    message: Message(.bet, players: [self.player])
-                )
+                self.client.sendMessageToServer(message: Message(.bet, players: [self.player]))
             }
         case .check:
             let diff = self.maxBid - self.player.bid
-            self.player.status = .didCheck
-            self.player.bid = diff
-            self.player.points = self.player.points - diff
+            self.player.check(amount: diff)
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
-            self.client.sendMessageToServer(
-                message: Message(.check, players: [self.player])
-            )
+            self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .allIn:
-            self.player.status = .check
-            self.player.bid += self.player.points
-            self.player.points = 0
+            self.player.allIn()
             self.pointsLabel.text = "Points: 0"
-            self.client.sendMessageToServer(
-                message: Message(.check, players: [self.player])
-            )
+            self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .cards:
-            self.player.status = .didCards
+            self.player.chooseCards(
+                cards: self.player.cards,
+                pickedCards: self.player.pickedCards,
+                numberOfPickedCards: self.player.numberOfPickedCards,
+                tieBreakerCard: self.player.tieBreakerCard,
+                score: self.player.score
+            )
             self.actionButton.setAttributedTitle(
                 NSAttributedString(
                     string: "Cards picked",
@@ -260,14 +255,12 @@ class GameVC: UIViewController {
                         size: 17
                     )!]
                 ),
-                for: UIControl.State.normal
+                for: .normal
             )
             for btn in self.cardsButtons {
                 btn.isEnabled = false
             }
-            self.client.sendMessageToServer(
-                message: Message(.cards, players: [self.player])
-            )
+            self.client.sendMessageToServer(message: Message(.cards, players: [self.player]))
         default:
             break
         }
@@ -288,7 +281,7 @@ class GameVC: UIViewController {
                         size: 17
                     )!]
                 ),
-                for: UIControl.State.normal
+                for: .normal
             )
         }
     }

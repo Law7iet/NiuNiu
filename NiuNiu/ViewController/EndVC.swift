@@ -117,7 +117,15 @@ class EndVC: UIViewController {
         self.endLabel.text = "Game over"
         self.changeEndLabel = false
         self.quitButton.setTitle("Quit", for: UIControl.State.normal)
-        self.quitButton.setAttributedTitle(NSAttributedString(string: "Quit", attributes: [NSAttributedString.Key.font: UIFont(name: "Marker Felt Thin", size: 17)!]), for: UIControl.State.normal)
+        self.quitButton.setAttributedTitle(
+            NSAttributedString(
+                string: "Quit",
+                attributes: [NSAttributedString.Key.font: UIFont(
+                    name: "Marker Felt Thin",
+                    size: 17
+                )!]
+            ),
+            for: .normal)
         self.playButton.isEnabled = false
         // Disconnection
         self.client.disconnect()
@@ -174,7 +182,7 @@ class EndVC: UIViewController {
     // MARK: Actions
     @IBAction func clickQuit(_ sender: Any) {
         if isGameOver == false {
-            let message = self.dealer != nil ? "If you quit the game, the game will end. Are you sure to quit?" : "If you quit the game, you won't be able to play until the game ends. Are you sure to quit?"
+            let message = self.dealer != nil ? Utils.confermHostLeftMessage : Utils.confermClientLeftMessage
             let alert = UIAlertController(
                 title: "Quit the game",
                 message: message,
@@ -239,14 +247,14 @@ extension EndVC: ClientEndDelegate {
                     // Server disconnected from a guest
                     alert = UIAlertController(
                         title: "Exit from lobby",
-                        message: "Lost connection with the host",
+                        message: Utils.hostLeftMessage,
                         preferredStyle: .alert
                     )
                 } else {
                     // Server disconnected from the host
                     alert = UIAlertController(
                         title: "Exit from lobby",
-                        message: "Lost connection with the clients",
+                        message: Utils.clientLeftMessage,
                         preferredStyle: .alert
                     )
                 }

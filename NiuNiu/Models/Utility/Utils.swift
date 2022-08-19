@@ -12,9 +12,9 @@ class Utils {
     
     // MARK: Costants of the applications
     // Timer values
-    static let timerOffset = 1
-    static let timerShort = 3
-    static let timerMedium = 15
+    static let timerOffset =    1
+    static let timerShort =     3
+    static let timerMedium =    15
     // Timer values for the game status
     static let timeStartBet =   timerShort + (1 * timerOffset) + (0 * Settings.timerLong)
     static let timeStopBet =    timerShort + (2 * timerOffset) + (1 * Settings.timerLong) - 1
@@ -23,6 +23,11 @@ class Utils {
     static let timeStartCards = timerShort + (3 * timerOffset) + (2 * Settings.timerLong)
     static let timeStopCards =  timerShort + (3 * timerOffset) + (3 * Settings.timerLong) - 1
     static let timeStartEnd =   timerShort + (4 * timerOffset) + (3 * Settings.timerLong)
+    // Some message
+    static let confermHostLeftMessage =     "If you quit the lobby, the lobby will close. Are you sure to quit?"
+    static let confermClientLeftMessage =   "If you quit the game, you can't play until the game ends. Are you sure to quit?"
+    static let hostLeftMessage =            "Lost connection with the server"
+    static let clientLeftMessage =          "Lost connection with the clients"
     
     // MARK: Card setting
     static let cornerRadius = CGFloat(5.0)

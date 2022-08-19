@@ -14,6 +14,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
     var status: PlayerStatus
     var points: Int
     var bid: Int
+    var fixBid: Int
     var cards: [Card]
     var pickedCards: [Bool]
     var numberOfPickedCards: Int
@@ -49,6 +50,7 @@ class Player: Codable, Comparable, CustomStringConvertible {
         self.status = .none
         self.points = points ?? 100
         self.bid = 0
+        self.fixBid = 0
         self.cards = [Card]()
         self.pickedCards = [false, false, false, false, false]
         self.numberOfPickedCards = 0
@@ -67,14 +69,14 @@ class Player: Codable, Comparable, CustomStringConvertible {
     /// - Parameter amount: the amount to increase/decrease
     func check(amount: Int) {
         self.status = .didCheck
-        self.bid += amount
+        self.fixBid = amount
         self.points -= amount
     }
     
     /// Change the player's status, change his bid with his points and set to 0 his points
     func allIn() {
         self.status = .didCheck
-        self.bid += self.points
+        self.fixBid = self.points
         self.points = 0
     }
     

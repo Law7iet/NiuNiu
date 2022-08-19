@@ -25,7 +25,6 @@ class Dealer {
     var points: Int
     
     // Others
-//    var isForced: Bool
     var maxBid: Int
     var totalBid: Int
     var timerCounter: Int
@@ -45,7 +44,6 @@ class Dealer {
             self.playerDict[peerID.displayName] = peerID
         }
         // Others
-//        self.isForced = false
         self.maxBid = 0
         self.totalBid = 0
         self.timerCounter = 0
@@ -75,7 +73,6 @@ class Dealer {
         // Initialization of data
         self.maxBid = 0
         self.totalBid = 0
-//        self.isForced = false
         self.deck = Deck()
         for player in self.players {
             // Set the players' cards and next status
@@ -123,18 +120,20 @@ class Dealer {
                 player.status = .fold
             }
         }
-        // Compute and change the leader or leaders' status
-        var notAllLeaders = false
-        for player in players {
-            if player.bid == self.maxBid {
-                player.status = .didCheck
-            } else {
-                notAllLeaders = true
+        if !flag {
+            // Compute and change the leader or leaders' status
+            var notAllLeaders = false
+            for player in players {
+                if player.bid == self.maxBid {
+                    player.status = .didCheck
+                } else {
+                    notAllLeaders = true
+                }
             }
-        }
-        // If all are leader it skips to the pick cards status
-        if notAllLeaders == false {
-            self.timerCounter = Utils.timeStartCards - 1
+            // If all are leader it skips to the pick cards status
+            if notAllLeaders == false {
+                self.timerCounter = Utils.timeStartCards - 1
+            }
         }
     }
     
@@ -154,15 +153,16 @@ class Dealer {
         self.server.sendMessage(Message(.stopCheck, amount: flag ? 1 : 0))
         // Compute the total bid
         // Change the status to the players who didn't check
-        self.totalBid = 0
-        for player in self.players {
-            if player.status == .didCheck {
-                self.totalBid += player.bid
-                // Set the player's next status
-                player.status = .cards
-            } else if player.status != .disconnected && !flag {
-                // Change to fold only if the players is not disconnected and the timer properly ended
-                player.status = .fold
+        if !flag {
+            for player in self.players {
+                if player.status == .didCheck {
+                    self.totalBid += player.fixBid
+                    // Set the player's next status
+                    player.status = .cards
+                } else if player.status != .disconnected && !flag {
+                    // Change to fold only if the players is not disconnected and the timer properly ended
+                    player.status = .fold
+                }
             }
         }
     }
@@ -197,32 +197,22 @@ class Dealer {
         print("endMatch()")
         // Compute the winner
         var winner: Player? = nil
-//        if self.isForced == false {
-            for player in self.players {
-                if player.status != .fold && player.status != .disconnected {
-                    if winner == nil {
+        for player in self.players {
+            if player.status != .fold && player.status != .disconnected {
+                if winner == nil {
+                    winner = player
+                } else {
+                    if player.score > winner!.score {
                         winner = player
-                    } else {
-                        if player.score > winner!.score {
+                    } else if player.score == winner!.score {
+                        // Tie breaker
+                        if player.tieBreakerCard! > winner!.tieBreakerCard! {
                             winner = player
-                        } else if player.score == winner!.score {
-                            // Tie breaker
-                            if player.tieBreakerCard! > winner!.tieBreakerCard! {
-                                winner = player
-                            }
                         }
                     }
                 }
             }
-//        } else {
-//            // Should be only one player that status is not fold or disconnected
-//            for player in self.players {
-//                if player.status != .disconnected && player.status != .fold {
-//                    winner = player
-//                }
-//
-//            }
-//        }
+        }
         if winner != nil {
             winner!.status = .winner
             winner!.points = winner!.points + self.totalBid
@@ -316,7 +306,7 @@ extension Dealer: ServerGameDelegate {
                     )
                 // MARK: Check
                 case .check:
-                    if user.bid + player.bid == maxBid {
+                    if user.bid + user.fixBid == maxBid {
                         player.check(amount: user.bid)
                     } else {
                         player.allIn()

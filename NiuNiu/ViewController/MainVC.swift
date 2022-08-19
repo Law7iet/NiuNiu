@@ -21,12 +21,20 @@ class MainVC: UIViewController {
     }
     
     func setupPlayBtn() {
-        let hostBtn = UIAction(title: "Create a lobby", image: UIImage(systemName: "server.rack")) { (action) in
-            self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
-        }
-        let joinBtn = UIAction(title: "Find a lobby", image: UIImage(systemName: "magnifyingglass")) { (action) in
-            self.performSegue(withIdentifier: "showSearcherSegue", sender: nil)
-        }
+        let hostBtn = UIAction(
+            title: "Create a lobby",
+            image: UIImage(systemName: "server.rack"),
+            handler: { (action) in
+                self.performSegue(withIdentifier: "showLobbySegue", sender: nil)
+            }
+        )
+        let joinBtn = UIAction(
+            title: "Find a lobby",
+            image: UIImage(systemName: "magnifyingglass"),
+            handler: { (action) in
+                self.performSegue(withIdentifier: "showSearcherSegue", sender: nil)
+            }
+        )
         let menu = UIMenu(title: "Play", options: .displayInline, children: [hostBtn, joinBtn])
         self.playButton.showsMenuAsPrimaryAction = true
         self.playButton.menu = menu

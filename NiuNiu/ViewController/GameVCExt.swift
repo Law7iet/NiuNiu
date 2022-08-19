@@ -45,14 +45,14 @@ extension GameVC: ClientGameDelegate {
                     // Server disconnected from a guest
                     alert = UIAlertController(
                         title: "Exit from lobby",
-                        message: "Lost connection with the host",
+                        message: Utils.hostLeftMessage,
                         preferredStyle: .alert
                     )
                 } else {
                     // Server disconnected from the host
                     alert = UIAlertController(
                         title: "Exit from lobby",
-                        message: "Lost connection with the clients",
+                        message: Utils.clientLeftMessage,
                         preferredStyle: .alert
                     )
                 }
@@ -129,7 +129,7 @@ extension GameVC: ClientGameDelegate {
                             size: 17
                         )!]
                     ),
-                    for: UIControl.State.normal
+                    for: .normal
                 )
                 self.setupUserButton(withSlider: true, turnOn: true)
                 // Set timer
@@ -150,10 +150,13 @@ extension GameVC: ClientGameDelegate {
         case .stopBet:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                if self.isClicked == false || self.player.bid == 0 {
+                if (self.isClicked == false || self.player.bid == 0) && message.amount == 0 {
                     // The player didn't bet
                     self.foldAction()
                 }
+                // Change UI
+                self.statusLabel.text = "Stop Bet!"
+                self.timerLabel.text = ""
                 self.setupUserButton(withSlider: true, turnOn: false)
             }
         // MARK: StartCheck
@@ -179,7 +182,7 @@ extension GameVC: ClientGameDelegate {
                                     size: 17
                                 )!]
                             ),
-                            for: UIControl.State.normal
+                            for: .normal
                         )
                     } else {
                         // All-in
@@ -192,7 +195,7 @@ extension GameVC: ClientGameDelegate {
                                     size: 17
                                 )!]
                             ),
-                            for: UIControl.State.normal
+                            for: .normal
                         )
                     }
                     // Change UI
@@ -216,16 +219,12 @@ extension GameVC: ClientGameDelegate {
         case .stopCheck:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                var message: String
-                if self.isClicked == false && self.player.bid != self.maxBid {
+                if self.isClicked == false && (self.player.bid + self.player.fixBid) != self.maxBid && message.amount == 0 {
                     // The player didn't check
                     self.foldAction()
-                    message = "You didn't check"
-                } else {
-                    message = "Stop check"
                 }
                 // Change UI
-                self.statusLabel.text = message
+                self.statusLabel.text = "Stop Check!"
                 self.timerLabel.text = ""
                 self.setupUserButton(withSlider: false, turnOn: false)
             }
@@ -246,7 +245,7 @@ extension GameVC: ClientGameDelegate {
                             size: 17
                         )!]
                     ),
-                    for: UIControl.State.normal
+                    for: .normal
                 )
                 self.setupUserButton(withSlider: false, turnOn: true)
                 self.checkPickedCards()
@@ -271,7 +270,7 @@ extension GameVC: ClientGameDelegate {
         case .stopCards:
             DispatchQueue.main.async {
                 self.timer?.invalidate()
-                if self.isClicked == false {
+                if self.isClicked == false && message.amount == 0 {
                     // The player didn't pick any cards
                     self.foldAction()
                 }
@@ -310,16 +309,10 @@ extension GameVC: ClientGameDelegate {
                                 switch player.status {
                                 case .didBet: message = "Bet \(player.bid)"
                                 case .didCheck: message = "Checked"
-                                case .didCards: message = "Choosen cards"
+                                case .didCards: message = "Cards confirmed"
                                 default: break
                                 }
-                                self.playersLabel[index].attributedText = NSAttributedString(
-                                    string: message,
-                                    attributes: [NSAttributedString.Key.font: UIFont(
-                                        name: "Marker Felt Thin",
-                                        size: 17
-                                    )!]
-                                )
+                                self.playersLabel[index].text = message
                                 // Animation
                                 UIView.transition(with: self.playersLabel[index], duration: 0.5, options: .transitionCrossDissolve) {
                                     self.playersLabel[index].isHidden = false

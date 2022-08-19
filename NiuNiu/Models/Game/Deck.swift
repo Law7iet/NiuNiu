@@ -26,7 +26,7 @@ class Deck {
     /// - Returns: The 5 cards.
     func getFiveCards() -> [Card] {
         var myCards = [Card]()
-        for _ in 1...5 {
+        for _ in 1 ... 5 {
             myCards.append(self.cards.removeFirst())
         }
         return myCards

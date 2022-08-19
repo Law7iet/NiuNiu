@@ -37,17 +37,6 @@ class LobbyVC: UIViewController {
     }
     
     func setupLobby() {
-        // Navigation bar
-        self.playButton.tintColor = UIColor(named: "Orange")
-        self.playButton.setAttributedTitle(
-            NSAttributedString(
-                string: "Play",
-                attributes: [NSAttributedString.Key.font: UIFont(
-                    name: "Marker Felt Thin",
-                    size: 20)!
-                ]),
-            for: UIControl.State.normal
-        )
         // Lobby
         if self.server == nil {
             // Get the clients that are already connected
@@ -137,7 +126,7 @@ class LobbyVC: UIViewController {
                     self.showExitAlert(withMessage: "The lobby has been closed")
                 } else {
                     self.server!.disconnect()
-                    self.showExitAlert(withMessage: "Lost connection with the clients")
+                    self.showExitAlert(withMessage: Utils.clientLeftMessage)
                 }
             }
         }
@@ -186,7 +175,11 @@ class LobbyVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let gameVC = segue.destination as! GameVC
         if self.server != nil {
-            gameVC.dealer = Dealer(server: self.server!, time: Settings.timerLong, points: Settings.points)
+            gameVC.dealer = Dealer(
+                server: self.server!,
+                time: Settings.timerLong,
+                points: Settings.points
+            )
         }
         gameVC.client = self.client
         // Close browsing or advertising tasks
@@ -241,7 +234,7 @@ extension LobbyVC: UITableViewDelegate {
             var action: (UIAlertAction) -> Void
             if user == self.server?.peerID {
                 title = "Exit the lobby"
-                message = "If you quit the lobby, the lobby will close. Are you sure to quit?"
+                message = Utils.confermHostLeftMessage
                 action = { (alertAction: UIAlertAction) in
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -322,7 +315,7 @@ extension LobbyVC: ClientLobbyDelegate {
                 }
             }
         case .closeSession:
-            self.showExitAlert(withMessage: "The host removed you from the lobby")
+            self.showExitAlert(withMessage: "You have been removed from the lobby")
         default:
             break
         }
