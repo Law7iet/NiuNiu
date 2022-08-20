@@ -9,7 +9,6 @@ enum MessageType: Codable {
     
     // MARK: Send from server
     // Game status
-    case startGame
     case startMatch
     case startBet
     case stopBet
@@ -25,6 +24,7 @@ enum MessageType: Codable {
     case notify
     
     // Connections
+    case startGames
     case closeSession
 
     // MARK: Send from client

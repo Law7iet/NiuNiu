@@ -32,6 +32,7 @@ class Dealer {
     
     // MARK: Methods
     init(server: Server, time: Int?, points: Int?) {
+        print("Dealer init")
         // Game Settings
         self.time = time ?? Settings.timerLong
         self.points = points ?? Settings.points

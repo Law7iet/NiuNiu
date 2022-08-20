@@ -895,7 +895,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End round" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qcy-I0-y1P">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Round" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qcy-I0-y1P">
                                 <rect key="frame" x="20" y="20" width="335" height="22"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
                                 <color key="textColor" name="Orange"/>
@@ -1453,9 +1453,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="g6j-AK-1PK"/>
         <segue reference="r8X-wQ-4AQ"/>
         <segue reference="U82-HS-8Oy"/>
-        <segue reference="TCa-Jb-oMc"/>
+        <segue reference="WOn-YX-ZXF"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="Orange"/>
     <resources>

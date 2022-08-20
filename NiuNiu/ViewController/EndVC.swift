@@ -152,7 +152,7 @@ class EndVC: UIViewController {
             self.endGame()
         } else {
             self.rounds += 1
-            self.titleLabel.text = "End round n. \(self.rounds!)"
+            self.titleLabel.text = "Round n. \(self.rounds!)"
             var timerCounter = 0
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                 if timerCounter >= Utils.timerMedium {
@@ -186,6 +186,7 @@ class EndVC: UIViewController {
         if let gameVC = segue.destination as? GameVC {
             gameVC.dealer = self.dealer
             gameVC.client = self.client
+            gameVC.rounds = self.rounds
         }
     }
     

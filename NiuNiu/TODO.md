@@ -6,6 +6,8 @@
 
 ## CHECK
 
+Controllare il giocatore che folda se riceve e cambia view ma non può fare altre azioni (specta solamente)
+
 ## DONE
 
 Statistiche:

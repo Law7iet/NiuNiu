@@ -230,10 +230,12 @@ class GameVC: UIViewController {
             let diff = self.maxBid - self.player.bid
             self.player.check(amount: diff)
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
+            self.betSlider.value = Float(self.player.bid + self.player.fixBid)
             self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .allIn:
             self.player.allIn()
             self.pointsLabel.text = "Points: 0"
+            self.betSlider.value = Float(self.player.bid + self.player.fixBid)
             self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .cards:
             self.player.chooseCards(
