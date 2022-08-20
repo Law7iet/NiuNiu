@@ -20,6 +20,8 @@ class Player: Codable, Comparable, CustomStringConvertible {
     var numberOfPickedCards: Int
     var tieBreakerCard: Card?
     var score: Score
+    var wins: Int
+    var rounds: Int
     
     /// A string that describes the player.
     var description: String {
@@ -55,6 +57,8 @@ class Player: Codable, Comparable, CustomStringConvertible {
         self.pickedCards = [false, false, false, false, false]
         self.numberOfPickedCards = 0
         self.score = .none
+        self.wins = 0
+        self.rounds = 0
     }
     
     /// Change the player's status, bid and reduce his points
@@ -169,7 +173,11 @@ class Player: Codable, Comparable, CustomStringConvertible {
     }
     
     static func < (lhs: Player, rhs: Player) -> Bool {
-        return lhs.points < rhs.points
+        if lhs.points == rhs.points {
+            return lhs.wins < rhs.wins
+        } else {
+            return lhs.points < rhs.points
+        }
     }
     
     static func == (lhs: Player, rhs: Player) -> Bool {

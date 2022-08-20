@@ -16,6 +16,7 @@ class GameVC: UIViewController {
     var player: Player!
     var players: [Player]!
     
+    var rounds = 0
     var time = 0
     var maxBid = 0
     var totalBid = 0
@@ -165,6 +166,7 @@ class GameVC: UIViewController {
             endVC.players = self.players
             endVC.prize = self.totalBid
             endVC.isGameOver = self.forceGameOver
+            endVC.rounds = self.rounds
         }
     }
     

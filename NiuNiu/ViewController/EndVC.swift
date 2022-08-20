@@ -14,6 +14,7 @@ class EndVC: UIViewController {
     var client: Client!
     var players: [Player]!
     var prize: Int!
+    var rounds: Int!
     
     var timer: Timer?
     var clickedPlayBtn = false
@@ -150,6 +151,8 @@ class EndVC: UIViewController {
         if self.isGameOver == true {
             self.endGame()
         } else {
+            self.rounds += 1
+            self.titleLabel.text = "End round n. \(self.rounds!)"
             var timerCounter = 0
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
                 if timerCounter >= Utils.timerMedium {

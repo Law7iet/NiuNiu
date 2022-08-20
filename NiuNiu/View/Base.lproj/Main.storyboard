@@ -1037,7 +1037,7 @@
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9vU-zc-Oqm">
-                                                                <rect key="frame" x="82" y="0.0" width="36" height="50"/>
+                                                                <rect key="frame" x="82" y="2" width="33" height="46"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="HM3-Ko-Rju"/>
                                                                     <constraint firstAttribute="width" secondItem="9vU-zc-Oqm" secondAttribute="height" multiplier="64:89" id="KTI-kk-2wG"/>
@@ -1045,7 +1045,7 @@
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iW6-CE-1j0">
-                                                                <rect key="frame" x="123" y="2" width="33" height="46"/>
+                                                                <rect key="frame" x="120" y="0.0" width="36" height="50"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="6Fx-VQ-Psj"/>
                                                                     <constraint firstAttribute="width" secondItem="iW6-CE-1j0" secondAttribute="height" multiplier="64:89" id="CiY-FJ-pfD"/>
