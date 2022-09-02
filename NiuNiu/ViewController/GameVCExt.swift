@@ -167,14 +167,14 @@ extension GameVC: ClientGameDelegate {
                     let diff = self.maxBid - self.player.bid
                     if diff < self.player.points {
                         // Check
-                        self.player.status = .check
+                        self.player.status = self.player.status == .fold ? .fold : .check
                         self.actionButton.setAttributedTitle(
                             Utils.myString("Check +\(diff)"),
                             for: .normal
                         )
                     } else {
                         // All-in
-                        self.player.status = .allIn
+                        self.player.status = self.player.status == .fold ? .fold : .allIn
                         self.actionButton.setAttributedTitle(
                             Utils.myString("All-in"),
                             for: .normal
@@ -214,7 +214,7 @@ extension GameVC: ClientGameDelegate {
         case .startCards:
             DispatchQueue.main.async {
                 // Change data
-                self.player.status = .cards
+                self.player.status = self.player.status == .fold ? .fold : .cards
                 self.isClicked = false
                 // Change UI
                 self.statusLabel.text = "Start pick cards!"

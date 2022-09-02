@@ -189,8 +189,6 @@ class Dealer {
                 player.status = .fold
             }
         }
-//        // Flag used to compute the winner
-//        self.isForced = flag
     }
     
     /// Compute the winner, sort the players for the scoreboard and send a message to the all the players the end of the round.
@@ -308,7 +306,7 @@ extension Dealer: ServerGameDelegate {
                 // MARK: Check
                 case .check:
                     if user.bid + user.fixBid == maxBid {
-                        player.check(amount: user.bid)
+                        player.check(amount: user.fixBid)
                     } else {
                         player.allIn()
                     }

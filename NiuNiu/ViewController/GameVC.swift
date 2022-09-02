@@ -103,17 +103,23 @@ class GameVC: UIViewController {
     }
     
     func setupUserButton(withSlider flag: Bool, turnOn: Bool) {
-        if turnOn {
-            self.actionButton.isEnabled = true
-            self.foldButton.isEnabled = true
-            if flag {
-                self.betSlider.isEnabled = true
-            }
-        } else {
+        if self.player.status == .fold {
             self.actionButton.isEnabled = false
             self.foldButton.isEnabled = false
-            if flag {
-                self.betSlider.isEnabled = false
+            self.betSlider.isEnabled = false
+        } else {
+            if turnOn {
+                self.actionButton.isEnabled = true
+                self.foldButton.isEnabled = true
+                if flag {
+                    self.betSlider.isEnabled = true
+                }
+            } else {
+                self.actionButton.isEnabled = false
+                self.foldButton.isEnabled = false
+                if flag {
+                    self.betSlider.isEnabled = false
+                }
             }
         }
     }
@@ -166,7 +172,12 @@ class GameVC: UIViewController {
             endVC.players = self.players
             endVC.prize = self.totalBid
             endVC.isGameOver = self.forceGameOver
-            endVC.rounds = self.rounds
+            endVC.rounds = self.rounds            
+            for player in self.players {
+                if player.points <= 0 {
+                    endVC.isGameOver = true
+                }
+            }
         }
     }
     
@@ -234,7 +245,7 @@ class GameVC: UIViewController {
             self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .allIn:
             self.player.allIn()
-            self.pointsLabel.text = "Points: 0"
+            self.pointsLabel.text = "Points: 0 (\(self.player.bid + self.player.fixBid)"
             self.betSlider.value = Float(self.player.bid + self.player.fixBid)
             self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
         case .cards:

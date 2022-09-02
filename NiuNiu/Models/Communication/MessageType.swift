@@ -24,7 +24,7 @@ enum MessageType: Codable {
     case notify
     
     // Connections
-    case startGames
+    case startGame
     case closeSession
 
     // MARK: Send from client

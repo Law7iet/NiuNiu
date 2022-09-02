@@ -149,6 +149,18 @@ class EndVC: UIViewController {
 
         // Setup endLabel and buttons
         if self.isGameOver == true {
+            let alert = UIAlertController(
+                title: "Game Over",
+                message: nil,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "Ok",
+                style: .default
+            ))
+            DispatchQueue.main.async {
+                self.present(alert, animated: true)
+            }
             self.endGame()
         } else {
             self.rounds += 1
