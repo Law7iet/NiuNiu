@@ -38,10 +38,10 @@ class Utils {
     ///   - playerName: the player name.
     ///   - players: the array.
     /// - Returns: the player that id's matches with the name. If no players match with the name, it return `nil`.
-    static func findPlayer(byName playerName: String, from players: [Player]) -> Player? {
-        for player in players {
-            if player.id == playerName {
-                return player
+    static func findPlayer(byName playerName: String, from users: [User]) -> User? {
+        for user in users {
+            if user.id == playerName {
+                return user
             }
         }
         return nil

@@ -10,19 +10,19 @@ import MultipeerConnectivity
 // MARK: ClientGameDelegate implementation
 // This is used for the UI changes caused by the connections during the gameplay
 // It could be the disconnection of a peer or the receiving of a message from the server
-extension GameVC: ClientGameDelegate {
+extension GameVC: PlayerDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
         
         let handler = { (action: UIAlertAction) in
             self.forceGameOver = true
-            self.client.disconnect()
+            self.player.client.disconnect()
             self.dealer?.timer?.invalidate()
             self.dealer?.server.disconnect()
             self.performSegue(withIdentifier: "showEndSegue", sender: Any?.self)
         }
         
-        if self.client.session.connectedPeers.count == 1 {
+        if self.player.client.session.connectedPeers.count == 1 {
             // Insufficient players in the lobby
             let alert = UIAlertController(
                 title: "Exit from lobby",
@@ -38,7 +38,7 @@ extension GameVC: ClientGameDelegate {
                 self.present(alert, animated: true)
             }
         } else {
-            if peerID == self.client.serverPeerID {
+            if peerID == self.player.client.serverPeerID {
                 // Server disconnected
                 var alert: UIAlertController
                 if self.dealer == nil {
@@ -87,7 +87,7 @@ extension GameVC: ClientGameDelegate {
                 self.time = message.amount!
                 self.maxBid = 0
                 self.totalBid = 0
-                self.players = message.players!
+                self.users = message.users!
                 self.setupPlayers()
                 // Initialization of UI
                 self.statusLabel.text = "The game will start soon"
@@ -262,20 +262,20 @@ extension GameVC: ClientGameDelegate {
         case .endMatch:
             DispatchQueue.main.async {
                 self.totalBid = message.amount!
-                self.players = message.players!
+                self.users = message.users!
                 self.performSegue(withIdentifier: "showEndSegue", sender: nil)
             }
         // MARK: resPlayer
         case .resPlayer:
             // Update the UI
             DispatchQueue.main.async {
-                self.userData?.message = "Points: \(message.players![0].points)\nBid: \(message.players![0].bid)"
+                self.userData?.message = "Points: \(message.users![0].points)\nBid: \(message.users![0].bid)"
                 self.userDataSpinner?.stopAnimating()
             }
         // MARK: notify
         case .notify:
-            if let player = message.players?[0] {
-                if player.id != self.client.peerID.displayName {
+            if let player = message.users?[0] {
+                if player.id != self.player.client.peerID.displayName {
                     DispatchQueue.main.async {
                         // Find the player's index
                         for index in 0 ..< 4 {

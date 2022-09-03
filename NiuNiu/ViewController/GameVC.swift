@@ -11,10 +11,8 @@ class GameVC: UIViewController {
 
     // MARK: Properties
     var dealer: Dealer?
-    
-    var client: Client!
     var player: Player!
-    var players: [Player]!
+    var users: [User]!
     
     var rounds = 0
     var time = 0
@@ -61,7 +59,7 @@ class GameVC: UIViewController {
                 handler: { action in
                     // Notify and exit or close
                     self.dealer?.server.disconnect()
-                    self.client.disconnect()
+                    self.player.client.disconnect()
                     // Stats
                     Statistics.increaseGamesPlayed()
                     self.performSegue(withIdentifier: "backToMainSegue", sender: self)
@@ -75,10 +73,10 @@ class GameVC: UIViewController {
     
     func setupPlayers() {
         var index = 0
-        for player in self.players {
-            if player.id == self.client.peerID.displayName {
+        for user in self.users {
+            if user.id == self.player.client.peerID.displayName {
                 // Setup himself cards
-                self.player = player
+                self.player.setupUser(user)
                 for cardIndex in 0 ... 4 {
                     let image = UIImage(named: self.player.cards[cardIndex].fileName)
                     self.cardsButtons[cardIndex].setBackgroundImage(image, for: .normal)
@@ -93,7 +91,7 @@ class GameVC: UIViewController {
             } else {
                 // Setup the other players
                 self.playersButtons[index].setAttributedTitle(
-                    Utils.myString(player.id),
+                    Utils.myString(user.id),
                     for: .normal
                 )
                 self.playersButtons[index].isEnabled = true
@@ -145,14 +143,14 @@ class GameVC: UIViewController {
         self.foldLabel.isHidden = false
         // Change data
         self.player.status = .fold
-        self.client.sendMessageToServer(message: Message(.fold, players: [self.player]))
+        self.player.client.sendMessageToServer(message: Message(.fold, users: [self.player]))
     }
     
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupMenu()
-        self.client.gameDelegate = self
+        self.player.gameDelegate = self
         // Hide UI
         for btn in self.playersButtons + self.cardsButtons {
             btn.isHidden = true
@@ -168,12 +166,12 @@ class GameVC: UIViewController {
         self.dealer?.timer?.invalidate()
         if let endVC = segue.destination as? EndVC {
             endVC.dealer = self.dealer
-            endVC.client = self.client
-            endVC.players = self.players
+            endVC.player = self.player
+            endVC.users = self.users
             endVC.prize = self.totalBid
             endVC.isGameOver = self.forceGameOver
             endVC.rounds = self.rounds            
-            for player in self.players {
+            for player in self.users {
                 if player.points <= 0 {
                     endVC.isGameOver = true
                 }
@@ -183,7 +181,7 @@ class GameVC: UIViewController {
     
     // MARK: Actions
     @IBAction func clickPlayer(_ sender: UIButton) {
-        let player = Utils.findPlayer(byName: sender.currentAttributedTitle!.string, from: self.players)!
+        let player = Utils.findPlayer(byName: sender.currentAttributedTitle!.string, from: self.users)!
         // Setting the action sheet view
         self.userData = UIAlertController(
             title: player.id,
@@ -201,7 +199,7 @@ class GameVC: UIViewController {
         self.userData!.view.addSubview(self.userDataSpinner!)
         self.present(self.self.userData!, animated: true, completion: nil)
         // Send request data
-        self.client.sendMessageToServer(message: Message(.reqPlayer, players: [player]))
+        self.player.client.sendMessageToServer(message: Message(.reqPlayer, users: [player]))
     }
     
     @IBAction func clickCard(_ sender: UIButton) {
@@ -235,19 +233,19 @@ class GameVC: UIViewController {
             } else {
                 self.player.bet(amount: bid)
                 self.pointsLabel.text = "Points: \(String(self.player.points)) (\(bid))"
-                self.client.sendMessageToServer(message: Message(.bet, players: [self.player]))
+                self.player.client.sendMessageToServer(message: Message(.bet, users: [self.player]))
             }
         case .check:
             let diff = self.maxBid - self.player.bid
             self.player.check(amount: diff)
             self.pointsLabel.text = "Points: \(String(self.player.points)) (\(self.maxBid))"
             self.betSlider.value = Float(self.player.bid + self.player.fixBid)
-            self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
+            self.player.client.sendMessageToServer(message: Message(.check, users: [self.player]))
         case .allIn:
             self.player.allIn()
             self.pointsLabel.text = "Points: 0 (\(self.player.bid + self.player.fixBid)"
             self.betSlider.value = Float(self.player.bid + self.player.fixBid)
-            self.client.sendMessageToServer(message: Message(.check, players: [self.player]))
+            self.player.client.sendMessageToServer(message: Message(.check, users: [self.player]))
         case .cards:
             self.player.chooseCards(
                 cards: self.player.cards,
@@ -263,7 +261,7 @@ class GameVC: UIViewController {
             for btn in self.cardsButtons {
                 btn.isEnabled = false
             }
-            self.client.sendMessageToServer(message: Message(.cards, players: [self.player]))
+            self.player.client.sendMessageToServer(message: Message(.cards, users: [self.player]))
         default:
             break
         }

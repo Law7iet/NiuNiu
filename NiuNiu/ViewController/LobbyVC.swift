@@ -181,7 +181,10 @@ class LobbyVC: UIViewController {
                 points: Settings.points
             )
         }
-        gameVC.client = self.client
+        let player = Player()
+        player.setupClient(client: self.client)
+        player.setupPlayer(id: self.client.peerID.displayName, points: nil)
+        gameVC.player = player
         // Close browsing or advertising tasks
         self.server?.stopAdvertising()
         self.client.stopBrowsing()

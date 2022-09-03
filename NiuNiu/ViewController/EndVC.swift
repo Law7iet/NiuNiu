@@ -11,8 +11,8 @@ class EndVC: UIViewController {
 
     // MARK: Properties
     var dealer: Dealer?
-    var client: Client!
-    var players: [Player]!
+    var player: Player!
+    var users: [User]!
     var prize: Int!
     var rounds: Int!
     
@@ -40,9 +40,9 @@ class EndVC: UIViewController {
     // MARK: Supporting functions
     func setupStatistics() {
         Statistics.increaseRoundsPlayed()
-        for player in self.players {
-            if player.status == .winner {
-                if player.id == self.client.peerID.displayName {
+        for user in self.users {
+            if user.status == .winner {
+                if user.id == self.player.id {
                     Statistics.increaseRoundsWon()
                     Statistics.addPointsGained(points: self.prize)
                 }
@@ -52,12 +52,12 @@ class EndVC: UIViewController {
     
     func setupViewDidLoad() {
         // Delegate
-        self.client.endDelegate = self
+        self.player.client.endDelegate = self
         // Setup players and find if there's a loser
         if self.dealer != nil {
-            self.players = [Player]()
-            for player in self.dealer!.players {
-                self.players?.append(player)
+            self.users = [Player]()
+            for player in self.dealer!.users {
+                self.users?.append(player)
                 if player.points <= 0 {
                     self.isGameOver = true
                 }
@@ -85,7 +85,7 @@ class EndVC: UIViewController {
     
     func setupPlayersUI() {
         var playerIndex = 0
-        for player in self.players {
+        for player in self.users {
             // Setup the players
             self.playerIDs[playerIndex].text = player.id
             if player.status == .winner {
@@ -108,7 +108,7 @@ class EndVC: UIViewController {
     func endGame() {
         // Statistics
         Statistics.increaseGamesPlayed()
-        if self.client.peerID.displayName == self.players[0].id {
+        if self.player.id == self.users[0].id {
             // The player is the winner of the game
             Statistics.increaseGamesWon()
         }
@@ -123,7 +123,7 @@ class EndVC: UIViewController {
         }
         // Change UI
         var index = 0
-        for player in self.players {
+        for player in self.users {
             self.playerIDs[index].text = "\(index + 1). \(self.playerIDs[index].text!)"
             self.playerPoints[index].text = "Points: \(player.points)"
             index += 1
@@ -136,7 +136,7 @@ class EndVC: UIViewController {
             for: .normal)
         self.playButton.isEnabled = false
         // Disconnection
-        self.client.disconnect()
+        self.player.client.disconnect()
         self.dealer?.server.disconnect()
     }
     
@@ -197,7 +197,7 @@ class EndVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let gameVC = segue.destination as? GameVC {
             gameVC.dealer = self.dealer
-            gameVC.client = self.client
+            gameVC.player = self.player
             gameVC.rounds = self.rounds
         }
     }
@@ -244,7 +244,7 @@ extension EndVC: ClientEndDelegate {
     
     func didDisconnect(with peerID: MCPeerID) {
         if !self.isGameOver {
-            if self.client.session.connectedPeers.count == 1 {
+            if self.player.client.session.connectedPeers.count == 1 {
                 // Insufficient players in the lobby
                 let alert = UIAlertController(
                     title: "Exit from lobby",
@@ -263,7 +263,7 @@ extension EndVC: ClientEndDelegate {
                     self.endGame()
                     self.present(alert, animated: true)
                 }
-            } else if peerID == self.client.serverPeerID {
+            } else if peerID == self.player.client.serverPeerID {
                 // Server disconnected
                 var alert: UIAlertController
                 if self.dealer == nil {

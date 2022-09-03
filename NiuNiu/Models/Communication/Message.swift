@@ -12,7 +12,7 @@ class Message: Codable {
     // MARK: Properties
     var type: MessageType
     var amount: Int?
-    var players: [Player]?
+    var users: [User]?
     
     // MARK: Methods
     init(_ type: MessageType) {
@@ -24,15 +24,15 @@ class Message: Codable {
         self.amount = amount
     }
     
-    init(_ type: MessageType, players: [Player]) {
+    init(_ type: MessageType, users: [User]) {
         self.type = type
-        self.players = players
+        self.users = users
     }
     
-    init(_ type: MessageType, amount: Int?, players: [Player]?) {
+    init(_ type: MessageType, amount: Int?, users: [User]?) {
         self.type = type
         self.amount = amount
-        self.players = players
+        self.users = users
     }
     
     init(data: Data) {
@@ -40,7 +40,7 @@ class Message: Codable {
         if object != nil {
             self.type = object!.type
             self.amount = object!.amount
-            self.players = object!.players
+            self.users = object!.users
         } else {
             self.type = .error
         }
@@ -52,7 +52,7 @@ class Message: Codable {
         let object = Message(
             self.type,
             amount: self.amount,
-            players: self.players
+            users: self.users
         )
         return try? JSONEncoder().encode(object)
     }
